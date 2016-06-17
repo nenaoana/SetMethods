@@ -70,13 +70,14 @@ function(results,
           if (sm>=sn){
             casesm<-c(casesm,m)
             casesn<-c(casesn,n)
-            val<-c(val,s)}
+            val<-c(val,s)
           if ((x[m,] <= codata1[m,]) & (x[n,] <= codata1[n,])) {order<-c(order,1)}
           else { if ((x[m,] <= codata1[m,]) & (x[n,] > codata1[n,])) {order<-c(order,2)}
             else { if ((x[m,] > codata1[m,]) & (x[n,] <= codata1[n,])) {order<-c(order,3)}
               else { if ((x[m,] > codata1[m,]) & (x[n,] > codata1[n,])) {order<-c(order,4)}
               }
             }
+          }
           }
         }}
       matcres <- data.frame(casesm, casesn, val, order)
