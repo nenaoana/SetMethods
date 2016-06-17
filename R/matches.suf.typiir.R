@@ -36,7 +36,8 @@ function(results,
       else{
         y <- 1-data[outcome]
       } 
-      
+    if (length(tn)==1) {print(paste("This term has a single condition!"))}
+    else{  
       co<- tn[-grep(tn[i], tn)]
       co<- toupper(co)
       codata<-data1[co]
@@ -116,3 +117,5 @@ function(results,
       }
     }
   }
+}
+    
