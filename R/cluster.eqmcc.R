@@ -5,7 +5,8 @@ function(results,
            unit_id,
            cluster_id,
            intermed=FALSE,
-           sol=1)
+           sol=1,
+           p=2)
   {
     if (!intermed){
       s <- results$solution[[sol]]
