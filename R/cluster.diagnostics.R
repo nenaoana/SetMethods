@@ -1,5 +1,5 @@
 cluster.diagnostics <-
-function( x, y, unit, cluster, necessity=FALSE)
+function( x, y, unit, cluster, necessity=FALSE, p=2)
   {X <- xtabs( x ~ unit + cluster)
    Y <- xtabs( y ~ unit + cluster)
     # Consistency suff.
