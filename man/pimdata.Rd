@@ -1,84 +1,51 @@
 \name{pimdata}
 \alias{pimdata}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+	Function to extract prime implicants table from object of class "qca"	
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+	Function extracts a table with prime implicants from an object of class
+	"qca".  
 }
 \usage{
 pimdata(results, outcome, intermed = FALSE, sol = 1)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{results}{
-%%     ~~Describe \code{results} here~~
-}
-  \item{outcome}{
-%%     ~~Describe \code{outcome} here~~
-}
-  \item{intermed}{
-%%     ~~Describe \code{intermed} here~~
-}
-  \item{sol}{
-%%     ~~Describe \code{sol} here~~
-}
+	\item{results}{
+		An object of class "qca".
+	}
+	\item{outcome}{
+		A character string with the name of the outcome.
+	}
+	\item{intermed}{
+		Logical. Use the intermediate solution?
+	}
+	\item{sol}{
+		A numeric vector where the first number indicates the number of the
+		solution according to the order in the "qca" object.
+	}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+	A table with set memberships.
+	\item{solution_formula}{The solution formula.}
+	\item{out}{Membership in the outcome.}
 }
 \references{
-%% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+	Ioana-Elena Oana and Juraj Medzihorsky
 }
 \note{
-%%  ~~further notes~~
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[SetMethods:pimplot]{pimplot}}
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (results, outcome, intermed = FALSE, sol = 1) 
-{
-    if (!intermed) {
-        s <- results$solution[[sol]]
-        P <- results$pims[colnames(results$pims) \%in\% s]
-    }
-    else {
-        s <- results$i.sol$C1P1$solution[[sol]]
-        P <- results$i.sol$C1P1$pims[colnames(results$i.sol$C1P1$pims) \%in\% 
-            s]
-    }
-    P$solution_formula <- apply(P, 1, max)
-    data <- results$tt$initial.data
-    if (results$options$neg.out) {
-        P$out <- 1 - data[, outcome]
-    }
-    else {
-        P$out <- data[, outcome]
-    }
-    return(P)
-  }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{QCA}

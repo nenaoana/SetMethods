@@ -1,34 +1,23 @@
 \name{FakeCS}
 \alias{FakeCS}
 \docType{data}
-\title{
-%%   ~~ data name/kind ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
-}
-\usage{data("FakeCS")}
+\title{Fake crisp-set data}
+\description{The \code{FakeCS} data frame has 30 rows and 5 variables}
+\usage{data(FakeCS)}
 \format{
   A data frame with 30 observations on the following 5 variables.
   \describe{
-    \item{\code{y}}{a numeric vector}
-    \item{\code{j}}{a numeric vector}
-    \item{\code{z}}{a numeric vector}
-    \item{\code{w}}{a numeric vector}
-    \item{\code{k}}{a numeric vector}
+    \item{\code{y}}{a numeric vector. Outcome with 2 categories (crisp-set).}
+    \item{\code{j}}{a numeric vector. Condition with 2 categories (crisp-set).}
+    \item{\code{z}}{a numeric vector. Condition with 2 categories (crisp-set).}
+    \item{\code{w}}{a numeric vector. Condition with 2 categories (crisp-set).}
+    \item{\code{k}}{a numeric vector. Condition with 2 categories (crisp-set).}
   }
 }
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
-\examples{
-data(FakeCS)
-## maybe str(FakeCS) ; plot(FakeCS) ...
-}
+\details{The data frame has only exercise purpuses to let the user learn how to perform crisp-set QCA in R.}
+%\source{}
+\references{Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
+	
+Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.}
+\examples{data(FakeCS)}
 \keyword{datasets}

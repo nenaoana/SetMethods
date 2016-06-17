@@ -1,104 +1,45 @@
 \name{QCAfit}
 \alias{QCAfit}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-QCAfit(x, y, cond.lab = NULL, necessity = FALSE, negation = FALSE)
-}
-%- maybe also 'usage' for other objects documented here.
+\title{Function calculating the parameters of fit}
+\description{QCAfit is a function calculating parameters of fit useful in QCA and fsQCA that are consistency, coverage, PRI and PRODUCT. It works with both single and multiple conditions.}
+\usage{QCAfit(x, y, cond.lab = NULL, necessity = FALSE, negation = FALSE)}
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+  \item{x}{is a vector containing the values of a condition or a matrix with more than one conditions.}
+  \item{y}{is a vector containing the values of the output.}
+  \item{cond.lab}{is a vector containing the label(s) of the condition(s).}
+  \item{necessity}{logical. It indicates if the output should be for sufficient or necessary condition(s). By default, \code{TRUE}, the function returns a table of parameters of fit for sufficient condition(s) (Consistency, Coverage, PRI and Product). When it set to \code{FALSE} the function returns a table of parameters of fit for necessary condition(s) (Consistency, Coverage, Relevance of Necessity).}
+  \item{negation}{logical. It indicates if the parameters of fit should be computed for the positive or the negative outcome. By default, \code{FALSE}, the function returns parameters of fit for the positive outcome.}
 }
-  \item{y}{
-%%     ~~Describe \code{y} here~~
-}
-  \item{cond.lab}{
-%%     ~~Describe \code{cond.lab} here~~
-}
-  \item{necessity}{
-%%     ~~Describe \code{necessity} here~~
-}
-  \item{negation}{
-%%     ~~Describe \code{negation} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+%\details{}
+\value{It returns a matrix containing the parameters of fit for each condition.}
 \references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.	
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}}
+\author{Mario Quaranta}
+%\note{}
+%\seealso{}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# Generate fake data
+set.seed(1234)
 
-## The function is currently defined as
-function (x, y, cond.lab = NULL, necessity = FALSE, negation = FALSE) 
-{
-    x <- as.matrix(x)
-    v <- matrix(NA, length(x[, 1]), length(x[1, ]))
-    out <- matrix(NA, length(x[1, ]), 7)
-    if (negation == TRUE) {
-        y <- 1 - y
-    }
-    for (i in 1:length(x[1, ])) {
-        v[, i] <- pmin(x[, i], y)
-        out[i, 1] <- sum(v[, i])/sum(x[, i])
-        out[i, 2] <- sum(v[, i])/sum(y)
-        out[i, 3] <- sum(v[, i])/sum(y)
-        out[i, 4] <- sum(v[, i])/sum(x[, i])
-        out[i, 5] <- sum(1 - x[, i])/sum(1 - v[, i])
-        p1 <- sum(pmin(x[, i], y)) - sum(pmin(x[, i], y, 1 - 
-            y))
-        p2 <- sum(x[, i]) - sum(pmin(x[, i], y, 1 - y))
-        out[i, 6] <- p1/p2
-        out[i, 7] <- out[i, 1] * out[i, 6]
-    }
-    suf <- matrix(out[, c(1:2, 6:7)], nrow = ncol(x))
-    colnames(suf) <- c("Cons. Suf.", "Cov. Suf.", "PRI", "PRODUCT")
-    rownames(suf) <- cond.lab
-    suf <- format(suf, digits = 3)
-    storage.mode(suf) <- "numeric"
-    nec <- matrix(out[, 3:5], nrow = ncol(x))
-    colnames(nec) <- c("Cons. Nec.", "Cov. Nec.", "RoN")
-    rownames(nec) <- cond.lab
-    nec <- format(nec, digits = 3)
-    storage.mode(nec) <- "numeric"
-    if (necessity == FALSE) {
-        return(suf)
-    }
-    else {
-        return(nec)
-    }
-  }
+a <- runif(100, 0, 1)
+b <- runif(100, 0, 1)
+c <- runif(100, 0, 1)
+y <- runif(100, 0, 1)
+
+# Only one condition, for sufficiency
+QCAfit(a, y, cond.lab = "A")
+
+# With three conditions, for sufficiency
+QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"))
+
+# Only one condition, for necessity
+QCAfit(a, y, cond.lab = "A", necessity = TRUE)
+
+# With three conditions, for necessity
+QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"), necessity = TRUE)
+
+# With three conditions and negated output, for sufficiency
+QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"), negation = TRUE)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

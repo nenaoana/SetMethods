@@ -1,199 +1,74 @@
 \name{xy.plot.lat}
 \alias{xy.plot.lat}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
+\title{Function producing enhanced XY plots with Lattice}
+
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+\code{xy.plot.lat} produces XY plots using the \code{lattice} package and provides coverage and consistency values. The advantage over \code{fsplot()} (in the \code{QCA3} package) is its larger flexibility and that it does not need a dataset to work, it just needs two vectors. Several graphic parameters can be decided by the user.}
 \usage{
-xy.plot.lat(x, y, ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), main = "", pch = 19, col = "black", cex.fit = 1, ylab = "Outcome", xlab = "Condition", pos.fit = "top", strip.cex = 0.8, necessity = FALSE, show.fit = TRUE, case.lab = FALSE, lab.pos = 4, labs = NULL, show.hv = TRUE)
+xy.plot.lat(x, y, 
+            ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), 
+            main = "", pch = 19, col = "black", cex.fit = 1, 
+            ylab = "Outcome", xlab = "Condition", 
+            pos.fit = "top", strip.cex = 0.8, 
+            necessity = FALSE, show.fit = TRUE, case.lab = FALSE, 
+            lab.pos = 4, labs = NULL, 
+            show.hv = TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
-  \item{y}{
-%%     ~~Describe \code{y} here~~
-}
-  \item{ylim}{
-%%     ~~Describe \code{ylim} here~~
-}
-  \item{xlim}{
-%%     ~~Describe \code{xlim} here~~
-}
-  \item{main}{
-%%     ~~Describe \code{main} here~~
-}
-  \item{pch}{
-%%     ~~Describe \code{pch} here~~
-}
-  \item{col}{
-%%     ~~Describe \code{col} here~~
-}
-  \item{cex.fit}{
-%%     ~~Describe \code{cex.fit} here~~
-}
-  \item{ylab}{
-%%     ~~Describe \code{ylab} here~~
-}
-  \item{xlab}{
-%%     ~~Describe \code{xlab} here~~
-}
-  \item{pos.fit}{
-%%     ~~Describe \code{pos.fit} here~~
-}
-  \item{strip.cex}{
-%%     ~~Describe \code{strip.cex} here~~
-}
+  \item{x}{vector containing the condition.}
+  \item{y}{vector containing the outcome.}
+  \item{ylim}{limits of y-axis. The default is \code{c(-0.05, 1.05)}.}
+  \item{xlim}{limits of x-axis. The default is \code{c(-0.05, 1.05)}.}  
+  \item{main}{an overall title for the plot. The default is \code{""}. See ?xyplot.}
+  \item{pch}{plotting "character". The default is \code{19}. See ?pch or ?xyplot.}
+  \item{col}{color for the plotting "character". The default is \code{"black"}. See ?par or ?xyplot.}
+  \item{cex.fit}{character expansion for the parameters of fit. The defaut is \code{0.6}. See ?pch or ?text.}
+  \item{ylab}{a title for the y-axis. The default is \code{"Outcome"}. See ?title or ?xyplot.}
+  \item{xlab}{a title for the x-axis. The default is \code{"Condition"}. See ?title or ?xyplot.}
+  \item{pos.fit}{character. Indicates the position of the parameters of fit. The positions are \code{"top"}, which places the parameters of fit in a strip on top of the plotting area, or \code{"corner"}, which places the parameters of fit in the corner of the plotting are. The default is \code{pos.fit = "top"}.}
+  \item{strip.cex}{character expansion for the parameters of fit when \code{pos.fit = "top"}. The defaut is \code{0.8}. See ?pch or ?text.}
   \item{necessity}{
-%%     ~~Describe \code{necessity} here~~
-}
+logical. Indicates if the parameters of fit are calculated for a sufficient or necessary condition. The default is \code{FALSE}, therefore it calculates the parameters of fit for sufficiency. To get the parameters of fit for necessary conditions set \code{necessity} as \code{TRUE}.}
   \item{show.fit}{
-%%     ~~Describe \code{show.fit} here~~
-}
+logical. Indicates if parameters of fit have to be shown. The default is \code{TRUE}.}
   \item{case.lab}{
-%%     ~~Describe \code{case.lab} here~~
-}
+logical. Indicates if cases have to be labeled. The default is \code{TRUE}.}
   \item{lab.pos}{
-%%     ~~Describe \code{lab.pos} here~~
+a position specifier for the case labels. Values of 1, 2, 3 and 4, respectively indicate positions below, to the left of, above and to the right of the specified coordinates. The default is \code{4}. See ?text.}
+\item{labs}{
+the vector of case labels. The default is \code{NULL}.}
+\item{show.hv}{logical. Indicates if horizontal and vertical lines at 0.5 have to be shown. The default is \code{TRUE}.}
 }
-  \item{labs}{
-%%     ~~Describe \code{labs} here~~
-}
-  \item{show.hv}{
-%%     ~~Describe \code{show.hv} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+%\details{}
+\value{It returns an enhanced XY plot using the \code{lattice} package.}
 \references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond, The Chicago University Press: Chicago and London.
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
+
+Sarkar, D. (2008) Lattice: Multivariate Data Visualization with R, Springer: Berlin.
 }
+\author{Mario Quaranta}
+%\note{}
+%\seealso{}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# Generate fake data to have perfect necessity
+set.seed(123)
+x <- runif(60, 0, 1)
+y <- runif(60, 0, 1)
 
-## The function is currently defined as
-function (x, y, ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), 
-    main = "", pch = 19, col = "black", cex.fit = 1, ylab = "Outcome", 
-    xlab = "Condition", pos.fit = "top", strip.cex = 0.8, necessity = FALSE, 
-    show.fit = TRUE, case.lab = FALSE, lab.pos = 4, labs = NULL, 
-    show.hv = TRUE) 
-{
-    if (necessity == TRUE) {
-        con <- sum(pmin(x, y))/sum(y)
-        cov <- sum(pmin(x, y))/sum(x)
-        ron <- sum(1 - x)/sum(1 - pmin(x, y))
-        cons <- format(con, digits = 3)
-        storage.mode(cons) <- "numeric"
-        cove <- format(cov, digits = 3)
-        storage.mode(cove) <- "numeric"
-        rons <- format(ron, digits = 3)
-        storage.mode(rons) <- "numeric"
-        pof <- sprintf("Consistency Necessity: \%.3f; Coverage Necessity: \%.3f; Relevance Necessity: \%.3f", 
-            con, cov, ron)
+for(i in 1:length(y)) {
+    while(x[i] < y[i]) {
+        y[i] <- runif(1, 0, 1)
+        x[i] <- runif(1, 0, 1)
     }
-    else {
-        con <- sum(pmin(x, y))/sum(x)
-        cov <- sum(pmin(x, y))/sum(y)
-        pri <- (sum(pmin(x, y)) - sum(pmin(x, y, 1 - y)))/(sum(x) - 
-            sum(pmin(x, y, 1 - y)))
-        cons <- format(con, digits = 3)
-        storage.mode(cons) <- "numeric"
-        cove <- format(cov, digits = 3)
-        storage.mode(cove) <- "numeric"
-        pris <- format(pri, digits = 3)
-        storage.mode(pris) <- "numeric"
-        pof <- sprintf("Consistency Sufficiency: \%.3f; Coverage Sufficiency: \%.3f; PRI: \%.3f", 
-            con, cov, pri)
-    }
-    if (show.fit == TRUE) {
-        if (pos.fit == "top") {
-            xyplot(y ~ x | pof, ylim = ylim, xlim = xlim, main = main, 
-                pch = pch, col = col, ylab = ylab, xlab = xlab, 
-                strip = strip.custom(par.strip.text = list(cex = strip.cex)), 
-                par.settings = list(par.strip.text = list(cex = strip.cex), 
-                  strip.background = list(col = NA), layout.heights = list(strip = 1.5)), 
-                scales = list(x = list(at = seq(0, 1, 0.1)), 
-                  y = list(at = seq(0, 1, 0.1))), panel = function(x, 
-                  y, ...) {
-                  panel.abline(0, 1)
-                  panel.xyplot(x, y, ...)
-                  if (show.hv == TRUE) {
-                    panel.abline(h = 0.5, lty = 2)
-                    panel.abline(v = 0.5, lty = 2)
-                  }
-                  if (case.lab == TRUE) {
-                    panel.text(x, y, labels = labs, pos = lab.pos)
-                  }
-                })
-        }
-        else {
-            xyplot(y ~ x, ylim = ylim, xlim = xlim, main = main, 
-                pch = pch, col = col, ylab = ylab, xlab = xlab, 
-                strip = strip.custom(par.strip.text = list(cex = strip.cex)), 
-                par.settings = list(par.strip.text = list(cex = strip.cex), 
-                  strip.background = list(col = NA), layout.heights = list(strip = 1.5)), 
-                scales = list(x = list(at = seq(0, 1, 0.1)), 
-                  y = list(at = seq(0, 1, 0.1))), panel = function(x, 
-                  y, ...) {
-                  panel.abline(0, 1)
-                  panel.xyplot(x, y, ...)
-                  if (show.hv == TRUE) {
-                    panel.abline(h = 0.5, lty = 2)
-                    panel.abline(v = 0.5, lty = 2)
-                  }
-                  if (case.lab == TRUE) {
-                    panel.text(x, y, labels = labs, pos = lab.pos)
-                  }
-                  panel.text(-0.02, 1.02, cons, cex = cex.fit, 
-                    adj = 0)
-                  panel.text(1.02, -0.02, cove, cex = cex.fit, 
-                    adj = 1)
-                })
-        }
-    }
-    else {
-        xyplot(y ~ x, ylim = ylim, xlim = xlim, main = main, 
-            pch = pch, col = col, ylab = ylab, xlab = xlab, strip = strip.custom(par.strip.text = list(cex = 1)), 
-            par.settings = list(strip.background = list(col = NA), 
-                layout.heights = list(strip = 1.5)), scales = list(x = list(at = seq(0, 
-                1, 0.1)), y = list(at = seq(0, 1, 0.1))), panel = function(x, 
-                y, ...) {
-                panel.abline(0, 1)
-                panel.xyplot(x, y, ...)
-                panel.abline(h = 0.5, lty = 2)
-                panel.abline(v = 0.5, lty = 2)
-                panel.text(x, y, labels = 1:40, pos = lab.pos)
-            })
-    }
-  }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+# Default with blue dots and pch = 1
+xy.plot.lat(x, y, pch = 1, col = "blue")
+
+# Parameters of fit in the corners with blue dots and pch = 1
+xy.plot.lat(x, y, pch = 1, col = "blue", pos.fit = "corner")
+}

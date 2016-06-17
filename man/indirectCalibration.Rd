@@ -1,79 +1,52 @@
 \name{indirectCalibration}
 \alias{indirectCalibration}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-indirectCalibration(x, x_cal, binom = TRUE)
-}
-%- maybe also 'usage' for other objects documented here.
+\title{Function performing the indirect calibration}
+\description{indirectCalibration is a function for the indirect calibration procedure as described by Ragin (2008). It uses a binomial or a beta regression for tranforming raw scores into calibrated scores. In our opinion, using a fractional polynomial may not be appropriate to this case. In fact, we do not deal with proportions. This function requires the package \code{betareg}.}
+\usage{indirectCalibration(x, x_cal, binom = TRUE)}
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+  \item{x}{vector of raw scores.}
+  \item{x_cal}{vector of theoretically calibrated scores.}
+  \item{binom}{logical. If indirect calibration has to be performed using binomial regression or beta regression.  The default is \code{TRUE}, which means that binomial regression is used.}
 }
-  \item{x_cal}{
-%%     ~~Describe \code{x_cal} here~~
-}
-  \item{binom}{
-%%     ~~Describe \code{binom} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+%\details{}
+\value{It returns a vector of indirectly calibrated values.}
+\references{Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond, The Chicago University Press: Chicago and London.
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
 }
+\author{Mario Quaranta}
+%\note{}
+%\seealso{}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x, x_cal, binom = TRUE) 
-{
-    if (binom == TRUE) {
-        options(warn = -1)
-        Z_bin <- glm(x_cal ~ x, family = binomial)
-        b_bin <- coef(Z_bin)
-        y_hat_bin <- 1/(1 + (exp(-(b_bin[1] + b_bin[2] * x))))
-        return(structure(y_hat_bin, class = "SetMethod"))
-        options(warn = 1)
-    }
-    else {
-        N <- length(x_cal)
-        x_cal_t <- ((x_cal * (N - 1) + 1/2)/N)
-        Z_bet <- betareg(x_cal_t ~ x, link = "logit", phi = TRUE)
-        y_hat_bet <- b_bet <- coef(Z_bet)
-        y_hat_bet <- 1/(1 + (exp(-(b_bet[1] + b_bet[2] * x))))
-        return(structure(y_hat_bet, class = "SetMethod"))
-    }
-  }
+# Generate fake data
+set.seed(4)
+x <- runif(20, 0, 1)
+
+# Find quantiles
+quant <- quantile(x, c(.2, .4, .5, .6, .8))
+
+# Theoretical calibration
+x_cal <- NA  
+x_cal[x <= quant[1]] <- 0
+x_cal[x > quant[1] & x <= quant[2]] <- .2
+x_cal[x > quant[2] & x <= quant[3]] <- .4
+x_cal[x > quant[3] & x <= quant[4]] <- .6
+x_cal[x > quant[4] & x <= quant[5]] <- .8
+x_cal[x > quant[5]] <- 1
+x_cal
+
+# Indirect calibration (binomial)
+a <- indirectCalibration(x, x_cal, binom = TRUE)
+
+# Indirect calibration (beta regression)
+b <- indirectCalibration(x, x_cal, binom = FALSE)
+
+# Correlation
+cor(a, b)
+
+# Plot
+plot(x, a); points(x, b, col = "red")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

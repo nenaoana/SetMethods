@@ -1,101 +1,57 @@
 \name{pimplot}
 \alias{pimplot}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+	Prime implicant plots.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+	Plot prime implicant plots from an object of class "qca".  
 }
 \usage{
-pimplot(results, outcome, intermed = FALSE, sol = 1, case_labels = TRUE, lab_color = rgb(0, 0, 0, 0.5), lab_jitter = FALSE)
+pimplot(results, outcome, intermed=FALSE, sol = 1, case_labels=TRUE, lab_color=rgb(0,0,0,0,5), lab_jitter=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{results}{
-%%     ~~Describe \code{results} here~~
-}
-  \item{outcome}{
-%%     ~~Describe \code{outcome} here~~
-}
-  \item{intermed}{
-%%     ~~Describe \code{intermed} here~~
-}
-  \item{sol}{
-%%     ~~Describe \code{sol} here~~
-}
-  \item{case_labels}{
-%%     ~~Describe \code{case_labels} here~~
-}
-  \item{lab_color}{
-%%     ~~Describe \code{lab_color} here~~
-}
-  \item{lab_jitter}{
-%%     ~~Describe \code{lab_jitter} here~~
-}
+	\item{results}{
+		An object of class "qca".
+	}
+	\item{outcome}{
+		A character string with the name of the outcome.
+	}
+	\item{intermed}{
+		Logical. Use the intermediate solution?
+	}
+	\item{sol}{
+		A numeric vector where the first number indicates the number of the
+		solution according to the order in the "qca" object.
+	}
+	\item{case_labels}{
+		Logical. Print case labels?
+	}
+	\item{lab_color}{
+		Color of the labels.
+	}
+	\item{lab_jitter}{
+		Logical.  Add jitter to label positions?
+	}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+	A plot.
 }
 \references{
-%% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+	Juraj Medzihorsky
 }
 \note{
-%%  ~~further notes~~
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[SetMethods:pimdata]{pimdata}}
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (results, outcome, intermed = FALSE, sol = 1, case_labels = TRUE, 
-    lab_color = rgb(0, 0, 0, 0.5), lab_jitter = FALSE) 
-{
-    P <- pimdata(results = results, outcome = outcome, intermed = intermed, 
-        sol = sol)
-    n_c <- ncol(P) - 1
-    par(ask = T)
-    aux.plot <- function(i) {
-        xy.plot(P[, i], P[, "out"], xlab = colnames(P)[i], ylab = outcome)
-        if (case_labels) {
-            fil <- P[, i] > 0.5
-            if (i == n_c) {
-                fil <- P[, i] < 0.5
-            }
-            if (lab_jitter) {
-                text(jitter(P[fil, i]), jitter(P[fil, "out"]), 
-                  col = lab_color, rownames(P)[fil], pos = 3, 
-                  cex = 0.75)
-            }
-            else {
-                text(P[fil, i], P[fil, "out"], col = lab_color, 
-                  rownames(P)[fil], pos = 3, cex = 0.75)
-            }
-        }
-    }
-    for (i in 1:n_c) {
-        aux.plot(i)
-    }
-  }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ QCA }
