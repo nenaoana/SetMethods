@@ -9,7 +9,8 @@ function(theory,
     tl <- unlist(strsplit(tl, '\\+')) 
     tl <- strsplit(tl, '\\*') 
     tn <- unique(unlist(tl))
-    
+    t_neg<-character(0)
+    t_pre<-character(0)
     if(length(grep("~",tn)) > 0){
       t_neg<-tn[grep("~",tn)]
       t_neg<-gsub('\\~', '', t_neg)
@@ -59,6 +60,10 @@ function(theory,
     P$'t*E' <- pmin(1-tv,   P$Sol.Formula)
     P$'T*e' <- pmin(  tv, 1-P$Sol.Formula)
     P$'t*e' <- pmin(1-tv, 1-P$Sol.Formula)
-    P[outcome]<-empirics$tt$initial.data[,outcome]
+    if (empirics$options$neg.out) {
+      P$Outcome<-1-empirics$tt$initial.data[,outcome]
+    } else {
+      P$Outcome<-empirics$tt$initial.data[,outcome]
+    }
     return(P)
   }
