@@ -1,7 +1,7 @@
 cluster.diagnostics <-
-function( x, y, unit, cluster, necessity=FALSE, p=2)
-  {X <- xtabs( x ~ unit + cluster)
-   Y <- xtabs( y ~ unit + cluster)
+function( x, y, unit_id, cluster_id, necessity=FALSE, p=2)
+  {X <- xtabs( x ~ unit_id + cluster_id)
+   Y <- xtabs( y ~ unit_id + cluster_id)
     # Consistency suff.
     con.ragin <-
       function(X, Y)
