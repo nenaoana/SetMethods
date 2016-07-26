@@ -5,7 +5,7 @@ function(results,
 		 intermed=FALSE,
 		 sol=1,
 		 max_pairs=5)
-	{
+	{outcome <- toupper(outcome)
 		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
 		n <- rownames(X)
 		if (!neg.out){
