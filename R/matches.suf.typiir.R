@@ -7,9 +7,8 @@ function(results,
            sol=1,
            max_pairs=5)
     
-  {
+  {outcome <- toupper(outcome)
     pdata <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
-    outcome<-toupper(outcome)
     nterm <- colnames(pdata[term])
     data <- results$tt$initial.data
     data1 <- data.frame(matrix(NA,ncol=0,nrow=nrow(data)))
