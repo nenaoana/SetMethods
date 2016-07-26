@@ -4,7 +4,7 @@ function(results,
 		 neg.out=FALSE,
 		 intermed=FALSE,
 		 sol=1)
-	{
+	{outcome <- toupper(outcome)
 		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
 		if (!neg.out){
 		y <- results$tt$initial.data[, outcome]}
