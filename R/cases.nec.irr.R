@@ -2,7 +2,7 @@ cases.nec.irr <-
 function(results,
 		 outcome,
 		 solution=1)
-	{
+	{outcome <- toupper(outcome)
 		X <- pimdata(results=results, outcome=outcome, solution=solution)
 		y <- results$tt$initial.data[, outcome]
 		CS <- results$tt$recoded.data
