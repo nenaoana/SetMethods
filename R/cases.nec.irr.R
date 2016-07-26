@@ -1,9 +1,9 @@
 cases.nec.irr <-
 function(results,
 		 outcome,
-		 solution=1)
+		 sol=1)
 	{outcome <- toupper(outcome)
-		X <- pimdata(results=results, outcome=outcome, solution=solution)
+		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		y <- results$tt$initial.data[, outcome]
 		CS <- results$tt$recoded.data
 		CS <- CS[, -which(colnames(CS)==outcome)]
