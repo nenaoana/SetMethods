@@ -1,19 +1,19 @@
 Package: SetMethods
 Type: Package
-Title: SetMethods: A Package Companion to "Set-Theoretic Methods for
-        the Social Sciences".
+Title: SetMethods: A Package for Set-theoretic Multi-method Research
 Version: 2.0
-Date: 2016-06-17
+Date: 2016-07-26
 Author: Juraj Medzihorsky, Ioana-Elena Oana, Mario Quaranta, Carsten Q. Schneider
 Maintainer: Ioana-Elena Oana <oana_ioana-elena@phd.ceu.edu>
-Description: SetMethods is a package companion to the book by C. Q.
+Description: SetMethods initiated as a package companion to the book by C. Q.
         Schneider and C. Wagemann "Set-Theoretic Methods for the Social
-        Sciences", Cambridge University Press. It contains some
-        additional functions not present in other packages and data to
-        replicate the examples in the book and in the online appendix.
+        Sciences", Cambridge University Press. It grew to include functions 
+	for performing 	set-theoretic multi-method research not present in other 
+	packages. Additionally it includes data to replicate the examples in the 
+	book and in the online appendix.
 Depends: QCA, lattice, betareg, R (>= 2.14.0)
 Imports: QCA, lattice, betareg
 License: GPL-2
-Packaged: 2016-06-17 11:00:00 UTC; nena
+Packaged: 2016-07-26 11:00:00 UTC; nena
 NeedsCompilation: no
 Date/Publication: 2016-06-17 11:00:00
