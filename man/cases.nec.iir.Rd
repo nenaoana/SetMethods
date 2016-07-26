@@ -7,7 +7,7 @@
 	Function extracts individually irrelevant cases from an object of class "qca".
 }
 \usage{
-cases.nec.irr(results, outcome, solution = 1)
+cases.nec.irr(results, outcome, sol = 1)
 }
 \arguments{
 	\item{results}{
@@ -16,7 +16,7 @@ cases.nec.irr(results, outcome, solution = 1)
 	\item{outcome}{
 		A character string with the name of the outcome.
 	}
-	\item{solution}{
+	\item{sol}{
 		A numeric vector where the first number indicates the number of the
 		solution according to the order in the "qca" object.
 	}

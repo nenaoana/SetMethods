@@ -7,7 +7,7 @@
 	Function returns pooled, within, and between consistencies and coverages for the relationship between two sets.
 }
 \usage{
-cluster.diagnostics(x, y, unit, cluster, p=2, necessity= FALSE)
+cluster.diagnostics(x, y, unit, cluster, necessity= FALSE,  p = 2)
 }
 \arguments{
 	\item{x}{
@@ -42,5 +42,17 @@ Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theo
 	\code{\link[QCA:eqmcc]{eqmcc}}
 }
 \examples{
+# Import your clustered data in the long format. 
+# For example:
+
+data(Schneider)
+
+# Get pooled, within, and between consistencies and coverages 
+# for STOCK as necessary for EXPORT:
+
+
+cluster.diagnostics(Schneider$STOCK, Schneider$EXPORT, unit = Schneider$COUNTRY, 
+                    cluster = Schneider$YEAR, necessity= TRUE)
+
 }
 \keyword{QCA}

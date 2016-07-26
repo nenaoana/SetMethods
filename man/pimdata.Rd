@@ -4,7 +4,7 @@
 	Function to extract prime implicants table from object of class "qca"	
 }
 \description{
-	Function extracts a table with prime implicants from an object of class
+	A function that extracts a table with prime implicants from an object of class
 	"qca".  
 }
 \usage{
@@ -15,14 +15,14 @@ pimdata(results, outcome, intermed = FALSE, sol = 1)
 		An object of class "qca".
 	}
 	\item{outcome}{
-		A character string with the name of the outcome.
+		A character string with the name of the outcome in capital letters.
 	}
 	\item{intermed}{
 		Logical. Use the intermediate solution?
 	}
 	\item{sol}{
 		A numeric vector where the first number indicates the number of the
-		solution according to the order in the "qca" object.
+		solution in case of model ambiguity according to the order in the "qca" object.
 	}
 }
 \details{
@@ -44,8 +44,34 @@ pimdata(results, outcome, intermed = FALSE, sol = 1)
 	\code{\link[SetMethods:pimplot]{pimplot}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# Import your data. For example:
+
+data(Schneider)
+
+# Get the truth table:
+
+TT_y <- truthTable(Schneider, outcome = "EXPORT",
+                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                   incl.cut1 = .9,
+                   complete = TRUE,
+                   PRI = TRUE,
+                   sort.by = c("out", "incl", "n"))
+
+# Get the parsimonious solution:
+
+sol_yp <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE)
+
+# Get the intermediate solution:
+
+sol_yi <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+
+# Get the prime implicants table for the parsimonious solution:
+
+pimdata(results = sol_yp, outcome = "EXPORT")
+
+# Get the prime implicants table for the first intermediate solution:
+
+pimdata(results = sol_yi, outcome = "EXPORT", intermed = TRUE, sol = 1)
+
 }
 \keyword{QCA}

@@ -1,13 +1,13 @@
 \name{cluster.eqmcc}
 \alias{cluster.eqmcc}
 \title{
-	Diagnostic tool for clustered data/
+	Diagnostic tool for clustered data
 }
 \description{
 	Function returns pooled, within, and between consistencies for an object of class "qca".
 }
 \usage{
-cluster.eqmcc(results, data, outcome, unit_id, cluster_id, intermed=FALSE, sol = 1)
+cluster.eqmcc(results, data, outcome, unit_id, cluster_id, intermed=FALSE, sol = 1, p = 2)
 }
 \arguments{
 	\item{results}{
@@ -22,10 +22,10 @@ cluster.eqmcc(results, data, outcome, unit_id, cluster_id, intermed=FALSE, sol =
 	\item{unit_id}{
 		A character string with the name of the vector containing the units (i.e. countries).
 	}
-	\item{cluster_if}{
+	\item{cluster_id}{
 		A character string with the name of the vector containing the clustering units (i.e. years).
 	}
-	\item{intermediate}{
+	\item{intermed}{
 		Logical. Use the intermediate solution?
 	}
 	\item{sol}{
@@ -49,5 +49,28 @@ Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theo
 	\code{\link[QCA:eqmcc]{eqmcc}}
 }
 \examples{
+
+# Import your clustered data in the long format. 
+# For example:
+
+data(Schneider)
+
+# Get the truth table for the presence of the outcome:
+
+TT_y <- truthTable(Schneider, outcome = "EXPORT",
+                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                   incl.cut1 = .9,
+                   complete = TRUE,
+                   PRI = TRUE,
+                   sort.by = c("out", "incl", "n"))
+
+# Get the intermediate solution:
+
+sol_yi <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+
+# Get pooled, within, and between consistencies for the second intermediate solution:
+
+cluster.eqmcc(results = sol_yi, data = Schneider, outcome = "EXPORT", unit_id = "COUNTRY", 
+              cluster_id = "YEAR", intermed = TRUE, sol = 2)
 }
 \keyword{QCA}

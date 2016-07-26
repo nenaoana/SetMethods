@@ -4,7 +4,7 @@
 	List individually irrelevant cases for sufficiency.
 }
 \description{
-	Function extracts individually irrelevant cases for sufficiency from an object of class "qca".
+	A function that extracts individually irrelevant cases for sufficiency from an object of class "qca".
 }
 \usage{
 cases.suf.iir(results, outcome, neg.out=FALSE, intermed=FALSE, sol = 1)
@@ -24,7 +24,7 @@ cases.suf.iir(results, outcome, neg.out=FALSE, intermed=FALSE, sol = 1)
 	}
 	\item{sol}{
 		A numeric vector where the first number indicates the number of the
-		solution according to the order in the "qca" object.
+		solution in case of model ambiguity according to the order in the "qca" object.
 	}
 }
 \details{
@@ -41,5 +41,51 @@ cases.suf.iir(results, outcome, neg.out=FALSE, intermed=FALSE, sol = 1)
 \seealso{
 	\code{\link[QCA:eqmcc]{eqmcc}}
 }
-\examples{}
+\examples{
+# Import your data. For example:
+
+data(Schneider)
+
+# Get the truth table for the presence of the outcome:
+
+TT_y <- truthTable(Schneider, outcome = "EXPORT",
+                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                   incl.cut1 = .9,
+                   complete = TRUE,
+                   PRI = TRUE,
+                   sort.by = c("out", "incl", "n"))
+
+# Get the parsimonious solution:
+
+sol_yp <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE)
+
+# Get the intermediate solution:
+
+sol_yi <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+
+# Return individually irrelevant cases for sufficiency for the parsimonious solution:
+
+cases.suf.iir(results = sol_yp, outcome = "EXPORT")
+
+# Return individually irrelevant cases cases for sufficiency for the intermediate solution:
+
+cases.suf.iir(results = sol_yi, outcome = "EXPORT", intermed = TRUE)
+
+# Get the truth table and the parsimonious solution for the absence of the outcome:
+
+TT_ny <- truthTable(Schneider, outcome = "EXPORT", neg.out = TRUE,
+                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                   incl.cut1 = .9,
+                   complete = TRUE,
+                   PRI = TRUE,
+                   sort.by = c("out", "incl", "n"))
+
+
+sol_nyp <- eqmcc(TT_ny, include = "?", details = TRUE, show.cases = TRUE)
+
+# Return individually irrelevant cases for sufficiency for the second parsimonious solution 
+# for the absence of the outcome:
+
+cases.suf.iir(results = sol_nyp, outcome = "EXPORT", neg.out = TRUE, sol = 2)
+}
 \keyword{QCA}

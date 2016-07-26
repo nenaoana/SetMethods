@@ -7,7 +7,7 @@
 \format{
   A data frame with 61 observations on the following 4 variables.
   \describe{
-    \item{\code{Y}}{a numeric vector. Outcone, trade liberalization.}
+    \item{\code{Y}}{a numeric vector. Outcome, trade liberalization.}
     \item{\code{G}}{a numeric vector. Condition, lack of weak growth.}
     \item{\code{H}}{a numeric vector. Condition, lack of hyper-inflation}
     \item{\code{HorG}}{a numeric vector. Condition, H or G.}
