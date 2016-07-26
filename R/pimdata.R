@@ -3,7 +3,8 @@ function(results,
            outcome, 
            intermed=FALSE,
            sol=1)
-  {if (!intermed){
+  { outcome <- toupper(outcome)
+    if (!intermed){
     s <- results$solution[[sol]]
     P <- results$pims[colnames(results$pims)%in%s]}
     else{
