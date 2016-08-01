@@ -2,10 +2,10 @@
 \alias{LipsetCS}
 \docType{data}
 \title{Lipset (1959), crisp-set}
-\description{The \code{LipsetCS} data frame has 18 rows and 6 variables}
+\description{The \code{LipsetCS} data frame has 18 rows and 6 sets}
 \usage{data(LipsetCS)}
 \format{
-  A data frame with 18 observations on the following 6 variables.
+  A data frame with 18 observations on the following 6 sets.
   \describe{
     \item{\code{DEVELOPED}}{a numeric vector. Condition, economically developed country.}
     \item{\code{URBAN}}{a numeric vector. Condition, urbanized countries.}

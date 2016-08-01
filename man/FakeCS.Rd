@@ -2,10 +2,10 @@
 \alias{FakeCS}
 \docType{data}
 \title{Fake crisp-set data}
-\description{The \code{FakeCS} data frame has 30 rows and 5 variables}
+\description{The \code{FakeCS} data frame has 30 rows and 5 sets}
 \usage{data(FakeCS)}
 \format{
-  A data frame with 30 observations on the following 5 variables.
+  A data frame with 30 observations on the following 5 sets.
   \describe{
     \item{\code{y}}{a numeric vector. Outcome with 2 categories (crisp-set).}
     \item{\code{j}}{a numeric vector. Condition with 2 categories (crisp-set).}

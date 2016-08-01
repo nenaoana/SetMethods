@@ -4,7 +4,7 @@
 	Function to extract prime implicants table from object of class "qca"	
 }
 \description{
-	A function that extracts a table with prime implicants from an object of class
+	A function that displays each case's set membership scores in each sufficient term, the solution formula, and the outcome from an object of class
 	"qca".  
 }
 \usage{

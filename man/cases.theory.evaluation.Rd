@@ -19,7 +19,9 @@ cases.theory.evaluation(theory_eval)
 }
 \value{
 }
-\references{
+\references{Ragin, C. C. 1987. The Comparative Method: Moving Beyond Qualitative and Quantitative Strategies. Berkeley: University of California Press, pp. 118-121.
+
+Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Sciences: A Guide to Qualitative Comparative Analysis. Cambridge: Cambridge University Press, chapter 11.3.
 }
 \author{
 	Ioana-Elena Oana and Juraj Medzihorsky

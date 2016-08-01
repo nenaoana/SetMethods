@@ -2,11 +2,11 @@
 \alias{LipsetFS}
 \docType{data}
 \title{Lipset (1959), fuzzy-set}
-\description{The \code{LipsetFS} data frame has 18 rows and 6 variables}
+\description{The \code{LipsetFS} data frame has 18 rows and 6 sets}
 
 \usage{data(LipsetFS)}
 \format{
-  A data frame with 18 observations on the following 6 variables.
+  A data frame with 18 observations on the following 6 sets.
   \describe{
     \item{\code{Survived}}{a numeric vector. Outcome, survival of democracy during the inter-war period.}
     \item{\code{DEVELOPED}}{a numeric vector. Condition, economically developed countries.}

@@ -2,10 +2,10 @@
 \alias{Samford}
 \docType{data}
 \title{Samford (2010)}
-\description{The \code{Samford} data frame has 61 rows and 4 variables}
+\description{The \code{Samford} data frame has 61 rows and 4 sets}
 \usage{data(Samford)}
 \format{
-  A data frame with 61 observations on the following 4 variables.
+  A data frame with 61 observations on the following 4 sets.
   \describe{
     \item{\code{Y}}{a numeric vector. Outcome, trade liberalization.}
     \item{\code{G}}{a numeric vector. Condition, lack of weak growth.}

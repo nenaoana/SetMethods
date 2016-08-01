@@ -31,7 +31,7 @@ cases.suf.dcv(results, outcome, neg.out=FALSE, intermed=FALSE, sol = 1)
 }
 \value{
 }
-\references{
+\references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97
 }
 \author{
 	Juraj Medzihorsky and Ioana-Elena Oana

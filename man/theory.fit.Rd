@@ -20,6 +20,7 @@ theory.fit(theory_eval)
 \value{
 }
 \references{
+Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Sciences: A Guide to Qualitative Comparative Analysis. Cambridge: Cambridge University Press, chapter 11.3
 }
 \author{
 	Ioana-Elena Oana

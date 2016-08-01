@@ -2,10 +2,10 @@
 \alias{emme}
 \docType{data}
 \title{Emmenegger (2011)}
-\description{The \code{emme} data frame has 19 rows and 8 variables}
+\description{The \code{emme} data frame has 19 rows and 8 sets}
 \usage{data(emme)}
 \format{
-  A data frame with 19 observations on the following 8 variables.
+  A data frame with 19 observations on the following 8 sets.
   \describe{
     \item{\code{country}}{a factor with levels \code{Australia} \code{Austria} \code{Belgium} \code{Canada} \code{Denmark} \code{Finland} \code{France} \code{Germany} \code{Ireland} \code{Italy} \code{Netherlands} \code{NewZealand} \code{Norway} \code{Portugal} \code{Spain} \code{Sweden} \code{Switzerland} \code{UK} \code{USA}}
     \item{\code{s}}{a numeric vector. Condition, state-society relationships.}

@@ -4,7 +4,8 @@
 	Prime implicants plots.
 }
 \description{
-	A function that returns prime implicants plots from an object of class "qca".  
+		A function that displays XY plots for each sufficient term and the solution formula plotted against the outcome from an object of class
+	"qca". 
 }
 \usage{
 pimplot(results, outcome, intermed=FALSE, sol = 1, case_labels=TRUE, lab_color=rgb(0,0,0,0.5), lab_jitter=FALSE)
@@ -38,7 +39,7 @@ pimplot(results, outcome, intermed=FALSE, sol = 1, case_labels=TRUE, lab_color=r
 \value{
 	A plot.
 }
-\references{
+\references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods Research 42(4): 559-597
 }
 \author{
 	Juraj Medzihorsky

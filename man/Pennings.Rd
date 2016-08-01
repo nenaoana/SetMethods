@@ -2,10 +2,10 @@
 \alias{Pennings}
 \docType{data}
 \title{Pennings (2003)}
-\description{The \code{Pennings} data frame has 45 rows and 5 variables}
+\description{The \code{Pennings} data frame has 45 rows and 5 sets}
 \usage{data(Pennings)}
 \format{
-  A data frame with 45 observations on the following 5 variables.
+  A data frame with 45 observations on the following 5 sets.
   \describe{
     \item{\code{K}}{a numeric vector. Outcome, constitutional control.}
     \item{\code{C}}{a numeric vector. Condition, consensus democracy.}

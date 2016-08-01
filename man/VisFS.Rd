@@ -2,10 +2,10 @@
 \alias{VisFS}
 \docType{data}
 \title{Vis (2009), fuzzy set data}
-\description{The \code{VisFS} data frame has 25 rows and 4 variables}
+\description{The \code{VisFS} data frame has 25 rows and 4 sets}
 \usage{data(VisFS)}
 \format{
-  A data frame with 25 observations on the following 4 variables.
+  A data frame with 25 observations on the following 4 sets.
   \describe{
     \item{\code{p}}{a numeric vector. Condition, weak political positions, with parties in government expecting losses at the next election.}
     \item{\code{s}}{a numeric vector. Condition, deteriorating economic situation.}

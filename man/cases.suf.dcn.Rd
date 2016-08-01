@@ -31,7 +31,9 @@ cases.suf.dcn(results, outcome, neg.out=FALSE, intermed=FALSE, sol = 1)
 }
 \value{
 }
-\references{
+\references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97
+
+Schneider, C. Q., Rohlfing I. 2016. Case Studies Nested in Fuzzy-Set QCA on Sufficiency: Formalizing Case Selection and Causal Inference. Sociological Methods & Research 45(3): 526-68
 }
 \author{
 	Juraj Medzihorsky and Ioana-Elena Oana

@@ -2,10 +2,10 @@
 \alias{DTmv}
 \docType{data}
 \title{Fake data for mvQCA}
-\description{\code{mvQCA} data frame has 25 rows and 4 variables.}
+\description{\code{mvQCA} data frame has 25 rows and 4 sets.}
 \usage{data(DTmv)}
 \format{
-  A data frame with 25 observations on the following 4 variables.
+  A data frame with 25 observations on the following 4 sets.
   \describe{
     \item{\code{Y}}{a numeric vector. Outcome with 2 categories (crisp).}
     \item{\code{A}}{a numeric vector. Condition with 2 categories (crisp).}

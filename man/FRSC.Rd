@@ -2,10 +2,10 @@
 \alias{FRSC}
 \docType{data}
 \title{Freitag and Schlicht (2009)}
-\description{The \code{FRSC} data frame has 16 rows and 8 variables}
+\description{The \code{FRSC} data frame has 16 rows and 8 sets}
 \usage{data(FRSC)}
 \format{
-  A data frame with 16 observations on the following 8 variables.
+  A data frame with 16 observations on the following 8 sets.
   \describe{
     \item{\code{integrated_comp_schools}}{a numeric vector. Condition, percentage  of Pupils Enrolled in Integrated Comprehensive Schools,}
     \item{\code{coop_comp_schools}}{a numeric vector. Condition, percentage  of Pupils Enrolled in Cooperative Comprehensive Schools.}

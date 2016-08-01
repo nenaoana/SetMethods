@@ -2,8 +2,8 @@
 \alias{SetMethods-package}
 \alias{SetMethods}
 \docType{package}
-\title{SetMethods: A Package SetMethods: A Package for Set-theoretic Multi-method Research.}
-\description{SetMethods initiated as a package companion to the book by C. Q. Schneider and C. Wagemann "Set-Theoretic Methods for the Social Sciences", Cambridge University Press. It grew to include functions for performing set-theoretic multi-method research not present in other packages. Additionally it includes data to replicate the examples in the book and in the online appendix.}
+\title{SetMethods: A Package for Set-theoretic Multi-method Research.}
+\description{SetMethods initiated as a package companion to the book by C. Q. Schneider and C. Wagemann "Set-Theoretic Methods for the Social Sciences", Cambridge University Press. It has now grown to include, among others, functions for performing set-theoretic multi-method research (Schneider and Rohlfing 2013) not present in other packages. Additionally it includes data to replicate the examples in the book and in the online appendix.}
 \details{
 \tabular{ll}{
 Package: \tab SetMethods\cr

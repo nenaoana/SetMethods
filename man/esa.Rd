@@ -24,14 +24,14 @@ esa(oldtt, nec_cond, imposs_LR, contrad_rows)
 		Unions of conditions are performed with a "+", while intersections are performed with a "*".
 	}
 	\item{contrad_rows}{
-		A vector containing the names of the rows which are contradictory.
+		A vector containing the names of the rows that are contradictory.
 	}
 	}
 \details{
 }
-\value{ It returns a new truthtable in which untenable assumptions are banned.
+\value{ It returns a new truth table in which all logical remainder rows are set to outcome value 0 that would otherwise present untenable assumptions.
 }
-\references{
+\references{Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Sciences: A Guide to Qualitative Comparative Analysis. Cambridge: Cambridge University Press, chapter 8.
 }
 \author{
 	Ioana-Elena Oana

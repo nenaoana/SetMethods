@@ -2,10 +2,10 @@
 \alias{Schneider}
 \docType{data}
 \title{Schneider et. al. (2010)}
-\description{The \code{Schneider} data frame has 76 observations and 9 variables}
+\description{The \code{Schneider} data frame has 76 observations and 9 sets}
 \usage{data(Schneider)}
 \format{
-  A data frame with 76 observations on the following 9 variables.
+  A data frame with 76 observations on the following 9 sets.
   \describe{
     \item{\code{EMP}}{a numeric vector. Condition, employment protection.}
     \item{\code{BARGAIN}}{a numeric vector. Condition, collective bargaining.}

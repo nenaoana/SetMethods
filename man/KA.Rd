@@ -2,10 +2,10 @@
 \alias{KA}
 \docType{data}
 \title{Koenig-Archibugi (2004)}
-\description{The \code{KA} data frame has 13 rows and 5 variables}
+\description{The \code{KA} data frame has 13 rows and 5 sets}
 \usage{data(KA)}
 \format{
-  A data frame with 13 observations on the following 5 variables.
+  A data frame with 13 observations on the following 5 sets.
   \describe{
     \item{\code{supranat}}{a numeric vector. Government support for supranational CFSP.}
     \item{\code{identmass}}{a numeric vector. European identity of the general public.}

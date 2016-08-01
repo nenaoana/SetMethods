@@ -2,10 +2,10 @@
 \alias{Selbst.disappear}
 \docType{data}
 \title{Selbst, disappearing necessary condition data}
-\description{The \code{Selbst.disappear} data frame has 98 rows and 4 variables}
+\description{The \code{Selbst.disappear} data frame has 98 rows and 4 sets}
 \usage{data(Selbst.disappear)}
 \format{
-  A data frame with 98 observations on the following 4 variables.
+  A data frame with 98 observations on the following 4 sets.
   \describe{
     \item{\code{A}}{a numeric vector. Condition, crisp-set.}
     \item{\code{B}}{a numeric vector. Condition, crisp-set.}

@@ -3,7 +3,7 @@
 \title{Function producing enhanced XY plots with Lattice}
 
 \description{
-\code{xy.plot.lat} produces XY plots using the \code{lattice} package and provides coverage and consistency values. The advantage over \code{fsplot()} (in the \code{QCA3} package) is its larger flexibility and that it does not need a dataset to work, it just needs two vectors. Several graphic parameters can be decided by the user.}
+\code{xy.plot.lat} produces XY plots using the \code{lattice} package and provides values for consistency, coverage, RoN, and PRI. Several graphic parameters can be decided by the user.}
 \usage{
 xy.plot.lat(x, y, 
             ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), 
