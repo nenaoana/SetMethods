@@ -19,7 +19,7 @@ function(results,
 		FA[FA<=0.5] <- 1 - FA[FA<=0.5]
 		w <- apply(FA, 1, min)
 		#
-		CS <- round(results$tt$initial.data)
+		CS <- round(results$tt$recoded.data)
 		CS <- CS[, -which(colnames(CS)==outcome)]
 		tt_row <- apply(CS, 1,	function(i) paste(i, collapse=''))
 		x <- X[, 'solution_formula']	
