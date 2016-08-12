@@ -12,7 +12,7 @@ function(results,
 		  y <- results$tt$initial.data[, outcome]}
 		else{
 		  y <- 1-results$tt$initial.data[, outcome]}  
-		FS <- results$tt$initial.data
+		FS <- results$tt$recoded.data
 		FS <- FS[, -which(colnames(FS)==outcome)]
 		#	get tt row membership W
 		FA <- FS
