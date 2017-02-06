@@ -26,17 +26,20 @@ function(results,
       data1[t_neg] <- 1 - data[t_neg]
       colnames(data1[t_neg])<-tolower(colnames(data1[t_neg]))
     }
-
+    
+    if (!neg.out){
+      Y <- data[outcome]}
+    else{
+      Y <- 1-data[outcome]}
+    
+    if (length(tn)==1) {return("This term has a single condition!")}
+    
+    else {
+      M <- list()
+      
     for (i in (1:length(tn)))
-    { print(paste("Focal Conjunct", tn[i], sep = " "))
-      x <- data1[toupper(tn[i])]
-      if (!neg.out){
-        y <- data[outcome]}
-      else{
-        y <- 1-data[outcome]
-      }
-    if (length(tn)==1) {print(paste("This term has a single condition!"))}
-      else{
+    { focconj <- paste("Focal Conjunct", tn[i], sep = " ")
+      X <- data1[toupper(tn[i])]
       co<- tn[-grep(tn[i], tn)]
       co<- toupper(co)
       codata<-data1[co]
@@ -44,54 +47,85 @@ function(results,
         a<-do.call(pmin, codata[,])
         codata1<-data.frame(a)
         row.names(codata1)<-row.names(codata)}
-      else            {
+      else{
         codata1<-codata
         names(codata1)[1]<-"a"}
-      codata$term<-pmin(codata1$a,x[,])
+      
+      codata$term<-pmin(codata1$a,X[,])
 
-      typical <-(codata$term>0.5) & (y>0.5) & (codata$term<=y)
-      typ1 <- (x <= codata1$a)
-      typ2 <- (x > codata1$a)
+      typical <-(codata$term>0.5) & (Y>0.5) & (codata$term<=Y)
+      typ1 <- (X <= codata1$a)
+      typ2 <- (X > codata1$a)
 
-      d <- rownames(data1)[typical]
-      e <- rownames(data1)[typical]
-      if (identical(e, character(0))) {print("no typical cases")}
+      ty <- rownames(data1)[typical]
+      
+      if (identical(ty, character(0))) {M[[i]] <-list(FocConj=focconj, results="no typical cases")}
       else {
-      casesm<-c()
-      casesn<-c()
-      val<-c()
-      order<-c()
-      for (m in d) {
-        for (n in e) {
-          s <- (((y[m,]-x[m,])+(y[n,]-x[n,])+(1.5-(x[m,]+x[n,])))/((x[m,]+x[n,])))
-          sm<-((y[m,]-codata[m,"term"])/codata[m,"term"])
-          sn<-((y[n,]-codata[n,"term"])/codata[n,"term"])
-          if (sm>=sn){
-            casesm<-c(casesm,m)
-            casesn<-c(casesn,n)
-            val<-c(val,s)
-          if ((x[m,] <= codata1[m,]) & (x[n,] <= codata1[n,])) {order<-c(order,1)}
-          else { if ((x[m,] <= codata1[m,]) & (x[n,] > codata1[n,])) {order<-c(order,2)}
-            else { if ((x[m,] > codata1[m,]) & (x[n,] <= codata1[n,])) {order<-c(order,3)}
-              else { if ((x[m,] > codata1[m,]) & (x[n,] > codata1[n,])) {order<-c(order,4)}
+        K <- expand.grid(ty, ty)
+        x <- X[,toupper(tn[i])]
+        y <- Y[,outcome]
+        mincc <- codata1[,"a"]
+        term <- codata[,"term"]
+        aux.f <-
+          function(p)
+          {
+            i <- which(rownames(X)==p[1])
+            j <- which(rownames(X)==p[2])
+            s <- (((y[i]-x[i])+(y[j]-x[j])+(1.5-(x[i]+x[j])))/(x[i]+x[j]))
+            return(s)
+          }
+        aux.f2 <-
+          function(p)
+          {
+            i <- which(rownames(X)==p[1])
+            j <- which(rownames(X)==p[2])
+            sm<-((y[i]-term[i])/term[i])
+            sn<-((y[j]-term[j])/term[j])     
+            return(sm>=sn)
+          }
+        aux.f3 <-
+          function(p)
+          {
+            i <- which(rownames(X)==p[1])
+            j <- which(rownames(X)==p[2])
+            if ((x[i] <= mincc[i]) & (x[j] <= mincc[j])) {order<-c(1)}
+            else { if ((x[i] <= mincc[i]) & (x[j] > mincc[j])) {order<-c(2)}
+              else { if ((x[i] > mincc[i]) & (x[j] <= mincc[j])) {order<-c(3)}
+                else { if ((x[i] > mincc[i]) & (x[j] > mincc[j])) {order<-c(4)}
+                }
               }
             }
-          }
-          }
-        }}
-      matcres <- data.frame(casesm, casesn, val, order)
-      matcres[,5] <- NA
+          return(order)
+          }  
+        
+        s <- apply(K, 1, aux.f)
+        order <- apply(K, 1, aux.f3)
+        mt <- apply(K, 1, aux.f2)
+        
+        matcres <- data.frame(Typical=K[,1],
+                              IIR=K[,2],
+                              Distance=round(s, digits=3),
+                              PairRank=order,
+                              Typ1moreTypical=mt)  
+     
       matcres[,6] <- NA
-      colnames(matcres)<-c("Typical1","Typical2","Distance","PairRank","UniqCov1","UniqCov2")
+      matcres[,7] <- NA
+      colnames(matcres)<-c("Typical1","Typical2","Distance","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
       R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, intermed=intermed, sol=sol)
+      
       for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
-        if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,5]<-R[uu,7]}
-        if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,7]}
+        if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,7]}
+        if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,7]<-R[uu,7]}
       }}
       maxl<-min(max_pairs,nrow(matcres))
-      matcres<-matcres[order(matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Distance),]
-      print(head(matcres, maxl))
+      matcres<-matcres[order(-matcres$Typ1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Distance),]
+      matcres <- matcres[matcres$Typ1MoreTypical==TRUE,]
+      matcres <- matcres[, -c(5)]
+      matcres <- matcres[matcres$Typical1!=matcres$Typical2,]
+      M[[i]] <- list(FocConj=focconj, results=(head(matcres, maxl))) 
       }
-      }
+    }
+      class(M) <- 'matchessuf'
+      return(M)
     }
 }
