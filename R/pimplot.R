@@ -10,7 +10,7 @@ function(data,
            lab_color=rgb(0,0,0,0.5),
            lab_jitter=FALSE)
   { if (!necessity){
-    if (!incl.tt) {  
+    if (is.null(incl.tt)) {  
     P <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
     n_c <- ncol(P)-1
     par(ask=F)
@@ -37,7 +37,7 @@ function(data,
     
     else { # for TT rows
       oldtt <- results$tt$tt
-      oldtt$incl <- as.numeric(oldtt$incl)
+      suppressWarnings(oldtt$incl <- as.numeric(oldtt$incl))
       newtt <- oldtt[ which(oldtt$incl>incl.tt), ]
       P <- as.data.frame(results$tt$minmat)
       P <- P[colnames(P)%in%rownames(newtt)]
@@ -94,4 +94,5 @@ function(data,
     }
   }
   }
+
 
