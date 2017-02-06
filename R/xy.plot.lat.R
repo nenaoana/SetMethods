@@ -33,13 +33,16 @@ function(x, y,
       con <- sum(pmin(x, y))/sum(x)
       cov <- sum(pmin(x, y))/sum(y)
       pri <- (sum(pmin(x,y))-sum(pmin(x,y,1-y)))/(sum(x)-sum(pmin(x,y,1-y)))
+      hcon <- sum(pmin(x,y))/sum(pmin(x,y) + sqrt(pmax((x-y), 0)*x))
       cons <- format(con, digits = 3)
       storage.mode(cons) <- "numeric"
       cove <- format(cov, digits = 3)
       storage.mode(cove) <- "numeric"
       pris <- format(pri, digits = 3)
       storage.mode(pris) <- "numeric"
-      pof <- sprintf("Consistency Sufficiency: %.3f; Coverage Sufficiency: %.3f; PRI: %.3f", con, cov, pri)
+      hcons <- format(hcon, digits = 3)
+      storage.mode(hcons) <- "numeric"
+      pof <- sprintf("Consistency Sufficiency: %.3f; Coverage Sufficiency: %.3f; PRI: %.3f; Haesebrouck Cons.: %.3f", con, cov, pri, hcon)
     }
     
     
