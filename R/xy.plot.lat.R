@@ -26,7 +26,7 @@ function(x, y,
       storage.mode(cove) <- "numeric"
       rons <- format(ron, digits = 3)
       storage.mode(rons) <- "numeric"
-      pof <- sprintf("Consistency Necessity: %.3f; Coverage Necessity: %.3f; Relevance Necessity: %.3f", con, cov, ron)
+      pof <- sprintf("Cons.Nec: %.3f; Cov.Nec: %.3f; RoN: %.3f", con, cov, ron)
     }
     else{
       # Sufficiency
@@ -42,7 +42,7 @@ function(x, y,
       storage.mode(pris) <- "numeric"
       hcons <- format(hcon, digits = 3)
       storage.mode(hcons) <- "numeric"
-      pof <- sprintf("Consistency Sufficiency: %.3f; Coverage Sufficiency: %.3f; PRI: %.3f; Haesebrouck Cons.: %.3f", con, cov, pri, hcon)
+      pof <- sprintf("Cons.Suf: %.3f; Cov.Suf: %.3f; PRI: %.3f; Cons.Suf(H): %.3f", con, cov, pri, hcon)
     }
     
     
