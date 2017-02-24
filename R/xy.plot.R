@@ -38,12 +38,12 @@ function(x, y,
       storage.mode(cove) <- "numeric"
       rons <- format(ron, digits = 3)
       storage.mode(rons) <- "numeric"
-      lab <- sprintf("Consistency Necessity: %.3f; Coverage Necessity: %.3f; Relevance Necessity: %.3f", con, cov, ron)
-      cons.c <- paste("Consistency Necessity",
+      lab <- sprintf("Cons.Nec: %.3f; Cov.Nec: %.3f; RoN: %.3f", con, cov, ron)
+      cons.c <- paste("Cons.Nec",
                       cons, sep = ": ")
-      cove.c <- paste("Coverage Necessity",
+      cove.c <- paste("Cov.Nec",
                       cove, sep = ": ")
-      rons.c<- paste("Relevance Necessity",
+      rons.c<- paste("RoN",
                       rons, sep = ": ")
       
     } else {
@@ -60,9 +60,15 @@ function(x, y,
       storage.mode(pris) <- "numeric"
       hcons <- format(hcon, digits = 3)
       storage.mode(hcons) <- "numeric"
-      lab <- sprintf("Consistency Sufficiency: %.3f; Coverage Sufficiency: %.3f; PRI: %.3f; Haesebrouck Cons.: %.3f", con, cov, pri, hcon)
+      lab <- sprintf("Cons.Suf: %.3f; Cov.Suf: %.3f; PRI: %.3f; Cons.Suf(H): %.3f", con, cov, pri, hcon)
+      cons.c <- paste("Cons.Suf",
+                      cons, sep = ": ")
+      cove.c <- paste("Cov.Suf",
+                      cove, sep = ": ")
       pris.c<- paste("PRI",
                      pris, sep = ": ")
+      hcons.c<- paste("Cons.Suf(H)",
+                     hcons, sep = ": ")
     }
     
     if (show.fit == TRUE) {
