@@ -7,7 +7,7 @@
 	Function returns pooled, within, and between consistencies and coverages for the relationship between two sets.
 }
 \usage{
-cluster.diagnostics(x, y, unit, cluster, necessity= FALSE,  p = 2)
+cluster.diagnostics(x, y, unit, cluster, necessity= FALSE)
 }
 \arguments{
 	\item{x}{
@@ -25,10 +25,7 @@ cluster.diagnostics(x, y, unit, cluster, necessity= FALSE,  p = 2)
 	\item{necessity}{
 		Logical. Perform the diagnostic for the relationship of necessity?
 	}
-}
-\details{
-}
-\value{
+	
 }
 \references{
 Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theoretic Research. COMPASSS Working Paper 2013-76
@@ -36,23 +33,21 @@ Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theo
 \author{
 	Ioana-Elena Oana and Juraj Medzihorsky
 }
-\note{
-}
 \seealso{
-	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[QCAGUI:eqmcc]{eqmcc}}
 }
 \examples{
 # Import your clustered data in the long format. 
 # For example:
 
-data(Schneider)
+data(SchneiderLong)
 
 # Get pooled, within, and between consistencies and coverages 
 # for STOCK as necessary for EXPORT:
 
 
-cluster.diagnostics(Schneider$STOCK, Schneider$EXPORT, unit = Schneider$COUNTRY, 
-                    cluster = Schneider$YEAR, necessity= TRUE)
+cluster.diagnostics(SchneiderLong$STOCK, SchneiderLong$EXPORT, unit = SchneiderLong$COUNTRY, 
+                    cluster = SchneiderLong$YEAR, necessity= TRUE)
 
 }
-\keyword{QCA}
+\keyword{QCAGUI}

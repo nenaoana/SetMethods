@@ -25,22 +25,17 @@ pimdata(results, outcome, intermed = FALSE, sol = 1)
 		solution in case of model ambiguity according to the order in the "qca" object.
 	}
 }
-\details{
-}
 \value{
 	A table with set memberships.
 	\item{solution_formula}{The solution formula.}
 	\item{out}{Membership in the outcome.}
 }
-\references{
-}
+%\references{}
 \author{
 	Ioana-Elena Oana and Juraj Medzihorsky
 }
-\note{
-}
 \seealso{
-	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[QCAGUI:eqmcc]{eqmcc}}
 	\code{\link[SetMethods:pimplot]{pimplot}}
 }
 \examples{
@@ -48,22 +43,23 @@ pimdata(results, outcome, intermed = FALSE, sol = 1)
 
 data(Schneider)
 
-# Get the truth table:
-
-TT_y <- truthTable(Schneider, outcome = "EXPORT",
-                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                   incl.cut1 = .9,
-                   complete = TRUE,
-                   PRI = TRUE,
-                   sort.by = c("out", "incl", "n"))
-
 # Get the parsimonious solution:
 
-sol_yp <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE)
+
+sol_yp <- eqmcc(Schneider, outcome = "EXPORT",
+                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                incl.cut1 = .9, 
+                include = "?", 					   
+                details = TRUE, show.cases = TRUE)
 
 # Get the intermediate solution:
 
-sol_yi <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+sol_yi <- eqmcc(Schneider, outcome = "EXPORT",
+                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                incl.cut1 = .9, 
+                include = "?", 					   
+                details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+
 
 # Get the prime implicants table for the parsimonious solution:
 
@@ -74,4 +70,4 @@ pimdata(results = sol_yp, outcome = "EXPORT")
 pimdata(results = sol_yi, outcome = "EXPORT", intermed = TRUE, sol = 1)
 
 }
-\keyword{QCA}
+\keyword{QCAGUI}

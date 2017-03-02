@@ -2,7 +2,7 @@
 \alias{xy.plot}
 \title{Function producing enhanced XY plots}
 \description{
-xy.plot produces XY plots and provides values for consistency, coverage, RoN, and PRI. Several graphic parameters can be decided by the user.
+xy.plot produces XY plots and provides values for consistency, Haesebrouck's consistency, coverage, RoN, PRI. Several graphic parameters can be decided by the user.
 }
 \usage{xy.plot(x, y, 
         ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), 
@@ -47,13 +47,16 @@ xy.plot produces XY plots and provides values for consistency, coverage, RoN, an
 %\details{}
 \value{It returns an enhanced XY plot.}
 \references{
+
+Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
+
 Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond. The Chicago University Press: Chicago and London.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge Univeristy Press: Cambridge.
 
 Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
 }
-\author{Mario Quaranta.}
+\author{Mario Quaranta and Ioana-Elena Oana.}
 %\note{}
 %\seealso{}
 \examples{

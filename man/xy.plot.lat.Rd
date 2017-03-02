@@ -3,7 +3,7 @@
 \title{Function producing enhanced XY plots with Lattice}
 
 \description{
-\code{xy.plot.lat} produces XY plots using the \code{lattice} package and provides values for consistency, coverage, RoN, and PRI. Several graphic parameters can be decided by the user.}
+\code{xy.plot.lat} produces XY plots using the \code{lattice} package and provides values for consistency, Haesebrouck's consistency, coverage, RoN, and PRI. Several graphic parameters can be decided by the user.}
 \usage{
 xy.plot.lat(x, y, 
             ylim = c(-0.05, 1.05), xlim = c(-0.05, 1.05), 
@@ -42,6 +42,8 @@ the vector of case labels. The default is \code{NULL}.}
 %\details{}
 \value{It returns an enhanced XY plot using the \code{lattice} package.}
 \references{
+Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
+
 Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond, The Chicago University Press: Chicago and London.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.
@@ -50,7 +52,7 @@ Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for S
 
 Sarkar, D. (2008) Lattice: Multivariate Data Visualization with R, Springer: Berlin.
 }
-\author{Mario Quaranta}
+\author{Mario Quaranta and Ioana-Elena Oana}
 %\note{}
 %\seealso{}
 \examples{

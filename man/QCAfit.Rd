@@ -1,24 +1,27 @@
 \name{QCAfit}
 \alias{QCAfit}
 \title{Function calculating the parameters of fit}
-\description{QCAfit is a function calculating parameters of fit useful in QCA and fsQCA that are consistency, coverage, PRI and PRODUCT. It works with both single and multiple conditions.}
-\usage{QCAfit(x, y, cond.lab = NULL, necessity = FALSE, negation = FALSE)}
+\description{QCAfit is a function calculating parameters of fit useful in QCA and fsQCA that are consistency, coverage, PRI, Haesebrouck's consistency, RoN and PRODUCT. It works with both single and multiple conditions.}
+\usage{QCAfit(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product = FALSE)}
 \arguments{
   \item{x}{is a vector containing the values of a condition or a matrix with more than one conditions.}
   \item{y}{is a vector containing the values of the output.}
   \item{cond.lab}{is a vector containing the label(s) of the condition(s).}
-  \item{necessity}{logical. It indicates if the output should be for sufficient or necessary condition(s). By default, \code{TRUE}, the function returns a table of parameters of fit for sufficient condition(s) (Consistency, Coverage, PRI and Product). When it set to \code{FALSE} the function returns a table of parameters of fit for necessary condition(s) (Consistency, Coverage, Relevance of Necessity).}
-  \item{negation}{logical. It indicates if the parameters of fit should be computed for the positive or the negative outcome. By default, \code{FALSE}, the function returns parameters of fit for the positive outcome.}
+  \item{necessity}{logical. It indicates if the output should be for sufficient or necessary condition(s). By default, \code{FALSE}, the function returns a table of parameters of fit for sufficient condition(s) (Consistency, Coverage, PRI, Haesebrouck's Consistency, and optionally Product). When it set to \code{TRUE} the function returns a table of parameters of fit for necessary condition(s) (Consistency, Coverage, Relevance of Necessity).}
+  \item{neg.out}{logical. It indicates if the parameters of fit should be computed for the positive or the negative outcome. By default, \code{FALSE}, the function returns parameters of fit for the positive outcome.}
+  \item{product}{logical. It indicates whether the parameter of fit PRODUCT should be shown. This stands for the product between the consistency sufficiency parameter and the PRI parameter.}
 }
 %\details{}
 \value{It returns a matrix containing the parameters of fit for each condition.}
 \references{
+Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
+
 Ragin, C. C. 2006. Set Relations in Social Research: Evaluating Their Consistency and Coverage. Political Analysis 14(3): 291-310.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.	
 
 Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}}
-\author{Mario Quaranta}
+\author{Mario Quaranta and Ioana-Elena Oana}
 %\note{}
 %\seealso{}
 \examples{

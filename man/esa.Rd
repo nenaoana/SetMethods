@@ -16,30 +16,31 @@ esa(oldtt, nec_cond, imposs_LR, contrad_rows)
 	\item{nec_cond}{
 		A vector of character strings containing the necessary conditions. 
 		Conditions should be capitalized and negated conditions should be inserted with a "~".
-		Unions of conditions are performed with a "+", while intersections are performed with a "*".
+		Unions of conditions are performed with a "+". Using this argument, logical remainder 
+		rows that contradict the statement of necessity will not be used in the analysis 
+		(i.e. OUT will be set to 0 in the truth table).
 	}
 	\item{imposs_LR}{
 		A vector of character strings containing the impossible logical remainders. 
 		Conditions should be capitalized and negated conditions should be inserted with a "~".
-		Unions of conditions are performed with a "+", while intersections are performed with a "*".
+		Intersections of conditions are performed with a "*". Using this argument, logical remainder
+		rows containing the particular intersection specified will not be used in the analysis 
+		(i.e. OUT will be set to 0 in the truth table).
 	}
 	\item{contrad_rows}{
-		A vector containing the names of the rows that are contradictory.
+		A vector containing the names of the rows that are contradictory. Using this argument,
+		all rows with the names specified (both logical remainders and rows containing empirical information)       will not be used in the analysis (i.e. OUT will be set to 0 in the truth table).
 	}
 	}
-\details{
-}
-\value{ It returns a new truth table in which all logical remainder rows are set to outcome value 0 that would otherwise present untenable assumptions.
+\value{ It returns a new truth table in which all truth table rows are set to outcome value 0 that would otherwise present untenable assumptions.
 }
 \references{Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Sciences: A Guide to Qualitative Comparative Analysis. Cambridge: Cambridge University Press, chapter 8.
 }
 \author{
 	Ioana-Elena Oana
 }
-\note{
-}
 \seealso{
-	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[QCAGUI:eqmcc]{eqmcc}}
 }
 \examples{
 # Import your data. For example:
@@ -55,12 +56,14 @@ TT_y <- truthTable(Schneider, outcome = "EXPORT",
                    PRI = TRUE,
                    sort.by = c("out", "incl", "n"))
 
-# Exclude the union of STOCK and MA as necessary for EXPORT
-# Exclude the rows "13", "14", "46", "51" as contradictory:
+# Exclude condition STOCK + MA and condition EMP as necessary for EXPORT
+# Exclude all remainder rows containing the combination BARGAIN*~OCCUP
+# Exclude the rows "19", "14", "46", "51" as contradictory:
 
-newtt <- esa(oldtt = TT_y, nec_cond = "STOCK+~MA", contrad_rows = c("13", "14", "46", "51"))
+newtt <- esa(oldtt = TT_y, nec_cond = c("STOCK+MA", "EMP"), 
+          imposs_LR = "BARGAIN*~OCCUP", contrad_rows = c("19", "14", "46", "51"))
 
 # The truth table newly created can afterwards be used in further analyses
 
 }
-\keyword{QCA}
+\keyword{QCAGUI}

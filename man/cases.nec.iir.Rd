@@ -21,10 +21,6 @@ cases.nec.iir(results, outcome, sol = 1)
 		solution according to the order in the "qca" object.
 	}
 }
-\details{
-}
-\value{
-}
 \references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97
 
 Rohlfing, I., Schneider C. Q. 2013. Combining QCA With Process Tracing in Analyses of Necessity. Political Research Quarterly 66(1): 220-35
@@ -32,11 +28,8 @@ Rohlfing, I., Schneider C. Q. 2013. Combining QCA With Process Tracing in Analys
 \author{
 	Juraj Medzihorsky
 }
-\note{
-}
 \seealso{
-	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[QCAGUI:eqmcc]{eqmcc}}
 }
-\examples{
-}
-\keyword{QCA}
+%\examples{}
+\keyword{QCAGUI}

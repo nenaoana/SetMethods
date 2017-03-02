@@ -35,42 +35,36 @@ matches.suf.typtyp(results, outcome, term = 1, neg.out=FALSE,
 		Maximum number of pairs to extract.
 	}
 }
-\details{
-}
-\value{
-}
 \references{
 Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods Research 42(4): 559-597
 }
 \author{
 	Ioana-Elena Oana
 }
-\note{
-}
 \seealso{
-	\code{\link[QCA:eqmcc]{eqmcc}}
+	\code{\link[QCAGUI:eqmcc]{eqmcc}}
 }
 \examples{
 # Import your data. For example:
 
 data(Schneider)
 
-# Get the truth table for the presence of the outcome:
-
-TT_y <- truthTable(Schneider, outcome = "EXPORT",
-                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                   incl.cut1 = .9,
-                   complete = TRUE,
-                   PRI = TRUE,
-                   sort.by = c("out", "incl", "n"))
-
 # Get the parsimonious solution:
 
-sol_yp <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE)
+
+sol_yp <- eqmcc(Schneider, outcome = "EXPORT",
+                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                incl.cut1 = .9, 
+                include = "?", 					   
+                details = TRUE, show.cases = TRUE)
 
 # Get the intermediate solution:
 
-sol_yi <- eqmcc(TT_y, include = "?", details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+sol_yi <- eqmcc(Schneider, outcome = "EXPORT",
+                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                incl.cut1 = .9, 
+                include = "?", 					   
+                details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
 
 # Match typical cases for each conjunct for the second term of the parsimonious solution:
 
@@ -86,21 +80,17 @@ matches.suf.typtyp(results = sol_yp, outcome = "EXPORT", max_pairs=3)
 
 matches.suf.typtyp(results = sol_yi, outcome = "EXPORT", intermed = TRUE)
 
-# Get the truth table and the parsimonious solution for the absence of the outcome:
+# Get the parsimonious solution for the absence of the outcome:
 
-TT_ny <- truthTable(Schneider, outcome = "EXPORT", neg.out = TRUE,
-                   conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                   incl.cut1 = .9,
-                   complete = TRUE,
-                   PRI = TRUE,
-                   sort.by = c("out", "incl", "n"))
-
-
-sol_nyp <- eqmcc(TT_ny, include = "?", details = TRUE, show.cases = TRUE)
+sol_nyp <- eqmcc(Schneider, outcome = "EXPORT", neg.out = TRUE,
+                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
+                incl.cut1 = .9, 
+                include = "?", 					   
+                details = TRUE, show.cases = TRUE)
 
 # Match typical cases for each conjunct for the first term (default) 
 # of the second parsimonious solution for the absence of the outcome:
 
 matches.suf.typtyp(results = sol_nyp, outcome = "EXPORT", neg.out = TRUE, sol = 2)
 }
-\keyword{QCA}
+\keyword{QCAGUI}
