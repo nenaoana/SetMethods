@@ -1,7 +1,7 @@
 Package: SetMethods
 Type: Package
 Title: Functions for Set-Theoretic Multi-Method Research and Advanced QCA
-Version: 2.0
+Version: 2.1
 Date: 2016-07-26
 Author: Juraj Medzihorsky [aut], 
 	Ioana-Elena Oana [aut, cre], 
