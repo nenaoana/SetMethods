@@ -1,0 +1,23 @@
+Version 2.1
+    o New: pimplot() can now plot specific truth table rows with argument “ttrows”
+    o New: pimplot() can now plot all truth table rows above a certain consistency
+      threshold with argument “incl.tt”	
+    o New: pimplot() can now plot necessity results obtained from superSubset() in 
+      package QCA with argument “necessity” set to TRUE and by specifying the “sS” 
+      object in argument “results”
+    o New: function cases.theory.evaluation() now also shows percentages of cases
+      in the various intersections between theory and empirics
+    o Improved: function cases.theory.evaluation() can now be saved in an object of
+      class “casestheoryeval” which allows for a more user-friendly output
+    o Improved: documentation for various functions
+    o Improved: functions QCAfit(), pimplot(), xy.plot(), and xy.plot.lat() also 
+      show the new parameter of fit Haesebrouck’s consistency as Cons.Suf(H)
+    o Changed: in function QCAfit() argument “negation” renamed to “neg.out”
+    o Changed: in function QCAfit() the parameter of fir PRODUCT is now optional 
+      and can be shown with logical argument “product” 
+    o Fixed: esa() can now work with necessary unions of conditions in argument
+      “nec_cond”	
+    o Fixed: argument “imposs_LR” in function esa() can now work with intersections
+      of conditions
+    o Fixed: results from matching functions matches.suf.typtyp() and matches.suf.typiir()
+      can now be saved in an object of class “matchessuf”
