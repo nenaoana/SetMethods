@@ -10,7 +10,9 @@ function(results,
     else{
       s <- results$i.sol$C1P1$solution[[sol]]
       P <- results$i.sol$C1P1$pims[colnames(results$i.sol$C1P1$pims)%in%s]
-      P <- P[,s]}
+      if (length(P)<1){P <- P[,s]}
+      else {P <- P}
+      }
     P$solution_formula <- apply(P, 1, max)
     data <- results$tt$initial.data
     if (results$options$neg.out) {
