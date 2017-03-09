@@ -27,6 +27,7 @@ function(results,
 				return(Z[order(Z$Sd),])
 			}
 		R <- do.call(rbind, lapply(1:(ncol(X)-1), aux))
+		R <- R[order(R$term,R$Sd,R$term_membership),]
 		if (neg.out){
 		  names(R)[names(R)==outcome]<- paste("~", outcome, sep="")}
 		return(R[R$term!='solution_formula', ])
