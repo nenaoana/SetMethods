@@ -31,6 +31,7 @@ function(results,
 		cases <- unique(R$case)
 		su <- vapply(cases, function(i) sum(R[R$case==i,3]>0.5), FUN.VALUE=numeric(1))
 		R$uniquely_cov <- R$case %in% cases[su==1]
+		R <- R[order(R$term,-R$uniquely_cov,R$St),]
 		if (neg.out){
 		  names(R)[names(R)==outcome]<- paste("~", outcome, sep="")}
 		return(R)
