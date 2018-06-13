@@ -7,20 +7,17 @@
 	A function that extracts most typical cases with regards to sufficiency from an object of class "qca".
 }
 \usage{
-cases.suf.typ.most(results, outcome, neg.out = FALSE, intermed = FALSE, sol = 1)
+cases.suf.typ.most(results, outcome, neg.out = FALSE, sol = 1)
 }
 \arguments{
 	\item{results}{
 		An object of class "qca".
 	}
 	\item{outcome}{
-		A character string with the name of the outcome.
+		A character string with the name of the outcome in capital letters. When performing pimdata of the          sufficient solution for the negated outcome one must only use the \code{minimize()} result from the            sufficiency analysis of the negated outcome in the argument \code{results}. Changing the name in the        argument \code{outcome} or using a tilde is not necessary.
 	}
 	\item{neg.out}{
 		Logical. Should the negated outcome be used?
-	}
-	\item{intermed}{
-		Logical. Should the intermediate solution be used?
 	}
 	\item{sol}{
 		A numeric vector where the first number indicates the number of the
@@ -33,27 +30,27 @@ cases.suf.typ.most(results, outcome, neg.out = FALSE, intermed = FALSE, sol = 1)
 	Juraj Medzihorsky and Ioana-Elena Oana
 }
 \seealso{
-	\code{\link[QCAGUI:eqmcc]{eqmcc}}
+	\code{\link[QCA:minimize]{minimize}}
 }
 \examples{
 # Import your data. For example:
 
-data(Schneider)
+data(SCHF)
 
 # Get the parsimonious solution:
 
 
-sol_yp <- eqmcc(Schneider, outcome = "EXPORT",
+sol_yp <- minimize(SCHF, outcome = "EXPORT",
                 conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                incl.cut1 = .9, 
+                incl.cut = .9, 
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE)
 
 # Get the intermediate solution:
 
-sol_yi <- eqmcc(Schneider, outcome = "EXPORT",
+sol_yi <- minimize(SCHF, outcome = "EXPORT",
                 conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                incl.cut1 = .9, 
+                incl.cut = .9, 
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
                 
@@ -64,13 +61,13 @@ cases.suf.typ.most(results = sol_yp, outcome = "EXPORT")
 
 # Return most typical cases for sufficiency for the intermediate solution:
 
-cases.suf.typ.most(results = sol_yi, outcome = "EXPORT", intermed = TRUE)
+cases.suf.typ.most(results = sol_yi, outcome = "EXPORT")
 
 # Get the parsimonious solution for the absence of the outcome:
 
-sol_nyp <- eqmcc(Schneider, outcome = "EXPORT", neg.out = TRUE,
+sol_nyp <- minimize(SCHF, outcome = "EXPORT", neg.out = TRUE,
                 conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                incl.cut1 = .9, 
+                incl.cut = .9, 
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE)
 
@@ -80,4 +77,4 @@ sol_nyp <- eqmcc(Schneider, outcome = "EXPORT", neg.out = TRUE,
 
 cases.suf.typ.most(results = sol_nyp, outcome = "EXPORT", neg.out = TRUE, sol = 2)
 }
-\keyword{QCAGUI}
+\keyword{QCA}

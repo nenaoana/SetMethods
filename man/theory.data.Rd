@@ -1,16 +1,14 @@
-\name{theory.evaluation}
-\alias{theory.evaluation}
+\name{theory.data}
+\alias{theory.data}
 \title{
-	Performs theory evaluation.
+	Membership of cases in the intersections between theory and the empirical solution.
 }
 \description{
 	Function that returns membership of cases in the intersections between theory and 
-	the empirical solution in the form of a data frame, the names of cases in the intersections 
-	between theory and the empirical solution, and the parameters of fit for these intersections.
+	the empirical solution in the form of a data frame.
 }
 \usage{
-theory.evaluation(theory, empirics, outcome, sol = 1, print.data=FALSE,  print.intersections=TRUE,
-           print.fit=FALSE)
+theory.data(theory, empirics, outcome, sol = 1)
 }
 \arguments{
 	\item{theory}{
@@ -32,23 +30,16 @@ theory.evaluation(theory, empirics, outcome, sol = 1, print.data=FALSE,  print.i
 		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
 		and i = intermediate solution.
 	}
-	\item{print.data}{
-		Logical. Print also the membership of cases in all the intersections between theory and empirics?
-	}
-	\item{print.intersections}{
-		Logical. Print also the Boolean intersections between theory and empirics?
-	}
-	\item{print.fit}{
-		Logical. Print also the parameters of fit for the intersections between theory and empirics?
-	}
 }
 %\details{}
+\value{ It returns a data frame containing the intersections between theory and empirical findings.
+}
 \references{Ragin, C. C. 1987. The Comparative Method: Moving Beyond Qualitative and Quantitative Strategies. Berkeley: University of California Press, pp. 118-121
 
 Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Sciences: A Guide to Qualitative Comparative Analysis. Cambridge: Cambridge University Press, chapter 11.3
 }
 \author{
-	Ioana-Elena Oana
+	Ioana-Elena Oana and Juraj Medzihorsky
 }
 \seealso{
 	\code{\link[QCA:minimize]{minimize}}
@@ -72,23 +63,10 @@ sol_yi <- minimize(SCHF, outcome = "EXPORT",
 
 t<-"~EMP*MA"
 
-# Perform theory evaluation:
+# Get membership of cases in the intersections between theory and 
+# the second intermediate solution:
 
-theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2, print.data=TRUE, print.fit=TRUE)
-
-# Get only the names of the cases and the Boolean intersections:
-
-theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2)
-
-# Get only the case names:
-
-TH <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", 
-                        sol = 2, print.data=FALSE)
-TH$cases
-
-# Or only the parameters of fit:
-
-TH$fit
+theory.data(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2)
 
 }
 \keyword{QCA}

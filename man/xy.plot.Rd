@@ -91,4 +91,14 @@ for(i in 1:length(y)) {
 
 # Default
 xy.plot(x, y)
+
+# Load the Schneider data:
+
+data(SCHF)
+
+# Plot of condition EMP as necessary for outcome EXPORT with case labels 
+# and names for the plot and axes:
+
+xy.plot(SCHF$EMP, SCHF$EXPORT, necessity = TRUE, labs = rownames(SCHF),
+        main = "EMP as necessary for EXPORT", ylab = "EXPORT", xlab = "EMP")
 }

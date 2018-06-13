@@ -73,4 +73,15 @@ xy.plot.lat(x, y, pch = 1, col = "blue")
 
 # Parameters of fit in the corners with blue dots and pch = 1
 xy.plot.lat(x, y, pch = 1, col = "blue", pos.fit = "corner")
+
+# Load the Schneider data:
+
+data(SCHF)
+
+# Plot of condition EMP as necessary for outcome EXPORT with case labels 
+# and names for the plot and axes:
+
+xy.plot.lat(SCHF$EMP, SCHF$EXPORT, necessity = TRUE, case.lab = TRUE, 
+            labs = rownames(SCHF), main = "EMP as necessary for EXPORT", 
+            ylab = "EXPORT", xlab = "EMP")
 }

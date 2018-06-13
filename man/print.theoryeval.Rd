@@ -1,15 +1,15 @@
-\name{print.casestheoryeval}
-\alias{print.casestheoryeval}
-\title{Print a casestheoryeval Object}
+\name{print.theoryeval}
+\alias{print.theoryeval}
+\title{Print a theoryeval Object}
 \description{
-  Information regarding the names and numbers of cases in the intersections between theory and empirics. 
+  Information regarding the intersections between theory and empirics. 
 }
 \usage{
-  \method{print}{casestheoryeval}(x, \dots)
+  \method{print}{theoryeval}(x, \dots)
 }
 \arguments{
-  \item{x}{an object inheriting from class \code{cases.theory.evaluation}, representing
-    the name and numbers of cases in the various intersections between theory and empirics.
+  \item{x}{an object inheriting from class \code{theory.evaluation}, representing
+    the various intersections between theory and empirics.
   }
   \item{\dots}{optional arguments passed to \code{print.default}; see
     the documentation on that method function}

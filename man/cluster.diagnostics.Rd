@@ -34,20 +34,20 @@ Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theo
 	Ioana-Elena Oana and Juraj Medzihorsky
 }
 \seealso{
-	\code{\link[QCAGUI:eqmcc]{eqmcc}}
+	\code{\link[QCA:minimize]{minimize}}
 }
 \examples{
 # Import your clustered data in the long format. 
 # For example:
 
-data(SchneiderLong)
+data(SCHLF)
 
 # Get pooled, within, and between consistencies and coverages 
 # for STOCK as necessary for EXPORT:
 
 
-cluster.diagnostics(SchneiderLong$STOCK, SchneiderLong$EXPORT, unit = SchneiderLong$COUNTRY, 
-                    cluster = SchneiderLong$YEAR, necessity= TRUE)
+cluster.diagnostics(SCHLF$STOCK, SCHLF$EXPORT, unit = SCHLF$COUNTRY, 
+                    cluster = SCHLF$YEAR, necessity= TRUE)
 
 }
-\keyword{QCAGUI}
+\keyword{QCA}

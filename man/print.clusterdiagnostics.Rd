@@ -23,6 +23,6 @@ Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theo
 Juraj Medzihorsky and Ioana-Elena Oana
 }
 \seealso{
-\code{\link[QCAGUI:eqmcc]{eqmcc}}
+\code{\link[QCA:minimize]{minimize}}
 }
-\keyword{QCAGUI}
+\keyword{QCA}

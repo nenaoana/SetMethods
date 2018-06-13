@@ -1,37 +1,40 @@
-\name{matches.suf.dcviir}
-\alias{matches.suf.dcviir}
+\name{cases.suf.typ.fct}
+\alias{cases.suf.typ.fct}
 \title{
-	Match deviant coverage cases and individually irrelevant cases with regards to sufficiency.
+	List cases typical with regards to sufficiency for each focal conjunct.
 }
 \description{
-	A function that matches deviant coverage cases and individually irrelevant cases with regards to sufficiency.
+	A function that extracts cases typical with regards to sufficiency from an object of class "qca".
 }
 \usage{
-matches.suf.dcviir(results, outcome, neg.out=FALSE, sol=1, max_pairs = 5)
+cases.suf.typ.fct(results, outcome, term = 1, neg.out=FALSE, sol = 1)
 }
 \arguments{
 	\item{results}{
 		An object of class "qca".
 	}
-	\item{outcome}{
+\item{outcome}{
 		A character string with the name of the outcome in capital letters. When performing pimdata of the          sufficient solution for the negated outcome one must only use the \code{minimize()} result from the            sufficiency analysis of the negated outcome in the argument \code{results}. Changing the name in the        argument \code{outcome} or using a tilde is not necessary.
 	}
 	\item{neg.out}{
 		Logical. Should the negated outcome be used?
 	}
-	\item{sol}{
+	\item{term}{
 		A numeric vector where the first number indicates the number of the
-		solution in case of model ambiguity according to the order in the "qca" object.
+		term according to the order in the "qca" object.
 	}
-	\item{max_pairs}{
-		Maximum number of pairs to extract.
+	\item{sol}{
+		A vector where the first number indicates the number of the
+		conservative or parsimonious solution according to the order in the "qca" object.
+		For more complicated structures of model ambiguity, the intermediate solution can also be specified
+		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
+		and i = intermediate solution.
 	}
 }
-\references{
-Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods Research 42(4): 559-597
+\references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97
 }
 \author{
-	Juraj Medzihorsky and Ioana-Elena Oana
+	Ioana-Elena Oana
 }
 \seealso{
 	\code{\link[QCA:minimize]{minimize}}
@@ -57,19 +60,15 @@ sol_yi <- minimize(SCHF, outcome = "EXPORT",
                 incl.cut = .9, 
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
-                
-# Match deviant coverage cases and individually irrelevant cases for the parsimonious solution:
 
-matches.suf.dcviir(results = sol_yp, outcome = "EXPORT")
 
-# Match deviant coverage cases and individually irrelevant cases for the parsimonious solution
-# and return only the best 3 pairs:
+# Return typical cases for sufficiency for the parsimonious solution:
 
-matches.suf.dcviir(results = sol_yp, outcome = "EXPORT", max_pairs=3)
+cases.suf.typ.fct(results = sol_yp, outcome = "EXPORT")
 
-# Match deviant coverage cases and individually irrelevant cases for the intermediate solution:
+# Return typical cases for sufficiency for the intermediate solution:
 
-matches.suf.dcviir(results = sol_yi, outcome = "EXPORT")
+cases.suf.typ.fct(results = sol_yi, outcome = "EXPORT")
 
 # Get the parsimonious solution for the absence of the outcome:
 
@@ -79,10 +78,9 @@ sol_nyp <- minimize(SCHF, outcome = "EXPORT", neg.out = TRUE,
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE)
 
-# Match deviant coverage cases and individually irrelevant cases for 
-# the second parsimonious solution for the absence of the outcome:
+# Return typical cases for sufficiency for the second parsimonious solution 
+# for the absence of the outcome:
 
-matches.suf.dcviir(results = sol_nyp, outcome = "EXPORT", neg.out = TRUE, sol = 2)
+cases.suf.typ.fct(results = sol_nyp, outcome = "EXPORT", neg.out = TRUE, sol = 2)
 }
 \keyword{QCA}
-

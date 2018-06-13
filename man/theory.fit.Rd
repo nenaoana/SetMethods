@@ -4,15 +4,15 @@
 	Parameters of fit for the intersections between theory and the empirical solution.
 }
 \description{
-		Function that returns parameters of fit for the intersections between theory and the empirical solution.
+	Function that returns parameters of fit for the intersections between theory and the empirical solution.
 }
 \usage{
-theory.fit(theory_eval)
+theory.fit(theory_data)
 }
 \arguments{
-	\item{theory_eval}{
+	\item{theory_data}{
 		A data frame with the intersections between theory and empirics. 
-		Usually the output of the theory.evaluation function should be inputed.
+		Usually the output of the theory.data function should be inputed.
 	}
 	}
 \references{
@@ -22,18 +22,18 @@ Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Scienc
 	Ioana-Elena Oana
 }
 \seealso{
-	\code{\link[QCAGUI:eqmcc]{eqmcc}}
+	\code{\link[QCA:minimize]{minimize}}
 }
 \examples{
 # Import your data. For example:
 
-data(Schneider)
+data(SCHF)
 
 # Get the intermediate solution:
 
-sol_yi <- eqmcc(Schneider, outcome = "EXPORT",
+sol_yi <- minimize(SCHF, outcome = "EXPORT",
                 conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                incl.cut1 = .9, 
+                incl.cut = .9, 
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
 
@@ -45,13 +45,12 @@ t<-"~EMP*MA"
 # Get membership of cases in the intersections between theory and 
 # the second intermediate solution and place it in an object:
 
-INT <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", 
-						 intermed = TRUE, sol = 2)
+INT <- theory.data(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2)
 
 # Get the parameters of fit for the intersections between theory and the empirical solution
-# using the output of the theory.evaluation function:
+# using the output of the theory.data function:
 
 theory.fit(INT)
 
 }
-\keyword{QCAGUI}
+\keyword{QCA}
