@@ -2,10 +2,14 @@ cases.suf.iir <-
 function(results,
 		 outcome,
 		 neg.out=FALSE,
-		 intermed=FALSE,
 		 sol=1)
-	{outcome <- toupper(outcome)
-		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+	{
+  if(length(grep("~",outcome)) > 0){
+    outcome<-outcome[grep("~",outcome)]
+    outcome<-gsub('\\~', '', outcome)
+    outcome<-unlist(outcome)}
+  outcome <- toupper(outcome)
+		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		if (!neg.out){
 		  y <- results$tt$initial.data[, outcome]}
 		else{
@@ -44,5 +48,8 @@ function(results,
 		Z <- Z[do.call("order", Z[sortnames]), ]
 		if (neg.out){
 		  names(Z$Outcome)<- paste("~", outcome, sep="")}
-		return(Z)
+		M <- list()
+		M[[1]] <- list(title="Individually Irrelevant Cases", results=Z)
+		class(M) <- 'matchessuf'
+		return(M)
 	}

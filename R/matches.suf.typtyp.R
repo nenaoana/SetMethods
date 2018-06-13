@@ -3,12 +3,15 @@ function(results,
            outcome,
            term=1,
            neg.out=FALSE,
-           intermed=FALSE,
            sol=1,
            max_pairs=5)
 
-  {outcome <- toupper(outcome)
-    pdata <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+  {if(length(grep("~",outcome)) > 0){
+    outcome<-outcome[grep("~",outcome)]
+    outcome<-gsub('\\~', '', outcome)
+    outcome<-unlist(outcome)}
+    outcome <- toupper(outcome)
+    pdata <- pimdata(results=results, outcome=outcome, sol=sol)
     nterm <- colnames(pdata[term])
     data <- results$tt$initial.data
     data1 <- data.frame(matrix(NA,ncol=0,nrow=nrow(data)))
@@ -59,7 +62,7 @@ function(results,
 
       ty <- rownames(data1)[typical]
       
-      if (identical(ty, character(0))) {M[[i]] <-list(FocConj=focconj, results="no typical cases")}
+      if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
       else {
         K <- expand.grid(ty, ty)
         x <- X[,toupper(tn[i])]
@@ -71,7 +74,11 @@ function(results,
           {
             i <- which(rownames(X)==p[1])
             j <- which(rownames(X)==p[2])
-            s <- (((y[i]-x[i])+(y[j]-x[j])+(1.5-(x[i]+x[j])))/(x[i]+x[j]))
+            s <- ((0.5-(x[i]-x[j]))+ #big diff. in FC
+                    (0.5-(y[i]-y[j]))+ #big diff in Y
+                    abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
+                    2*abs(y[i]-term[i])+ 
+                    2*abs(y[j]-term[j]))
             return(s)
           }
         aux.f2 <-
@@ -111,8 +118,8 @@ function(results,
       matcres[,6] <- NA
       matcres[,7] <- NA
       colnames(matcres)<-c("Typical1","Typical2","Distance","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
-      R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, intermed=intermed, sol=sol)
-      
+      R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, sol=sol)
+      R <- R[[1]]$results
       for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
         if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,7]}
         if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,7]<-R[uu,7]}
@@ -122,7 +129,7 @@ function(results,
       matcres <- matcres[matcres$Typ1MoreTypical==TRUE,]
       matcres <- matcres[, -c(5)]
       matcres <- matcres[matcres$Typical1!=matcres$Typical2,]
-      M[[i]] <- list(FocConj=focconj, results=(head(matcres, maxl))) 
+      M[[i]] <- list(title=focconj, results=(head(matcres, maxl))) 
       }
     }
       class(M) <- 'matchessuf'

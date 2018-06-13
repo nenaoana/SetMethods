@@ -2,10 +2,13 @@ cases.suf.typ <-
 function(results,
 		 outcome,
 		 neg.out=FALSE,
-		 intermed=FALSE,
 		 sol=1)
-	{outcome <- toupper(outcome)
-		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+	{if(length(grep("~",outcome)) > 0){
+	  outcome<-outcome[grep("~",outcome)]
+	  outcome<-gsub('\\~', '', outcome)
+	  outcome<-unlist(outcome)}
+    outcome <- toupper(outcome)
+		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		if (!neg.out){
 		y <- results$tt$initial.data[, outcome]}
 		else{
@@ -19,7 +22,7 @@ function(results,
 							   	s=rep(FALSE, sum(fil)),
 								term=rep(colnames(X)[i], sum(fil)),
 								case=rownames(X)[fil])
-				s <- (Z$y-Z$x)/Z$x
+				s <- ((Z$y-Z$x) + (1-Z$x))
 				suppressWarnings(Z$s[s==min(s)] <- TRUE)
 				Z$St <- s 
 				colnames(Z)[1:3] <- c('term_membership', outcome, 'most_typical')
@@ -34,5 +37,8 @@ function(results,
 		R <- R[order(R$term,-R$uniquely_cov,R$St),]
 		if (neg.out){
 		  names(R)[names(R)==outcome]<- paste("~", outcome, sep="")}
-		return(R)
+		M <- list()
+		M[[1]] <- list(title="Typical Cases", results=R)
+		class(M) <- 'matchessuf'
+		return(M)
 	}

@@ -3,12 +3,15 @@ function(results,
            outcome,
            term=1,
            neg.out=FALSE,
-           intermed=FALSE,
            sol=1,
            max_pairs=5)
     
-  { outcome <- toupper(outcome)
-    pdata <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+  { if(length(grep("~",outcome)) > 0){
+    outcome<-outcome[grep("~",outcome)]
+    outcome<-gsub('\\~', '', outcome)
+    outcome<-unlist(outcome)}
+    outcome <- toupper(outcome)
+    pdata <- pimdata(results=results, outcome=outcome, sol=sol)
     nterm <- colnames(pdata[term])
     data <- results$tt$initial.data
     data1 <- data.frame(matrix(NA,ncol=0,nrow=nrow(data)))
@@ -64,9 +67,9 @@ function(results,
       ty <- rownames(data1)[typical]
       ir <- rownames(data1)[indirre]
       
-      if (identical(ir, character(0))) {M[[i]] <-list(FocConj=focconj, results="no individually irrelevant cases")}
+      if (identical(ir, character(0))) {M[[i]] <-list(title=focconj, results="no individually irrelevant cases")}
       else { 
-        if (identical(ty, character(0))) {M[[i]] <-list(FocConj=focconj, results="no typical cases")}
+        if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
         else { 
           K <- expand.grid(ty, ir)
           x <- X[,toupper(tn[i])]
@@ -78,7 +81,11 @@ function(results,
               {
                 i <- which(rownames(X)==p[1])
                 j <- which(rownames(X)==p[2])
-                s <- (((y[i]-x[i])+(y[j]-x[j])+(1.5-(x[i]+x[j])))/(x[i]+x[j]))
+                s <- ((1-(x[i]-x[j]))+ #big diff. in FC
+                    (1-(y[i]-y[j]))+ #big diff in Y
+                    abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
+                    2*abs(y[i]-term[i])+ 
+                    2*abs(y[j]-term[j]))
                 return(s)
               }
             aux.ff <-
@@ -109,7 +116,8 @@ function(results,
           matcres[,5] <- NA
           matcres[,6] <- NA
           colnames(matcres)<-c("Typical","IIR","Distance","PairRank", "UniqCovTyp","GlobUncovIIR")
-          R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, intermed=intermed, sol=sol)
+          R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, sol=sol)
+          R <- R[[1]]$results
           for(u in 1:nrow(matcres)) { 
             for (uu in 1:nrow(R)){
               if (as.character(matcres[u,1])==as.character(R[uu,1])) 
@@ -124,7 +132,7 @@ function(results,
             }}
           maxl<-min(max_pairs,nrow(matcres))
           matcres<-matcres[order(matcres$PairRank,-matcres$UniqCovTyp, -matcres$GlobUncovIIR, matcres$Distance),]
-          M[[i]] <- list(FocConj=focconj, results=(head(matcres, maxl)))         
+          M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
         }  
       }
     }

@@ -1,12 +1,15 @@
 matches.suf.typdcn <-
 function(results,
            outcome,
-           neg.out=FALSE,
-           intermed=FALSE,
+         neg.out=FALSE,
            sol=1,
            max_pairs=5)
-  {outcome <- toupper(outcome)
-    X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+  {if(length(grep("~",outcome)) > 0){
+    outcome<-outcome[grep("~",outcome)]
+    outcome<-gsub('\\~', '', outcome)
+    outcome<-unlist(outcome)}
+   outcome <- toupper(outcome)
+    X <- pimdata(results=results, outcome=outcome, sol=sol)
     if (!neg.out){
       y <- results$tt$initial.data[, outcome]}
     else{
@@ -15,8 +18,10 @@ function(results,
     nt <- ncol(X)-2
     tn <- colnames(X)[1:nt]
     L <- list()
+    M <- list()
     for (i in 1:nt){
       term <- tn[i]
+      termp <- paste("Term", tn[i], sep = " ")
       x <- X[, term]
       y <- X[, 'out']
       typical <- (x>0.5) & (y>0.5) & (x<=y) 
@@ -30,7 +35,7 @@ function(results,
           {
             i <- which(rownames(X)==p[1])
             j <- which(rownames(X)==p[2])
-            s <- ((2-(x[i]+x[j]))+(1-(y[i]-y[j]))) / (x[i]+x[j])
+            s <- ((abs(x[i]-x[j]))+(1-(y[i]-y[j])) +(1-x[i])+(1-x[j]))
             return(s)
           }
         s <- apply(K, 1, aux.f)
@@ -43,6 +48,8 @@ function(results,
         R[R$distance==min(R$distance), 'best_matching_pair'] <- TRUE
         rownames(R) <- NULL
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
+        M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
+        class(M) <- 'matchessuf'
       } else {
         R <- data.frame(typical=NULL,
                         deviant_consistency=NULL,
@@ -50,7 +57,10 @@ function(results,
                         term=NULL,
                         best_matching_pair=NULL)	
         L[[i]]<-R
+        M[[i]] <- list(title=termp, results=R)
+        class(M) <- 'matchessuf'
       }
     }
-    return(L)
+    return(M)
   }
+

@@ -2,10 +2,13 @@ cases.suf.dcn <-
 function(results,
 		 outcome,
 		 neg.out=FALSE,
-		 intermed=FALSE,
 		 sol=1)
-	{outcome <- toupper(outcome)
-		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+	{ if(length(grep("~",outcome)) > 0){
+	  outcome<-outcome[grep("~",outcome)]
+	  outcome<-gsub('\\~', '', outcome)
+	  outcome<-unlist(outcome)}
+    outcome <- toupper(outcome)
+		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		if (!neg.out){
 		  y <- results$tt$initial.data[, outcome]}
 		else{
@@ -18,8 +21,8 @@ function(results,
 							   	y=y[fil],
 							   	s=rep(FALSE, sum(fil)),
 								term=rep(colnames(X)[i], sum(fil)),
-								case=rownames(X)[fil])
-				s <- 1 - (Z$x-Z$y)/Z$x
+								cases=rownames(X)[fil])
+				s <- (1 - (Z$x-Z$y) + (1-Z$x))
 				suppressWarnings(Z$s[s==min(s)] <- TRUE)
 				Z$Sd <- s 
 				colnames(Z)[1:3] <- c('term_membership', outcome, 'most_deviant')
@@ -30,5 +33,8 @@ function(results,
 		R <- R[order(R$term,R$Sd,R$term_membership),]
 		if (neg.out){
 		  names(R)[names(R)==outcome]<- paste("~", outcome, sep="")}
-		return(R[R$term!='solution_formula', ])
+		M<-list()
+		M[[1]] <- list(title="Deviant Consistency Cases", results=R[R$term!='solution_formula', ])
+		class(M) <- 'matchessuf'
+		return(M)
 	}

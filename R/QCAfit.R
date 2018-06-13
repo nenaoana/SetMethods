@@ -1,6 +1,45 @@
 QCAfit <-
-function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product=FALSE){
-		
+function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product = FALSE, sol=1, ttrows= c())
+  {
+  if (is(x,'qca'))
+  {   
+      if (necessity==TRUE) stop('You cannot calculate parameters of fit for necessity for a qca sufficient solution')
+      if (!is.character(y)) stop('When using qca object, the outcome must be of type character. 
+                                 Please specify the outcome using its exact name in the dataframe. ')
+      if (length(ttrows)>0){#for specific tt rows
+        results <- x
+        dt <- results$tt$initial.data
+        oldtt <- results$tt$tt
+        newtt <- oldtt[ttrows, ]
+        P <- as.data.frame(results$tt$minmat)
+        P <- P[colnames(P)%in%rownames(newtt)]
+        if (results$options$neg.out) {
+          P$out <- 1-dt[, y]
+        } else {
+          P$out <- dt[, y]
+        }
+        nc <- ncol(P)-1
+        a <- data.frame(matrix(ncol = 4, nrow = nc))
+        row.names(a) <- colnames(P[,1:nc])
+        colnames(a) <- c("Cons.Suf","Cov.Suf","PRI","Cons.Suf(H)")
+        for (i in 1:nc) {
+          a[i,] <-QCAfit(P[,i],P$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol)
+        }
+      }
+    else { 
+      X <- pimdata(results=x, outcome=y, sol=sol)
+      nc <- ncol(X)-1
+      a <- data.frame(matrix(ncol = 4, nrow = nc))
+      row.names(a) <- colnames(X[,1:nc])
+      colnames(a) <- c("Cons.Suf","Cov.Suf","PRI","Cons.Suf(H)")
+      for (i in 1:nc) {
+        a[i,] <-QCAfit(X[,i],X$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol)
+      }}
+    
+      return(a)
+  }
+  
+  else {	
 	x <- as.matrix(x)
 	
 	v <- matrix(NA, length(x[ ,1]), length(x[1, ]))
@@ -56,4 +95,4 @@ function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product=FALS
         return(nec)
 		}
 
-}
+}}

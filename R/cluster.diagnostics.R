@@ -1,7 +1,8 @@
 cluster.diagnostics <-
-function( x, y, unit, cluster, necessity=FALSE, p=2)
+function( x, y, unit, cluster, necessity=FALSE)
   {X <- xtabs( x ~ unit + cluster)
    Y <- xtabs( y ~ unit + cluster)
+   p<-2
     # Consistency suff.
     con.ragin <-
       function(X, Y)
@@ -56,9 +57,8 @@ function( x, y, unit, cluster, necessity=FALSE, p=2)
       }
     if (!necessity){
     #	d(Between, Pooled), Euclidean for p=2
-    p<-2
     dBP <-
-      function(X, Y, p=2)
+      function(X, Y)
       {
         J <- ncol(X)
         bc <- con.betw(X, Y)
@@ -66,7 +66,7 @@ function( x, y, unit, cluster, necessity=FALSE, p=2)
       }
     #	d(Within, Pooled), Euclidean for p=2
     dWP <-
-      function(X, Y, p=2)
+      function(X, Y)
       {
         N <- nrow(X)
         wc <- con.with(X, Y)
@@ -75,7 +75,7 @@ function( x, y, unit, cluster, necessity=FALSE, p=2)
     else{
       #	d(Between, Pooled), Euclidean for p=2
       dBP <-
-        function(X, Y, p=2)
+        function(X, Y)
         {
           J <- ncol(X)
           bc <- cvr.betw(X, Y)
@@ -83,7 +83,7 @@ function( x, y, unit, cluster, necessity=FALSE, p=2)
         }
       #	d(Within, Pooled), Euclidean for p=2
       dWP <-
-        function(X, Y, p=2)
+        function(X, Y)
         {
           N <- nrow(X)
           wc <- cvr.with(X, Y)
@@ -94,18 +94,18 @@ function( x, y, unit, cluster, necessity=FALSE, p=2)
     if (!necessity){
     r1 <- con.pool(x, y)
     r2 <- con.betw(X, Y)
-    r3 <- dBP(X, Y, p=p)
+    r3 <- dBP(X, Y)
     r4 <- con.with(X, Y)
-    r5 <- dWP(X, Y, p=p)
+    r5 <- dWP(X, Y)
     r6 <- list('pooled'  = cvr.pool(x, y),
                'between' = cvr.betw(X, Y),
                'within'  = cvr.with(X, Y))}
     else{
     r1 <- cvr.pool(x, y)
     r2 <- cvr.betw(X, Y)
-    r3 <- dBP(X, Y, p=p)
+    r3 <- dBP(X, Y)
     r4 <- cvr.with(X, Y)
-    r5 <- dWP(X, Y, p=p)
+    r5 <- dWP(X, Y)
     r6 <- list('pooled'  = con.pool(x, y),
                'between' = con.betw(X, Y),
                'within'  = con.with(X, Y))  

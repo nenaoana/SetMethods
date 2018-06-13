@@ -2,11 +2,14 @@ matches.suf.dcviir <-
 function(results,
 		 outcome,
 		 neg.out=FALSE,
-		 intermed=FALSE,
 		 sol=1,
 		 max_pairs=5)
-	{outcome <- toupper(outcome)
-		X <- pimdata(results=results, outcome=outcome, intermed=intermed, sol=sol)
+	{if(length(grep("~",outcome)) > 0){
+	  outcome<-outcome[grep("~",outcome)]
+	  outcome<-gsub('\\~', '', outcome)
+	  outcome<-unlist(outcome)}
+   outcome <- toupper(outcome)
+		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		n <- rownames(X)
 		if (!neg.out){
 		  y <- results$tt$initial.data[, outcome]}
@@ -42,7 +45,7 @@ function(results,
 			{
 				i <- which(n==p[1])
 				j <- which(n==p[2])
-				s <- ( (2-(w[i]+w[j])) + (1-(y[i]-y[j])) ) / (w[i]+w[j]) 
+				s <- ((abs(w[i]-w[j])) + (1-(y[i]-y[j])) + (1-w[i])+(1-w[j])) 
 				#	2 is the maximum value of this formula. the W value must be
 				#	membership in the truth table row all conditions that
 				#	constitute the tt row to which the cases belong
@@ -72,5 +75,8 @@ function(results,
 		R_list <- lapply(split(R, tt_row_fil), aux.list)
 		R <- do.call(rbind, R_list)
 		rownames(R) <- NULL
-		return(R)
+		M <- list()
+		M[[1]] <- list(title="Matching Deviant Coverage-IIR Cases", results=R)
+		class(M) <- 'matchessuf'
+		return(M)
 }
