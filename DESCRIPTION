@@ -1,22 +1,17 @@
 Package: SetMethods
 Type: Package
-Title: Functions for Set-Theoretic Multi-Method Research and Advanced QCA
-Version: 2.1
-Date: 2016-07-26
-Author: Juraj Medzihorsky [aut], 
-	Ioana-Elena Oana [aut, cre], 
+Title: Functions for Set-Theoretic Multi-Method Research and Advanced
+        QCA
+Version: 2.3.2
+Date: 2018-06-13
+Author: Ioana-Elena Oana [aut, cre],
+	Juraj Medzihorsky [aut],  
 	Mario Quaranta [aut],
 	Carsten Q. Schneider [aut] 		
 Maintainer: Ioana-Elena Oana <oana_ioana-elena@phd.ceu.edu>
-Description: This initiated as a package companion to the book by C. Q.
-        Schneider and C. Wagemann "Set-Theoretic Methods for the Social
-        Sciences", Cambridge University Press. It grew to include functions 
-	for performing set-theoretic multi-method research, QCA for clustered 
-	data, theory evaluation, and Enhanced Standard Analysis. Additionally 
-	it includes data to replicate the examples in the book and in the online 
-	appendix.
-Depends: QCA, QCAGUI, lattice, betareg, R (>= 3.3.0)
+Description: Functions for performing set-theoretic multi-method research, QCA for 		clustered data, theory evaluation, Enhanced Standard Analysis, indirect 		calibration, radar visualisations. Additionally it includes data to replicate the 	examples in the book by C. Q. Schneider and C. Wagemann "Set Theoretic Methods for 	the Social Sciences", Cambridge University Press and in the online appendix.
+Depends: QCA, lattice, betareg, fmsb, methods, R (>= 3.3.0)
 License: GPL-2
-Packaged: 2016-09-08 00:19:40 UTC; Ioana-Elena Oana
+Packaged: 2018-06-13 18:02:49 UTC; Nena
 NeedsCompilation: no
-Date/Publication: 2016-09-08 00:19:00
+Date/Publication: 2018-06-13 15:19:00

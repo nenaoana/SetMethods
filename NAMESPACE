@@ -1,1 +1,17 @@
 exportPattern("^[[:alpha:]]+")
+S3method(print, clusterdiagnostics)
+S3method(print, clusterminimize)
+S3method(print, matchessuf)
+S3method(print, casestheoryeval)
+S3method(print, theoryeval)
+S3method(print, thintersect)
+
+
+import(QCA, betareg, lattice, fmsb)
+importFrom("grDevices", "rgb")
+importFrom("graphics", "abline", "axis", "box", "identify", "mtext",
+             "par", "plot", "text")
+importFrom("stats", "binomial", "coef", "glm", "xtabs")
+importFrom("utils", "head")
+importFrom("graphics", "title")
+importFrom("methods", "is")
