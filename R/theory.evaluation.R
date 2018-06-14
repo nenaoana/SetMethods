@@ -3,7 +3,6 @@ theory.evaluation <-
            empirics, 
            outcome,
            sol=1,
-           print.intersections=TRUE,
            print.fit=FALSE,
            print.data=FALSE)
   {

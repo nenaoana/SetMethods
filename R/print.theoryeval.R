@@ -6,9 +6,6 @@ print.theoryeval <-
     if (x$printf==TRUE){
       cat("\nFIT:\n**********************\n\n")
       print(x$fit)}
-    if (x$printi==TRUE){
-      cat("\nBOOLEAN INTERSECTIONS:\n**********************\n\n")
-      print(x$inters)}
     cat("\nCASES:\n**********************\n\n")
       print(x$cases)
       cat("\n")
