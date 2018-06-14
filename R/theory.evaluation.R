@@ -7,7 +7,7 @@ theory.evaluation <-
            print.data=FALSE)
   {
     Tdata <- theory.data(theory=theory, empirics=empirics, outcome=outcome, sol=sol)
-    Tcases <- cases.theory.evaluation(Tdata)
+    Tcases <- cases.theory.evaluation(theory=theory, empirics=empirics, outcome=outcome, sol=sol)
     Tfit <- theory.fit(Tdata)
     Tint <- theory.intersections(theory=theory, empirics=empirics, sol=sol)
     T <- list()
