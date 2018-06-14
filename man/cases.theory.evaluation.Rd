@@ -7,12 +7,27 @@
 Function that returns names of cases in the intersections between theory and the empirical solution.
 }
 \usage{
-cases.theory.evaluation(theory_data)
+cases.theory.evaluation(theory, empirics, outcome, sol = 1)
 }
 \arguments{
-	\item{theory_data}{
-		A data frame with the intersections between theory and empirics. 
-		Usually the output of the theory.data function should be inputed.
+	\item{theory}{
+		A character string specifying the theory.
+		Conditions should be capitalized and negated conditions should be inserted with a "~".
+		Unions of conditions are performed with a "+", while intersections are performed with a "*".
+	}
+	\item{empirics}{
+		An object of class 'qca'. When performing analyses for the negated outcome, just use the 
+		results from the \code{minimize()} function for the negation of the outcome.
+	}
+	\item{outcome}{
+		A character string with the name of the outcome. When performing analyses of the sufficient solution for the negated outcome one must only use the \code{minimize()} result from the sufficiency analysis of the negated outcome in the argument \code{empirics}. Changing the name in the argument \code{outcome} or using a tilde is not necessary.
+	}
+	\item{sol}{
+		A vector where the first number indicates the number of the conservative or parsimonious solution 
+		according to the order in the "qca" object.
+		For more complicated structures of model ambiguity, the intermediate solution can also be specified
+		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
+		and i = intermediate solution.
 	}
 }
 \references{Ragin, C. C. 1987. The Comparative Method: Moving Beyond Qualitative and Quantitative Strategies. Berkeley: University of California Press, pp. 118-121.

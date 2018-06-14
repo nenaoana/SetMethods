@@ -9,8 +9,7 @@
 	between theory and the empirical solution, and the parameters of fit for these intersections.
 }
 \usage{
-theory.evaluation(theory, empirics, outcome, sol = 1, print.data=FALSE,  print.intersections=TRUE,
-           print.fit=FALSE)
+theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, print.data=FALSE)
 }
 \arguments{
 	\item{theory}{
@@ -34,9 +33,6 @@ theory.evaluation(theory, empirics, outcome, sol = 1, print.data=FALSE,  print.i
 	}
 	\item{print.data}{
 		Logical. Print also the membership of cases in all the intersections between theory and empirics?
-	}
-	\item{print.intersections}{
-		Logical. Print also the Boolean intersections between theory and empirics?
 	}
 	\item{print.fit}{
 		Logical. Print also the parameters of fit for the intersections between theory and empirics?
