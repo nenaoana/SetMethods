@@ -13,7 +13,6 @@ theory.evaluation <-
     T <- list()
     T <- list('printd'= print.data,
               'printf'= print.fit,
-              'printi'= print.intersections,
               'data'= Tdata,
               'cases'= Tcases,
               'fit'= Tfit,
