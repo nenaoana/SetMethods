@@ -30,19 +30,22 @@ intersectExp <- function (expression1, expression2)
   }
   combf <- (unique(unlist(combl)))
   combf <- combf[!is.na(combf)]
+  combfl <- strsplit(combf, '\\*') 
   
-  for (l in 1:length(combf)) {
-    for (m in 1:length(combf)) {
-      if (length(grep(combf[l],combf[m], fixed=TRUE)) > 0) { 
-        if (length(unlist(strsplit(combf[l], '\\*'))) >= length(unlist(strsplit(combf[m], '\\*'))))
-        {combf[l] <- combf[m]}
-        else {combf[m] <- combf[l]}
+  
+ 
+  for (l in 1:length(combfl)) {
+    for (m in 1:length(combfl)) {
+      if (all(combfl[[l]] %in% combfl[[m]])) { # here wrong, need to check if vector is subset of another vector
+        if (length(unlist(combfl[[l]])) >= length(unlist(combfl[[m]])))
+        {combfl[[l]] <- combfl[[m]]}
+        else {combfl[[m]] <- combfl[[l]]}
       }
     }}
   
-  combf <- unique(combf)
-  combff <-sapply(combf, function(x) strsplit(x, '\\*'))
   
+  combff <- unique(combfl)
+
   for (i in 1: length(combff)){ 
     for (j in 1: length(combff)){
       if (length(setdiff(combff[[i]], combff[[j]])) == 1 & 
