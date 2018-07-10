@@ -45,6 +45,6 @@ data(SCHF)
 # Plot of condition EMP as necessary for outcome EXPORT with case labels 
 # and names for the plot and axes:
 
-xy.plot.lab(SCHF$EMP, SCHF$EXPORT, necessity = TRUE,
-        main = "EMP as necessary for EXPORT", ylab = "EXPORT", xlab = "EMP")
+xy.plot.lab("EMP", "EXPORT", data=SCHF, necessity = TRUE,
+            main = "EMP as necessary for EXPORT", ylab = "EXPORT", xlab = "EMP")
 }
