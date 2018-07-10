@@ -1,0 +1,50 @@
+\name{xy.plot.lab}
+\alias{xy.plot.lab}
+\title{Function producing enhanced XY plots}
+\description{
+xy.plot.lab produces XY plots and provides values for consistency, Haesebrouck's consistency, coverage, RoN, PRI. Several graphic parameters can be decided by the user.
+}
+\usage{xy.plot.lab(x, y, data, 
+           labcol = "black",
+           main = "XY plot", 
+           ylab = "Outcome", 
+           xlab = "Condition",
+           necessity = FALSE)
+}
+\arguments{
+  \item{x}{vector containing the condition.}
+  \item{y}{vector containing the outcome.}
+  \item{data}{The dataset used}
+  \item{labcolor}{color of the dots.}
+  \item{main}{an overall title for the plot. The default is \code{"XY plot"}. See ?title.}
+  \item{ylab}{a title for the y-axis. The default is \code{"Outcome"}. See ?title.}
+  \item{xlab}{a title for the x-axis. The default is \code{"Condition"}. See ?title.}
+  \item{necessity}{logical. Indicates if the parameters of fit are calculated for a sufficient or necessary condition. The default is \code{FALSE}, therefore it calculates the parameters of fit for sufficiency. To get the parameters of fit for necessary conditions set \code{necessity} as \code{TRUE}.}
+}
+%\details{}
+\value{It returns an enhanced XY plot.}
+\references{
+
+Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
+
+Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond. The Chicago University Press: Chicago and London.
+
+Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge Univeristy Press: Cambridge.
+
+Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
+}
+\author{Mario Quaranta and Ioana-Elena Oana.}
+%\note{}
+%\seealso{}
+\examples{
+
+# Load the Schneider data:
+
+data(SCHF)
+
+# Plot of condition EMP as necessary for outcome EXPORT with case labels 
+# and names for the plot and axes:
+
+xy.plot.lab(SCHF$EMP, SCHF$EXPORT, necessity = TRUE,
+        main = "EMP as necessary for EXPORT", ylab = "EXPORT", xlab = "EMP")
+}
