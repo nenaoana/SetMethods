@@ -61,7 +61,11 @@ xy.plot.lab <-
   ylim(0,1)+
   theme_classic(base_size = 16) +
   geom_vline(xintercept = 0.5)+
+    geom_vline(xintercept = 1)+
+    
   geom_hline(yintercept = 0.5)+
+    geom_hline(yintercept = 1)+
+    
   geom_abline(intercept = 0)+
   labs(title = main, subtitle = lab , x=xlab,y=ylab)+
   theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0)) +
