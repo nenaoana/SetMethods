@@ -1,3 +1,14 @@
+Version 2.4
+	o Changed: xy.plot now works with names of columns in a specified dataset
+	o New: xy.plot and pimplot have a logical argument "jitter" for not overlapping 	labels
+	o New: xy.plot and pimplot have arguments "font", "fontface", "size", and "labcol" 	for formatting case labels
+	o Improved: the output of the theory.evaluation() function now also shows the 		Boolean expression of the intersections between theory and empirics
+	o Improved: function theory.evaluation() and all related functions now also have 	the argument "use.tilde" for inputing expressions or solutions that don't use 		tilde for negation	
+	o New: function negateExp() for negating Boolean expressions
+	o New: function intersectExp() for intersecting Boolean expressions
+	o New: function mmr() and its related functions now have a logical argument 	"use.tilde" and allows solutions in which negation is denoted by either lower case 	or a tilde
+	o Fixed: bug function mmr() and its related functions working with the focal 		conjunct principle giving an error when applied to a solution with a single term
+	o Improved: the output of the mmr() function for typical cases using the focal 		conjunct principle is now reordered to show uniquely covered cases before the rank
 Version 2.3.1
     	o Improved: the output of the theory.evaluation function now also shows percentage 	of cases in each intersection between empirics and theory that have and don't have 	the outcome
 	o Changed: argument "imposs_LR" in function esa() renamed to "untenable_LR"
