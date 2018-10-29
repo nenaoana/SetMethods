@@ -3,7 +3,7 @@ function(results,
 		 outcome,
 		 term=1,
 		 neg.out=FALSE,
-		 sol=1)
+		 sol=1, use.tilde = TRUE)
     {if(length(grep("~",outcome)) > 0){
           outcome<-outcome[grep("~",outcome)]
           outcome<-gsub('\\~', '', outcome)
@@ -17,8 +17,24 @@ function(results,
     tl <- gsub('\\s', '', nterm)
     tl <- strsplit(tl, '\\*')
     tn <- unique(unlist(tl))
+    #Code for working with ~:
+    if (use.tilde == TRUE) {
+      t_neg<-character(0)
+      t_pre<-character(0)
+      
+      if(length(grep("~",tn)) > 0){
+        t_neg<-tn[grep("~",tn)]
+        t_neg<-gsub('\\~', '', t_neg)
+        t_neg<-unlist(t_neg)
+        t_pre<-tn[!tn %in% tn[grep("~",tn)]]
+      }
+      else {t_pre<- toupper(tn)}
+    }
+    #Code for lower case:
+    else{
     t_pre <- toupper(tn)[toupper(tn)==tn]
-    t_neg <- toupper(tn)[tolower(tn)==tn]
+    t_neg <- toupper(tn)[tolower(tn)==tn]}
+      
     if (length(t_pre) > 0) {
       DT1[t_pre] <- DT[t_pre]
       colnames(DT1[t_pre])<-toupper(colnames(DT1[t_pre]))
@@ -113,12 +129,13 @@ function(results,
       Z[ty1,7] <- 1
       Z[ty2,7] <- 2
       Z <- Z[order(Z$Rank, Z$St),]
-      PDU <- PD[ty,-c(ncol(PD), ncol(PD)-1, term)]
+      PDU <- PD[ty,-c(ncol(PD), ncol(PD)-1, term), drop = FALSE]
       PDU <- apply(PDU, 1, function(x) sum(x>0.5))
       Z$uniquely_cov <- TRUE
       for (j in ty) {
         if (PDU[j]==0) {Z[j,"uniquely_cov"] <- TRUE}
         else {Z[j,"uniquely_cov"] <- FALSE}}
+      Z <- Z[c('Focal Conjunct', outcome, 'Comp. Conjunct','Term Membership', 'most_typical','uniquely_cov','Rank')]
       M[[i]] <- list(title=fct, results=Z)
     }
     }

@@ -6,7 +6,7 @@ mmr <-
            match=NULL,
            cases=NULL,
            max_pairs=5,
-           term = 1)
+           term = 1, use.tilde = TRUE)
   { if (is.null(match)) stop('You have not specifyied whether you want single case MMR or comparative MMR. 
                              Please use match= FALSE for single case MMR or match= TRUE for comparative MMR.')
     if (is.null(cases)) stop('You have not specifyied the cases to be identified. 

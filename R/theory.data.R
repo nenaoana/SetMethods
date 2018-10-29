@@ -2,12 +2,32 @@ theory.data <-
 function(theory, 
            empirics, 
            outcome,
-           sol=1)
+           sol=1, 
+           use.tilde = TRUE)
   { if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
     outcome<-gsub('\\~', '', outcome)
     outcome<-unlist(outcome)}
-    outcome <- toupper(outcome)		
+    outcome <- toupper(outcome)
+    
+
+    # TRANSFORM TO TILDE --------
+    tild <- function(x)
+    {
+      x <- unlist(strsplit(x, '\\*'))
+      x <- as.vector(unlist(sapply(x, function (y) 
+        if (!y==toupper(y)){y <- paste("~",toupper(y),sep="")} 
+        else { y <- y})))
+      x <- paste(x, collapse = "*")
+    }
+    # ------------
+    
+    if (!use.tilde){
+    th <- unlist(strsplit(theory, '\\+'))
+    th <- as.vector(unlist(sapply(th, function(x)  tild(x))))
+    theory <- paste(th, collapse = "+")}
+    else {theory <- toupper(theory)}
+    
     tl <- gsub('\\s', '', theory)
     tl <- unlist(strsplit(tl, '\\+')) 
     tl <- strsplit(tl, '\\*') 
@@ -20,7 +40,7 @@ function(theory,
       t_neg<-unlist(t_neg)
       t_pre<-tn[!tn %in% tn[grep("~",tn)]]
       }
-    else { t_pre<- toupper(tn) }
+    else {t_pre<- toupper(tn) }
     
     if (length(t_pre) > 0) {
       PRE <- empirics$tt$initial.data[t_pre] ; names(PRE) <- t_pre      
@@ -72,12 +92,15 @@ function(theory,
         }
       }
     
+    if (!use.tilde){
+    colnames(P) <- as.vector(unlist(sapply(colnames(P), function(x)  tild(x))))}
+    
     P$Sol.Formula <- apply(P, 1, max)
     P$Theory <- tv
     P$'T*E' <- pmin(  tv,   P$Sol.Formula)
-    P$'t*E' <- pmin(1-tv,   P$Sol.Formula)
-    P$'T*e' <- pmin(  tv, 1-P$Sol.Formula)
-    P$'t*e' <- pmin(1-tv, 1-P$Sol.Formula)
+    P$'~T*E' <- pmin(1-tv,   P$Sol.Formula)
+    P$'T*~E' <- pmin(  tv, 1-P$Sol.Formula)
+    P$'~T*~E' <- pmin(1-tv, 1-P$Sol.Formula)
     if (empirics$options$neg.out) {
       P$Outcome<-1-empirics$tt$initial.data[,outcome]
     } else {

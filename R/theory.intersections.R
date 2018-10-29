@@ -1,4 +1,4 @@
-theory.intersections <- function(theory, empirics, sol = 1)
+theory.intersections <- function(theory, empirics, sol = 1, use.tilde = TRUE)
 {
   if (is.null(empirics$i.sol)){
     if (is.character(sol)) stop('For conservative or parsimonious solutions, the model must be specificied numerically (e.g. sol=2).')
@@ -27,9 +27,14 @@ tild <- function(x)
        else { y <- y})))
   x <- paste(x, collapse = "*")
 }
-  
+
+if (!use.tilde){  
 emp <- as.vector(unlist(sapply(s, function(x)  tild(x))))
 emp <- paste(emp, collapse = "+")
+th <- unlist(strsplit(theory, '\\+'))
+th <- as.vector(unlist(sapply(th, function(x)  tild(x))))
+theory <- paste(th, collapse = "+")}
+else {theory <- toupper(theory)}
 
 thintersect <- list()
 

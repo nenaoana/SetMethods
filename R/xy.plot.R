@@ -1,37 +1,28 @@
 xy.plot <-
-function(x, y,
-           ylim = c(-.05, 1.05), xlim = c(-.05, 1.05),
-           pch = 19, col = "black",
-           main = "XY plot", ylab = "Outcome", xlab = "Condition",
-           mar = c(4, 4, 4, 1), mgp = c(2.2, .8, 0),
-           cex.fit = .6, cex.axis = .7, cex.main = 1,
-           necessity = FALSE, 
-           show.hv = TRUE, show.fit = TRUE, pos.fit = "top",
-           case.lab = TRUE, labs = NULL, cex.lab = .8, 
-           offset.x = 0, offset.y = 0, 
-           pos = 4, srt = 0,
-           ident = FALSE)
-{	
-    
-    par(mar = mar, mgp = mgp)
-    plot(x, y, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, 
-         axes = FALSE, pch = pch, main = main, cex.main = cex.main,
-         col = col)
-    axis(1, at = seq(0, 1, .1), labels = seq(0, 1, .1),
-         cex.axis = cex.axis)
-    axis(2, at = seq(0, 1, .1), labels = seq(0, 1, .1),
-         cex.axis = cex.axis, las=2)
-    box(); abline(0, 1); 
-    
-    if (show.hv == TRUE) {
-      abline(v = .5, lty = 2); abline(h = .5, lty = 2)
-    }
-    
+  function(x, y, data, 
+           labcol = "black",
+           main = "XY plot", 
+           ylab = "Outcome", 
+           xlab = "Condition",
+           necessity = FALSE,
+           jitter = FALSE, 
+           font = "sans",
+           fontface = "italic", 
+           fontsize = 3,
+           labs = rownames(data))
+{   if(length(grep("~",x)) > 0){
+    x<-gsub('\\~', '', x)
+    x<-unlist(x)
+    data[,x] <- 1-data[,x]}
+    if(length(grep("~",y)) > 0){
+      y<-gsub('\\~', '', y)
+      y<-unlist(y)
+      data[,y] <- 1-data[,y]}
     if (necessity == TRUE) {   
       # Necessity
-      con <- sum(pmin(x, y))/sum(y)
-      cov <- sum(pmin(x, y))/sum(x)
-      ron <- sum(1-x)/sum(1-pmin(x, y))
+      con <- sum(pmin(data[,x], data[,y]))/sum(data[,y])
+      cov <- sum(pmin(data[,x], data[,y]))/sum(data[,x])
+      ron <- sum(1-data[,x])/sum(1-pmin(data[,x], data[,y]))
       cons <- format(con, digits = 3)
       storage.mode(cons) <- "numeric"
       cove <- format(cov, digits = 3)
@@ -44,14 +35,14 @@ function(x, y,
       cove.c <- paste("Cov.Nec",
                       cove, sep = ": ")
       rons.c<- paste("RoN",
-                      rons, sep = ": ")
+                     rons, sep = ": ")
       
     } else {
       # Sufficiency
-      con <- sum(pmin(x, y))/sum(x)
-      cov <- sum(pmin(x, y))/sum(y)
-      pri <- (sum(pmin(x,y))-sum(pmin(x,y,1-y)))/(sum(x)-sum(pmin(x,y,1-y)))
-      hcon <- sum(pmin(x,y))/sum(pmin(x,y) + sqrt(pmax((x-y), 0)*x))
+      con <- sum(pmin(data[,x], data[,y]))/sum(data[,x])
+      cov <- sum(pmin(data[,x], data[,y]))/sum(data[,y])
+      pri <- (sum(pmin(data[,x], data[,y]))-sum(pmin(data[,x], data[,y],1-data[,y])))/(sum(data[,x])-sum(pmin(data[,x], data[,y],1-data[,y])))
+      hcon <- sum(pmin(data[,x], data[,y]))/sum(pmin(data[,x], data[,y]) + sqrt(pmax((data[,x]-data[,y]), 0)*data[,x]))
       cons <- format(con, digits = 3)
       storage.mode(cons) <- "numeric"
       cove <- format(cov, digits = 3)
@@ -68,25 +59,53 @@ function(x, y,
       pris.c<- paste("PRI",
                      pris, sep = ": ")
       hcons.c<- paste("Cons.Suf(H)",
-                     hcons, sep = ": ")
+                      hcons, sep = ": ")
     }
+    if (jitter == TRUE) {
+  ggplot(data) +
+  geom_point(aes(data[,x], data[,y]), color = 'black') +
+  geom_text_repel(aes(data[,x], data[,y], label = labs),
+                  size = fontsize,
+                  family = font,
+                  fontface = fontface,
+                  segment.size = 0.04,
+                  force = 0.07,
+                  max.iter = 2e3) +
+  xlim(0,1)+
+  ylim(0,1)+
+  theme_classic(base_size = 16) +
+  geom_vline(xintercept = 0.5)+
+    geom_vline(xintercept = 1)+
     
-    if (show.fit == TRUE) {
-      if (pos.fit == "top") {	
-        mtext(lab, line = 0.3, cex = cex.fit)
-      }
-      if (pos.fit == "corner") {
-        text(-.05, 1.05, cons, cex = cex.fit, adj = 0)
-        text(1.05, -.05, cove, cex = cex.fit, adj = 1)
-      }
+  geom_hline(yintercept = 0.5)+
+    geom_hline(yintercept = 1)+
+    
+  geom_abline(intercept = 0)+
+  labs(title = main, subtitle = lab , x=xlab,y=ylab)+
+  theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0)) +
+  theme(axis.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=12))+
+  theme(plot.subtitle = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=10)) 
     }
-    
-    if (case.lab == TRUE) {
-      text(x + offset.x, y + offset.y, 
-           labels = labs, cex = cex.lab, pos = pos, srt = srt)
-    } 
-    
-    if (ident == TRUE) {
-      id <- identify(x, y, labels = labs, cex = cex.lab)
+    else {
+      ggplot(data) +
+        geom_point(aes(data[,x], data[,y]), color = 'black') +
+        geom_text(aes(data[,x] , data[,y],label=labs),hjust=0, vjust=0, color = labcol, fontface = fontface, size = fontsize, family = font)+
+        xlim(0,1)+
+        ylim(0,1)+
+        theme_classic(base_size = 16) +
+        geom_vline(xintercept = 0.5)+
+        geom_vline(xintercept = 1)+
+        
+        geom_hline(yintercept = 0.5)+
+        geom_hline(yintercept = 1)+
+        
+        geom_abline(intercept = 0)+
+        labs(title = main, subtitle = lab , x=xlab,y=ylab)+
+        theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0)) +
+        theme(axis.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=12))+
+        theme(plot.subtitle = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=10)) 
+      
     }
-  }
+}
+
+ 

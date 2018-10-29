@@ -4,7 +4,7 @@ function(results,
            term=1,
            neg.out=FALSE,
            sol=1,
-           max_pairs=5)
+           max_pairs=5, use.tilde = TRUE)
     
   { if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
@@ -19,8 +19,25 @@ function(results,
     tl <- gsub('\\s', '', nterm)
     tl <- strsplit(tl, '\\*') 
     tn <- unique(unlist(tl)) 
-    t_pre <- toupper(tn)[toupper(tn)==tn] 
-    t_neg <- toupper(tn)[tolower(tn)==tn] 
+    
+    #Code for working with ~:
+    if (use.tilde == TRUE) {
+      t_neg<-character(0)
+      t_pre<-character(0)
+      
+      if(length(grep("~",tn)) > 0){
+        t_neg<-tn[grep("~",tn)]
+        t_neg<-gsub('\\~', '', t_neg)
+        t_neg<-unlist(t_neg)
+        t_pre<-tn[!tn %in% tn[grep("~",tn)]]
+      }
+      else {t_pre<- toupper(tn)}
+    }
+    #Code for lower case:
+    else{
+      t_pre <- toupper(tn)[toupper(tn)==tn]
+      t_neg <- toupper(tn)[tolower(tn)==tn]}
+    
     if (length(t_pre) > 0) {
       data1[t_pre] <- data[t_pre]
       colnames(data1[t_pre])<-toupper(colnames(data1[t_pre]))      
