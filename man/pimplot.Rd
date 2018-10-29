@@ -7,9 +7,20 @@
 		A function that displays XY plots for each sufficient term and the solution formula plotted against the outcome from an object of class "qca" (obtained by using the \code{minimize} function in package \code{QCA}). The function can also plot truth table rows against the outcome. Additionally, the function can plot results obtained from necessity analyses using an object of class "sS" (obtained by using the \code{superSubset} function in package \code{QCA}).
 }
 \usage{
-pimplot(data = NULL, results, outcome, neg.out=FALSE, incl.tt=NULL, ttrows= c(),
-        necessity=FALSE, sol=1, case_labels=TRUE, all_labels=FALSE,
-        lab_color=rgb(0,0,0,0.5), lab_jitter=FALSE)
+pimplot(data = NULL,
+           results,
+           outcome,
+           neg.out=FALSE,
+           incl.tt=NULL,
+           ttrows= c(),
+           necessity=FALSE,
+           sol=1,
+           all_labels=FALSE,
+           labcol="black", 
+           jitter = FALSE,
+           font = "sans",
+           fontface = "italic", 
+           fontsize = 3)
 }
 \arguments{
   \item{data}{
@@ -18,11 +29,11 @@ pimplot(data = NULL, results, outcome, neg.out=FALSE, incl.tt=NULL, ttrows= c(),
 		name of the outcome and of the conditions in capital letters. 
 	}
 	\item{results}{
-		An object of class "qca" when necessity is \code{FALSE}. An object of class "sS" when necessity is          \code{TRUE}. For performing pimplots of the sufficient solution for the negated outcome one must only         use the \code{minimize()} result from the sufficiency analysis of the negated outcome together with 
+		An object of class "qca" when necessity is \code{FALSE}. An object of class "sS" when necessity is          \code{TRUE}. For performing pimplot of the sufficient solution for the negated outcome one must only         use the \code{minimize()} result from the sufficiency analysis of the negated outcome together with 
 		 \code{neg.out} set to \code{TRUE}.
 	}
 	\item{outcome}{
-		A character string with the name of the outcome in capital letters. When performing pimplots of the        sufficient solution for the negated outcome one must only use the \code{minimize()} result from the           sufficiency analysis of the negated outcome in the argument \code{results} together with \code{neg.out} set to \code{TRUE}. Changing the name in the argument \code{outcome} or using a tilde is not necessary.
+		A character string with the name of the outcome in capital letters. When performing pimplot of the        sufficient solution for the negated outcome one must only use the \code{minimize()} result from the           sufficiency analysis of the negated outcome in the argument \code{results} together with \code{neg.out} set to \code{TRUE}. Changing the name in the argument \code{outcome} or using a tilde is not necessary.
 	}
 	\item{neg.out}{
 		Logical. Should the negated outcome be used?
@@ -52,17 +63,23 @@ pimplot(data = NULL, results, outcome, neg.out=FALSE, incl.tt=NULL, ttrows= c(),
 		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
 		and i = intermediate solution.
 	}
-	\item{case_labels}{
-		Logical. Print case labels for relevant cases?
-	}
 	\item{all_labels}{
 		Logical. Print ALL case labels?
 	}
-	\item{lab_color}{
+	\item{labcol}{
 		Color of the labels.
 	}
-	\item{lab_jitter}{
-		Logical. Add jitter to label positions?
+	\item{jitter}{
+		Logical. Should labels not overlab?
+	}
+	\item{font}{
+		Font of the labels. Accepts "sans", "serif", and "mono" fonts.
+	}
+	\item{fontface}{
+		Fontface of the labels. Accepts "plain", "bold", "italic", "bold.italic".
+	}
+	\item{fontsize}{
+		Fontsize of the labels.
 	}
 }
 \value{

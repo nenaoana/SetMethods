@@ -8,7 +8,7 @@
 }
 \usage{
 matches.suf.typtyp(results, outcome, term = 1, neg.out=FALSE, 
-                   sol=1, max_pairs = 5)
+                   sol=1, max_pairs = 5, use.tilde = TRUE)
 }
 \arguments{
 	\item{results}{
@@ -30,6 +30,9 @@ matches.suf.typtyp(results, outcome, term = 1, neg.out=FALSE,
 	}
 	\item{max_pairs}{
 		Maximum number of pairs to extract.
+	}
+	\item{use.tilde}{
+		Logical. Are sets negated with a tilde in the solution?
 	}
 }
 \references{

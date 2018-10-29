@@ -7,7 +7,7 @@
 	A function that extracts cases typical with regards to sufficiency from an object of class "qca".
 }
 \usage{
-cases.suf.typ.fct(results, outcome, term = 1, neg.out=FALSE, sol = 1)
+cases.suf.typ.fct(results, outcome, term = 1, neg.out=FALSE, sol = 1, use.tilde = TRUE)
 }
 \arguments{
 	\item{results}{
@@ -29,6 +29,9 @@ cases.suf.typ.fct(results, outcome, term = 1, neg.out=FALSE, sol = 1)
 		For more complicated structures of model ambiguity, the intermediate solution can also be specified
 		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
 		and i = intermediate solution.
+	}
+	\item{use.tilde}{
+		Logical. Are sets negated with a tilde in the solution?
 	}
 }
 \references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97

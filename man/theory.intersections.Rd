@@ -7,13 +7,13 @@
 	Function that returns the Boolean expressions of the various intersections between theory and empirics.
 }
 \usage{
-theory.intersections(theory, empirics, sol = 1)
+theory.intersections(theory, empirics, sol = 1, use.tilde = TRUE)
 }
 \arguments{
 	\item{theory}{
 		A character string specifying the theory.
-		Conditions should be capitalized and negated conditions should be inserted with a "~".
 		Unions of conditions are performed with a "+", while intersections are performed with a "*".
+		If use.tilde is set to TRUE, conditions should be capitalized and negated conditions should be inserted with     a "~". If use.tilde is set to FALSE, negation can be denoted with lowercase letters, but the output will        always transform negation to a tilde.
 	}
 	\item{empirics}{
 		An object of class 'qca'. When performing analyses for the negated outcome, just use the 
@@ -25,6 +25,9 @@ theory.intersections(theory, empirics, sol = 1)
 		For more complicated structures of model ambiguity, the intermediate solution can also be specified
 		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
 		and i = intermediate solution.
+	}
+	\item{use.tilde}{
+	Logical. If the theory or the solution formula do not use tilde for negation, set use.tilde to FALSE to         transform negation with a tilde.
 	}
 }
 %\details{}

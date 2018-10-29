@@ -9,13 +9,13 @@
 	between theory and the empirical solution, and the parameters of fit for these intersections.
 }
 \usage{
-theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, print.data=FALSE)
+theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, print.data=FALSE, use.tilde = TRUE)
 }
 \arguments{
 	\item{theory}{
 		A character string specifying the theory.
-		Conditions should be capitalized and negated conditions should be inserted with a "~".
 		Unions of conditions are performed with a "+", while intersections are performed with a "*".
+		If use.tilde is set to TRUE, conditions should be capitalized and negated conditions should be inserted with     a "~". If use.tilde is set to FALSE, negation can be denoted with lowercase letters, but the output will        always transform negation to a tilde.
 	}
 	\item{empirics}{
 		An object of class 'qca'. When performing analyses for the negated outcome, just use the 
@@ -36,6 +36,9 @@ theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, print.dat
 	}
 	\item{print.fit}{
 		Logical. Print also the parameters of fit for the intersections between theory and empirics?
+	}
+	\item{use.tilde}{
+	Logical. If the theory or the solution formula do not use tilde for negation, set use.tilde to FALSE to         transform negation with a tilde.
 	}
 }
 %\details{}
