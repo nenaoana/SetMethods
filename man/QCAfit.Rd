@@ -2,7 +2,7 @@
 \alias{QCAfit}
 \title{Function calculating the parameters of fit}
 \description{QCAfit is a function calculating parameters of fit useful in QCA and fsQCA that are consistency, coverage, PRI, Haesebrouck's consistency, RoN and PRODUCT. It works with both single and multiple conditions.}
-\usage{QCAfit(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, 
+\usage{QCAfit(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, 
               product = FALSE, sol=1, ttrows= c())}
 \arguments{
   \item{x}{
@@ -10,7 +10,8 @@
   \item{y}{
     A vector containing the values of the output or a character string when y is of class "qca".}
   \item{cond.lab}{
-    is a vector containing the label(s) of the condition(s).}
+     When inserting a dataframe or a matrix with more than one condition and column names, the function
+     automatically prints the names of the conditions tested. When inputing a vector, hence a single condition      (i.e. a single column in a dataframe, the name of the condition tested should be inserted in this option       .)}
   \item{necessity}{
     logical. It indicates if the output should be for sufficient or necessary condition(s). By default,             \code{FALSE}, the function returns a table of parameters of fit for sufficient condition(s) (Consistency,       Coverage, PRI, Haesebrouck's Consistency, and optionally Product). When it set to \code{TRUE} the              function returns a table of parameters of fit for necessary condition(s) (Consistency, Coverage,               Relevance of Necessity).}
   \item{neg.out}{logical. It indicates if the parameters of fit should be computed for the positive or the        negative outcome. By default, \code{FALSE}, the function returns parameters of fit for the positive outcome   .}
@@ -50,20 +51,17 @@ b <- runif(100, 0, 1)
 c <- runif(100, 0, 1)
 y <- runif(100, 0, 1)
 
-# Only one condition, for sufficiency
+# Only one condition, for necessity
 QCAfit(a, y, cond.lab = "A")
 
-# With three conditions, for sufficiency
-QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"))
+# With three conditions and their negation, for necessity
+QCAfit(cbind(a, b, c), y)
 
-# Only one condition, for necessity
-QCAfit(a, y, cond.lab = "A", necessity = TRUE)
+# Only one condition, for sufficiency
+QCAfit(a, y, cond.lab = "A", necessity = FALSE)
 
-# With three conditions, for necessity
-QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"), necessity = TRUE)
-
-# With three conditions and negated output, for sufficiency
-QCAfit(cbind(a, b, c), y, cond.lab = c("A", "B", "C"), neg.out = TRUE)
+# With three conditions, their negation and negated output, for necessity
+QCAfit(cbind(a, b, c), y, neg.out = TRUE)
 
 # Load the Schneider data:
 
@@ -71,15 +69,15 @@ data(SCHF)
 
 # Get parameters of fit for condition EMP as necessary for outcome EXPORT:
 
-QCAfit(SCHF$EMP, SCHF$EXPORT, necessity = TRUE, cond.lab = "EMP")
+QCAfit(SCHF$EMP, SCHF$EXPORT, cond.lab = "EMP")
 
 # Get parameters of fit for condition ~EMP as necessary for outcome ~EXPORT:
 
-QCAfit(1-SCHF$EMP, SCHF$EXPORT, neg.out=TRUE, necessity = TRUE, cond.lab = "~EMP")
+QCAfit(1-SCHF$EMP, SCHF$EXPORT, neg.out=TRUE, cond.lab = "~EMP")
 
-# Get parameters of fit for all conditions as necessary for outcome EXPORT:
+# Get parameters of fit for all conditions and their negation as necessary for outcome EXPORT:
 
-QCAfit(SCHF[,1:6], SCHF$EXPORT, necessity = TRUE, cond.lab = names(SCHF[,1:6]))
+QCAfit(SCHF[,1:6], SCHF$EXPORT)
 
 # Obtain the intermediate solution for outcome "EXPORT":
 
