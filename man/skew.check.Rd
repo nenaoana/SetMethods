@@ -4,7 +4,7 @@
 	Function for checking how skewed sets are.
 }
 \description{
-	A function that identifies how skewed sets are by returning the number and percentage of cases with higher      than 0.5 fuzzy-set values.
+	A function that identifies how skewed sets are by returning the number and percentage of cases with higher      than 0.5 fuzzy-set values.}
 \usage{
 skew.check(data)
 }
