@@ -1,6 +1,7 @@
 QCAfit <-
-function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product = FALSE, sol=1, ttrows= c())
+function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FALSE, sol=1, ttrows= c())
   {
+  # For qca objects:
   if (is(x,'qca'))
   {   
       if (necessity==TRUE) stop('You cannot calculate parameters of fit for necessity for a qca sufficient solution')
@@ -39,8 +40,14 @@ function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product = FA
       return(a)
   }
   
-  else {	
-	x <- as.matrix(x)
+  
+  else {
+  x <- as.matrix(x)
+  if (ncol(x)>1){
+    nx <- 1-x
+    colnames(nx) <- paste("~",colnames(nx), sep = "")
+    x <- cbind(x,nx)
+  }  
 	
 	v <- matrix(NA, length(x[ ,1]), length(x[1, ]))
 	
@@ -70,23 +77,27 @@ function(x, y, cond.lab = NULL, necessity = FALSE, neg.out = FALSE, product = FA
 		}
 	if (product == TRUE) {
 	  suf <- matrix(out[, c(1:2, 6:8)], nrow = ncol(x))
-	  colnames(suf) <- c("Cons.Suf", "Cov.Suf", "PRI", "Cons.Suf(H)",  "PRODUCT")					  					   
-	  rownames(suf) <- cond.lab
+	  colnames(suf) <- c("Cons.Suf", "Cov.Suf", "PRI", "Cons.Suf(H)",  "PRODUCT")	
 	  suf <- format(suf, digits = 3)
 	  storage.mode(suf) <- "numeric"}
 	else {
 	  suf <- matrix(out[, c(1:2, 6:7)], nrow = ncol(x))
 	  colnames(suf) <- c("Cons.Suf", "Cov.Suf", "PRI", "Cons.Suf(H)")					  					   
-	  rownames(suf) <- cond.lab
 	  suf <- format(suf, digits = 3)
 	  storage.mode(suf) <- "numeric"
 	  }
 	 	
 	nec <- matrix(out[, 3:5], nrow = ncol(x))	
 	colnames(nec) <- c("Cons.Nec", "Cov.Nec", "RoN")					  					   
-	rownames(nec) <- cond.lab
 	nec <- format(nec, digits = 3)
 	storage.mode(nec) <- "numeric" 	
+	
+	if (ncol(x)>1){
+	rownames(suf) <- colnames(x)
+	rownames(nec) <- colnames(x)}
+  else {
+  rownames(suf) <- cond.lab
+  rownames(nec) <- cond.lab}
 	
 	if(necessity == FALSE){
         return(suf)

@@ -15,7 +15,7 @@ mmr <-
     if (!match) {
     if (cases==1) {R <- cases.suf.typ(results, outcome, neg.out, sol)
     return(R)}
-    if (cases==2) {R <- cases.suf.typ.fct(results, outcome, term, neg.out, sol)
+    if (cases==2) {R <- cases.suf.typ.fct(results, outcome, term, neg.out, sol, use.tilde)
     return(R)}
     if (cases==3) {R <- cases.suf.dcn(results, outcome, neg.out, sol)
     return(R)}
@@ -27,7 +27,7 @@ mmr <-
             M<-list()
             R1 <- cases.suf.typ(results, outcome, neg.out, sol)
             M[[1]] <- list(title="Typical", results=R1[[1]]$results)
-            R2 <- cases.suf.typ.fct(results, outcome, term, neg.out, sol)
+            R2 <- cases.suf.typ.fct(results, outcome, term, neg.out, sol, use.tilde)
             M[[2]] <- list(title="Typical for each Focal Conjunct", results=R2[[1]]$results)
             R3 <- cases.suf.dcn(results, outcome, neg.out, sol)
             M[[3]] <- list(title="Deviant Consistency", results=R3[[1]]$results)
@@ -46,14 +46,14 @@ mmr <-
                term,
                neg.out,
                sol,
-               max_pairs) 
+               max_pairs, use.tilde) 
     return(R)}
     if (cases==2) {R <- matches.suf.typiir(results,
                                            outcome,
                                            term,
                                            neg.out,
                                            sol,
-                                           max_pairs) 
+                                           max_pairs, use.tilde) 
     return(R)}
     if (cases==3) {R <- matches.suf.typdcn(results,
                                            outcome,
@@ -74,14 +74,14 @@ mmr <-
                                 term,
                                 neg.out,
                                 sol,
-                                max_pairs)
+                                max_pairs, use.tilde)
       M[[1]] <- list(title="Typical-Typical", results=R1)
       R2 <- matches.suf.typiir(results,
                                outcome,
                                term,
                                neg.out,
                                sol,
-                               max_pairs) 
+                               max_pairs, use.tilde) 
       M[[2]] <- list(title="Typical-IIR", results=R2)
       R3 <- matches.suf.typdcn(results,
                                outcome,
