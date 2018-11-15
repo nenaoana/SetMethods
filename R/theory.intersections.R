@@ -34,7 +34,9 @@ emp <- paste(emp, collapse = "+")
 th <- unlist(strsplit(theory, '\\+'))
 th <- as.vector(unlist(sapply(th, function(x)  tild(x))))
 theory <- paste(th, collapse = "+")}
-else {theory <- toupper(theory)}
+else {
+  emp <- toupper(s)
+  theory <- toupper(theory)}
 
 thintersect <- list()
 
