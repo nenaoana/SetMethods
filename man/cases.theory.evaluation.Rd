@@ -61,15 +61,10 @@ sol_yi <- minimize(SCHF, outcome = "EXPORT",
 
 t<-"~EMP*MA"
 
-# Get membership of cases in the intersections between theory and 
-# the second intermediate solution and place it in an object:
 
-INT <- theory.data(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2)
+# Get the names of cases in the intersections between theory and the empirical solution:
 
-# Get the names of cases in the intersections between theory and the empirical solution
-# using the output of the theory.data function:
-
-cases.theory.evaluation(INT)
+cases.theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2, use.tilde=FALSE)
 
 }
 \keyword{QCA}

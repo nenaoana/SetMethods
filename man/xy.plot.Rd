@@ -19,7 +19,7 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
   \item{x}{vector containing the condition.}
   \item{y}{vector containing the outcome.}
   \item{data}{The dataset used}
-  \item{labcolor}{color of the dots.}
+  \item{labcol}{color of the dots.}
   \item{main}{an overall title for the plot. The default is \code{"XY plot"}. See ?title.}
   \item{ylab}{a title for the y-axis. The default is \code{"Outcome"}. See ?title.}
   \item{xlab}{a title for the x-axis. The default is \code{"Condition"}. See ?title.}

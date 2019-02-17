@@ -5,12 +5,10 @@
 }
 \description{
 	A function that identifies cases with 0.5 fuzzy-set values.}
-\usage{
-ambig.cases(data)
-}
+\usage{ambig.cases(data)}
 \arguments{
 	\item{data}{
-		A datafarme, a subset of a dataframe, or a vector (i.e. single column in a dataframe). If the function is provided with the dataframe it will return the name of the cases with 0.5 values together with their            location in the dataframe. If the function is provided with a vector (i.e. a single column), it will return     the position of the case having a 0.5 in that vector. The function should be used for calibrated data and       will give an error if the data contains uncalibrated scores. However, if you have both calibrated and           uncalibrated data in the same dataframe, it is possible to use the function only for the calibrated subset      of that data. 
+		A datafarme, a subset of a dataframe, or a vector (i.e. single column in a dataframe). If the function is       provided with the dataframe it will return the name of the cases with 0.5 values together with their            location in the dataframe. If the function is provided with a vector (i.e. a single column), it will return     the position of the case having a 0.5 in that vector. The function should be used for calibrated data and       will give an error if the data contains uncalibrated scores. However, if you have both calibrated and           uncalibrated data in the same dataframe, it is possible to use the function only for the calibrated subset      of that data. 
 	}
 }
 \author{

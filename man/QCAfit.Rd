@@ -79,20 +79,20 @@ QCAfit(1-SCHF$EMP, SCHF$EXPORT, neg.out=TRUE, cond.lab = "~EMP")
 
 QCAfit(SCHF[,1:6], SCHF$EXPORT)
 
-# Obtain the intermediate solution for outcome "EXPORT":
+# Obtain the parsimonious solution for outcome "EXPORT":
 
-sol_yi <- minimize(SCHF, outcome = "EXPORT",
+sol_yp <- minimize(SCHF, outcome = "EXPORT",
                 conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
                 incl.cut = .9, 
                 include = "?", 					   
-                details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
+                details = TRUE, show.cases = TRUE)
                 
-# Get parameters of fit for the second model of the intermediate solution:
+# Get parameters of fit for the parsimonious solution:
 
-QCAfit(x = sol_yi, y = "EXPORT", sol=2)
+QCAfit(x = sol_yp, y = "EXPORT", necessity = FALSE)
 
 # Get parameters of fit for truth table rows 2,8, and 10:
 
-QCAfit(x = sol_yi, y = "EXPORT", ttrows=c("2","8","10"))
+QCAfit(x = sol_yp, y = "EXPORT", ttrows=c("2","8","10"), necessity = FALSE)
 
 }

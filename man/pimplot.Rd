@@ -111,29 +111,17 @@ sol_yp <- minimize(SCHF, outcome = "EXPORT",
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE)
 
-# Get the intermediate solution:
-
-sol_yi <- minimize(SCHF, outcome = "EXPORT",
-                conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"),
-                incl.cut = .9, 
-                include = "?", 					   
-                details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
-
 # Plot the prime implicants of the parsimonious solution:
 
 pimplot(data = SCHF, results = sol_yp, outcome = "EXPORT")
 
-# Plot the prime implicants of the first intermediate solution showing all case labels:
+# Plot all truth table rows with a consistency higher than 0.95:
 
-pimplot(data = SCHF, results = sol_yi, outcome = "EXPORT", sol = 1, all_labels = TRUE)
+pimplot(data=SCHF, results = sol_yp, incl.tt=0.97, outcome = "EXPORT", sol = 1)
 
-# Plot all truth table rows with a consistency higher than 0.9:
+# Plot truth table row "60":
 
-pimplot(data=SCHF, results = sol_yi, incl.tt=0.9, outcome = "EXPORT", sol = 1)
-
-# Plot truth table rows "60" and "61":
-
-pimplot(data=SCHF, results = sol_yi, ttrows =c("60","61"), 
+pimplot(data=SCHF, results = sol_yp, ttrows =c("60"), 
         outcome = "EXPORT", sol = 1)
 
 # For plotting results of necessity analyses using superSubset,
@@ -141,7 +129,7 @@ pimplot(data=SCHF, results = sol_yi, ttrows =c("60","61"),
 
 SUPSUB <- superSubset(SCHF, outcome="EXPORT", 
                       conditions = c("EMP","BARGAIN","UNI","OCCUP","STOCK", "MA"), 
-                      relation = "necessity", incl.cut = 0.8)
+                      relation = "necessity", incl.cut = 0.996)
 SUPSUB
 
 # This can be imputed as result and necessity should be set to \code{TRUE}:

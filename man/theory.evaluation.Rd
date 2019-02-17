@@ -9,7 +9,8 @@
 	between theory and the empirical solution, and the parameters of fit for these intersections.
 }
 \usage{
-theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, print.data=FALSE, use.tilde = TRUE)
+theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, 
+                  print.data=FALSE, use.tilde = TRUE)
 }
 \arguments{
 	\item{theory}{
@@ -71,18 +72,15 @@ sol_yi <- minimize(SCHF, outcome = "EXPORT",
 
 t<-"~EMP*MA"
 
-# Perform theory evaluation:
 
-theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2, print.data=TRUE, print.fit=TRUE)
+# Perform theory evaluation (get only the names of the cases and the Boolean intersections):
 
-# Get only the names of the cases and the Boolean intersections:
-
-theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2)
+TH <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2, 
+                  print.data=FALSE, print.fit=FALSE)
+TH
 
 # Get only the case names:
 
-TH <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", 
-                        sol = 2, print.data=FALSE)
 TH$cases
 
 # Or only the parameters of fit:
