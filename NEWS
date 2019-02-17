@@ -1,3 +1,5 @@
+Version 2.4.1
+ 	o Fixed: bug function pimplot() unable to plot solution with tilde
 Version 2.4
 	o Changed: xy.plot now works with names of columns in a specified dataset
 	o New: xy.plot and pimplot have a logical argument "jitter" for not overlapping 	labels
@@ -7,6 +9,12 @@ Version 2.4
 	o New: function negateExp() for negating Boolean expressions
 	o New: function intersectExp() for intersecting Boolean expressions
 	o New: function mmr() and its related functions now have a logical argument 	"use.tilde" and allows solutions in which negation is denoted by either lower case 	or a tilde
+	o New: function ambig.cases() that identifyies cases that score exactly 0.5 in one 	or more conditions;
+ 	o New: function skew.check() for diagnosing skewness;
+	o New: function LR.intersect() to make it easier to intersect SAs and ECs for the 	outcome and its negation;
+	o Improved: function QCAfit() now automatically prints condition names and 		performs the analysis for their negation;
+	o Changed: function QCAfit() now has option necessity=TRUE as default;
+	o New: function property.cube() that produces a 3D scatter plot;
 	o Fixed: bug function mmr() and its related functions working with the focal 		conjunct principle giving an error when applied to a solution with a single term
 	o Improved: the output of the mmr() function for typical cases using the focal 		conjunct principle is now reordered to show uniquely covered cases before the rank
 Version 2.3.1
