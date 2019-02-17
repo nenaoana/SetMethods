@@ -10,14 +10,18 @@ xy.plot <-
            fontface = "italic", 
            fontsize = 3,
            labs = rownames(data))
-{   if(length(grep("~",x)) > 0){
+  { if (is.data.frame(x)){ x <- colnames(x)}
+    else{
+    if(length(grep("~",x)) > 0){
     x<-gsub('\\~', '', x)
     x<-unlist(x)
-    data[,x] <- 1-data[,x]}
+    data[,x] <- 1-data[,x]}}
+    if (is.data.frame(y)){ y <- colnames(y)}
+    else{
     if(length(grep("~",y)) > 0){
       y<-gsub('\\~', '', y)
       y<-unlist(y)
-      data[,y] <- 1-data[,y]}
+      data[,y] <- 1-data[,y]}}
     if (necessity == TRUE) {   
       # Necessity
       con <- sum(pmin(data[,x], data[,y]))/sum(data[,y])
@@ -37,7 +41,8 @@ xy.plot <-
       rons.c<- paste("RoN",
                      rons, sep = ": ")
       
-    } else {
+    } 
+    else {
       # Sufficiency
       con <- sum(pmin(data[,x], data[,y]))/sum(data[,x])
       cov <- sum(pmin(data[,x], data[,y]))/sum(data[,y])
@@ -82,9 +87,9 @@ xy.plot <-
     
   geom_abline(intercept = 0)+
   labs(title = main, subtitle = lab , x=xlab,y=ylab)+
-  theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0)) +
-  theme(axis.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=12))+
-  theme(plot.subtitle = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=10)) 
+  theme(plot.title = element_text(family = "Palatino", color="#666666", face="bold", size=20, hjust=0)) +
+  theme(axis.title = element_text(family = "Palatino", color="#666666", face="bold", size=12))+
+  theme(plot.subtitle = element_text(family = "Palatino", color="#666666", face="bold", size=10)) 
     }
     else {
       ggplot(data) +
@@ -101,9 +106,9 @@ xy.plot <-
         
         geom_abline(intercept = 0)+
         labs(title = main, subtitle = lab , x=xlab,y=ylab)+
-        theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0)) +
-        theme(axis.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=12))+
-        theme(plot.subtitle = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=10)) 
+        theme(plot.title = element_text(family = "Palatino", color="#666666", face="bold", size=20, hjust=0)) +
+        theme(axis.title = element_text(family = "Palatino", color="#666666", face="bold", size=12))+
+        theme(plot.subtitle = element_text(family = "Palatino", color="#666666", face="bold", size=10)) 
       
     }
 }

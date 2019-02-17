@@ -9,7 +9,7 @@ QCAradar <-
     nc <- ncol(PD)-2
     cond <- results$tt$options$conditions
     pims <- names(PD[,1:nc])
-    fitdat <- QCAfit(x=results, y=outcome, sol=sol, necessity=FALSE)
+    fitdat <- QCAfit(x=results, y=outcome, sol=sol, necessity = FALSE)
     rdt <- data.frame(matrix(ncol=length(cond), nrow=length(pims)))
     rdt[,] <- 1
     colnames(rdt)=cond

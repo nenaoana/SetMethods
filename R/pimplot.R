@@ -40,14 +40,14 @@ pimplot <-
               else {fil <- rownames(P)
               fil[with(P, !(P[i] > 0.5))] <- ""}
               if (!neg.out){
-                xy.plot(colnames(P[i]), 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=outcome, main="Sufficiency Plot",
+                xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=outcome, main="Sufficiency Plot",
                             labcol=labcol, 
                             jitter = jitter,
                             font = font,
                             fontface = fontface, 
                             fontsize = fontsize, 
                             labs = fil)}
-              else {xy.plot(colnames(P[i]), 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
+              else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
@@ -75,14 +75,14 @@ pimplot <-
               if (i==n_c) { fil <- rownames(P)
               fil[with(P, !(P[i] < 0.5))] <- "" }}
               if (!neg.out){
-              xy.plot(colnames(P[i]), 'out', data = P, xlab=colnames(P)[i], ylab=outcome, main="Sufficiency Plot",
+              xy.plot(P[,i, drop=FALSE], "out", data = P, xlab=colnames(P[i]), ylab=outcome, main="Sufficiency Plot",
                 labcol=labcol, 
                 jitter = jitter,
                 font = font,
                 fontface = fontface, 
                 fontsize = fontsize, 
                 labs = fil)}
-              else {xy.plot(colnames(P[i]), 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), main="Sufficiency Plot",
+              else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
@@ -115,14 +115,14 @@ pimplot <-
               else {fil <- rownames(P)
               fil[with(P, !(P[i] > 0.5))] <- ""}
               if (!neg.out){
-              xy.plot(colnames(P[i]), 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=outcome, main="Sufficiency Plot",
+              xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=outcome, main="Sufficiency Plot",
                           labcol=labcol, 
                           jitter = jitter,
                           font = font,
                           fontface = fontface, 
                           fontsize = fontsize, 
                           labs = fil)}
-              else {xy.plot(colnames(P[i]), 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
+              else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
@@ -154,14 +154,14 @@ pimplot <-
             else {fil <- rownames(P)
             fil[with(P, !(P[,'out'] > 0.5))] <- ""}
           if (!neg.out){
-          xy.plot(colnames(P[i]), 'out', data = P, xlab=colnames(P)[i], ylab=outcome, necessity = TRUE, main="Necessity Plot",
+          xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=colnames(P)[i], ylab=outcome, necessity = TRUE, main="Necessity Plot",
                       labcol=labcol, 
                       jitter = jitter,
                       font = font,
                       fontface = fontface, 
                       fontsize = fontsize, 
                       labs = fil)}
-          else {xy.plot(colnames(P[i]), 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), necessity = TRUE, main="Necessity Plot",
+          else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), necessity = TRUE, main="Necessity Plot",
                             labcol=labcol, 
                             jitter = jitter,
                             font = font,
