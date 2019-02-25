@@ -312,10 +312,10 @@ robust.intersections <- function(results1, results2, sol1 = 1, sol2=1, use.tilde
   
   thintersect <- list()
   
-  thintersect$S1S2 <- simplify(intersectExp(emp1,emp2))
-  thintersect$s1S2 <- simplify(intersectExp(negateExp(emp1),emp2))
-  thintersect$S1s2 <- simplify(intersectExp(emp1,negateExp(emp2)))
-  thintersect$s1s2 <- simplify(intersectExp(negateExp(emp1),negateExp(emp2)))
+  thintersect$S1S2 <- intersectExp(emp1,emp2)
+  thintersect$s1S2 <- intersectExp(negateExp(emp1),emp2)
+  thintersect$S1s2 <- intersectExp(emp1,negateExp(emp2))
+  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp2))
   
   class(thintersect) <- 'robtersect'
   return(thintersect)
