@@ -41,9 +41,9 @@ else {
 thintersect <- list()
 
 thintersect$TE <- intersectExp(theory,emp)
-thintersect$tE <- intersectExp(simplify(negateExp(theory)),emp)
-thintersect$Te <- intersectExp(theory,simplify(negateExp(emp)))
-thintersect$te <- intersectExp(simplify(negateExp(theory)),simplify(negateExp(emp)))
+thintersect$tE <- intersectExp(negateExp(theory),emp)
+thintersect$Te <- intersectExp(theory,negateExp(emp))
+thintersect$te <- intersectExp(negateExp(theory),negateExp(emp))
 
 class(thintersect) <- 'thintersect'
 return(thintersect)
