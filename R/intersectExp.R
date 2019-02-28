@@ -30,6 +30,10 @@ intersectExp <- function (expression1, expression2)
   }
   combf <- (unique(unlist(combl)))
   combf <- combf[!is.na(combf)]
+  
+  if (length(combf)==0) {combff = "Empty Set"}
+  
+  else{
   combfl <- strsplit(combf, '\\*') 
   
   
@@ -72,5 +76,6 @@ intersectExp <- function (expression1, expression2)
   combff <- unique(combff)
   combff <- sapply(combff, function(x) paste(x, collapse = "*"))
   combff <- paste(combff, collapse = " + ")
+  }
   return(combff)
 }
