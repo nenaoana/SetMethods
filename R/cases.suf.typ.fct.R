@@ -89,7 +89,8 @@ function(results,
     for (i in (1:length(tn)))
       {
       fct <- paste("Typical Cases - Focal Conjunct", tn[i], sep = " ")
-      X <-DT1[toupper(tn[i])]
+      if(length(grep("~",tn[i])) > 0){tn[i]<-unlist(gsub('\\~', '', tn[i]))}
+      X <- DT1[toupper(tn[i])]
       cct<- tn[-grep(tn[i], tn)]
       cct<- toupper(cct)
       CCDT<-DT1[cct]

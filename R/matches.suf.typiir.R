@@ -58,6 +58,7 @@ function(results,
     for (i in (1:length(tn)))
     { 
       focconj <- paste("Focal Conjunct", tn[i], sep = " ")
+      if(length(grep("~",tn[i])) > 0){tn[i]<-unlist(gsub('\\~', '', tn[i]))}
       X <- data1[toupper(tn[i])] 
       co<- tn[-grep(tn[i], tn)]
       co<- toupper(co)
