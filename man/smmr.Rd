@@ -1,5 +1,5 @@
 \name{smmr}
-\alias{mmr}
+\alias{smmr}
 \title{
 	Function for performing set-theoretic multi-method research.
 }
