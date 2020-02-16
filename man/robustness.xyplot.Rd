@@ -1,11 +1,11 @@
 \name{robustness.xyplot}
 \alias{robustness.xyplot}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{
-%%  ~~function to do ... ~~
+Function for plotting an initial solution against the test set.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Function for plotting an initial solution against the test set (the set of all other alternative solutions created).
 }
 \usage{
 robustness.xyplot(test_sol, 
@@ -15,7 +15,6 @@ robustness.xyplot(test_sol,
             fontsize = 3,
             labs = TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{test_sol}{
 The different alternative solutions created with minimize() and placed in a list using list().
@@ -35,9 +34,6 @@ The size of the font for case labels.
 \item{labs}{
 Logical.Should case labels be printed?}
 
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \references{
 Oana, Ioana-Elena, and Carsten Q. Schneider. 2020. Robustness tests in QCA: A fit-oriented and case-oriented perspective using R. Unpublished Manuscript.
