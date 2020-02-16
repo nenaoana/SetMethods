@@ -2,14 +2,22 @@ cases.suf.typ.fct <-
 function(results,
 		 outcome,
 		 term=1,
-		 neg.out=FALSE,
-		 sol=1, use.tilde = TRUE)
-    {if(length(grep("~",outcome)) > 0){
-          outcome<-outcome[grep("~",outcome)]
-          outcome<-gsub('\\~', '', outcome)
-          outcome<-unlist(outcome)}
+		 sol=1,
+		 max_pairs=5,
+		 ...)
+    {
+    dots <- list(...)
+    if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+      }
+    if(length(grep("~",outcome)) > 0){
+      outcome<-outcome[grep("~",outcome)]
+      outcome<-gsub('\\~', '', outcome)
+      outcome<-unlist(outcome)}
     outcome <- toupper(outcome)
     PD <- pimdata(results=results, outcome=outcome, sol=sol)
+    if (term>(ncol(PD)-2)){stop("The term selected does not exist for the chosen model of the solution. Check the solution again and pick another term or change the model using the argument sol.")}
     nterm <- colnames(PD[term])
     DT <- results$tt$initial.data
     DT1 <- data.frame(matrix(NA,ncol=0,nrow=nrow(DT)))
@@ -18,7 +26,7 @@ function(results,
     tl <- strsplit(tl, '\\*')
     tn <- unique(unlist(tl))
     #Code for working with ~:
-    if (use.tilde == TRUE) {
+    if (results$options$use.tilde == TRUE) {
       t_neg<-character(0)
       t_pre<-character(0)
       
@@ -44,10 +52,9 @@ function(results,
       colnames(DT1[t_neg])<-tolower(colnames(DT1[t_neg]))
     }
   
-  if (!neg.out){
-    Y <- DT[outcome]}
-  else{
-    Y <- 1-DT[outcome]}
+    Y <- PD[,"out", drop=FALSE]
+    names(Y) <- outcome
+    # For terms with a single condition:
     if (length(tn)==1) {
       fct <- paste("Typical Cases - Focal Conjunct", tn[1], sep = " ")
       X <-DT1[toupper(tn[1])]
@@ -63,27 +70,31 @@ function(results,
           s <- (abs(Z$y-Z$x) + (1-Z$x))
           suppressWarnings(Z$s[s==min(s)] <- TRUE)
           Z$St <- s
-          colnames(Z)[1:3] <- c('Suff.Term/Focal Conjunct', outcome, 'most_typical')
+          colnames(Z)[1:3] <- c('Suff.Term/Focal Conjunct', outcome, 'Most_typical')
           Z<-Z[, c( 1, 2, 4, 3)]
           Z <- Z[order(Z$St),]
           PDU <- as.data.frame(PD[ty,-c(ncol(PD), ncol(PD)-1, term)], row.names = ty)
-          Z$uniquely_cov <- TRUE
+          Z$Uniquely_cov <- TRUE
           if (ncol(PDU)>1) {
             PDU <- apply(PDU, 1, function(x) sum(x>0.5))
             for (j in ty) {
-            if (PDU[j]==0) {Z[j,"uniquely_cov"] <- TRUE}
-              else {Z[j,"uniquely_cov"] <- FALSE}}}
+            if (PDU[j]==0) {Z[j,"Uniquely_cov"] <- TRUE}
+              else {Z[j,"Uniquely_cov"] <- FALSE}}}
           else { 
             if (ncol(PDU)==1) {
               for (j in ty) {
-                if (PDU[j,]<=0.5) {Z[j,"uniquely_cov"] <- TRUE}
-                else {Z[j,"uniquely_cov"] <- FALSE}}
+                if (PDU[j,]<=0.5) {Z[j,"Uniquely_cov"] <- TRUE}
+                else {Z[j,"Uniquely_cov"] <- FALSE}}
               }
           }
+          names(Z)[names(Z)==outcome]<- "Outcome"
+          names(Z)[names(Z)=="St"]<- "Best"
+          Z <- Z[order(Z$Uniquely_cov,Z$Best),]
           M <- list()
           M[[1]] <- list(title=fct, results=Z)
         }
-      }
+    }
+    # For terms with multiple FCs:
     else {
     M <- list()
     for (i in (1:length(tn)))
@@ -115,29 +126,33 @@ function(results,
     if (identical(ty, character(0))) {M[[i]] <-list(title=fct, results="no typical cases")}
     else {
       Z <- data.frame(
-        x <- X[ty,toupper(tn[i])],
-        y <- Y[ty,outcome],
-        cctm <- CCDT1[ty,"a"],
-        termm <- CCDT[ty,"termm"],
-        s=rep(FALSE))
+        "x" = X[ty,toupper(tn[i])],
+        "y" = Y[ty,outcome],
+        "cctm" = CCDT1[ty,"a"],
+        "termm" = CCDT[ty,"termm"],
+        "s" = rep(FALSE))
       row.names(Z) <- ty
-      s <- (abs(Z$y-Z$x) + (1-Z$term))
+      s <- (abs(Z$y-Z$x) + (1-Z$termm))
       suppressWarnings(Z$s[s==min(s)] <- TRUE)
       Z$St <- s
-      colnames(Z)[1:5] <- c('Focal Conjunct', outcome, 'Comp. Conjunct','Term Membership', 'most_typical')
+      colnames(Z) <- c('FocalConj', outcome, 'CompConj','Term', 'Most_typical','Best')
       Z<-Z[, c( 1, 3, 4, 2, 6, 5)]
+      Z$Most_typical_Val <- s
       Z$Rank <- NA
-      Z[ty1,7] <- 1
-      Z[ty2,7] <- 2
-      Z <- Z[order(Z$Rank, Z$St),]
+      Z[ty1,8] <- 1
+      Z[ty2,8] <- 2
+      Z <- Z[order(Z$Rank, Z$Best),]
       PDU <- PD[ty,-c(ncol(PD), ncol(PD)-1, term), drop = FALSE]
       PDU <- apply(PDU, 1, function(x) sum(x>0.5))
-      Z$uniquely_cov <- TRUE
+      Z$UniqCov <- TRUE
       for (j in ty) {
-        if (PDU[j]==0) {Z[j,"uniquely_cov"] <- TRUE}
-        else {Z[j,"uniquely_cov"] <- FALSE}}
-      Z <- Z[c('Focal Conjunct', outcome, 'Comp. Conjunct','Term Membership', 'most_typical','uniquely_cov','Rank')]
-      M[[i]] <- list(title=fct, results=Z)
+        if (PDU[j]==0) {Z[j,"UniqCov"] <- TRUE}
+        else {Z[j,"UniqCov"] <- FALSE}}
+      Z<-Z[, c( 1, 4, 2, 3, 5, 6, 7, 9, 8)]
+      Z <- Z[order(Z$Rank, 1-Z$UniqCov, Z$Best, Z$Most_typical_Val),]
+      Z[,c(1:5,7)] <- round(Z[,c(1:5,7)], digits=3)
+      names(Z)[names(Z)==outcome]<- "Outcome"
+      M[[i]] <- list(title=fct, results=head(Z, max_pairs))
     }
     }
     }

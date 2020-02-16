@@ -114,7 +114,7 @@ function( x, y, unit, cluster, necessity=FALSE)
     r <- list('POCOS'=r1,
               'BECOS'=r2,
               'dBP'=r3,
-              'WICOS'=r4,
+              'WICONS'=r4,
               'dWP'=r5,
               'Coverages'=r6)
     

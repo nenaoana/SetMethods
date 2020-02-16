@@ -40,7 +40,7 @@ function(theory,
       t_neg<-unlist(t_neg)
       t_pre<-tn[!tn %in% tn[grep("~",tn)]]
       }
-    else {t_pre<- toupper(tn) }
+    else {t_pre<- toupper(tn)}
     
     if (length(t_pre) > 0) {
       PRE <- empirics$tt$initial.data[t_pre] ; names(PRE) <- t_pre      
@@ -102,9 +102,9 @@ function(theory,
     P$'T*~E' <- pmin(  tv, 1-P$Sol.Formula)
     P$'~T*~E' <- pmin(1-tv, 1-P$Sol.Formula)
     if (empirics$options$neg.out) {
-      P$Outcome<-1-empirics$tt$initial.data[,outcome]
+      P$Outcome<-empirics$tt$recoded.data[,outcome]
     } else {
-      P$Outcome<-empirics$tt$initial.data[,outcome]
+      P$Outcome<empirics$tt$recoded.data[,outcome]
     }
     return(P)
   }

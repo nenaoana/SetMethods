@@ -5,8 +5,10 @@ cluster <-
            unit_id,
            cluster_id,
            sol=1,
-           necessity=FALSE)
-  { if (is(results,'qca')) 
+           necessity=FALSE,
+           wicons = FALSE)
+  { 
+    if (is(results,'qca')) 
     {
     if (is.null(data)) stop('You have not provided a dataframe. Please provide the dataframe in the long format to the argument data.')
     if(length(grep("~",outcome)) > 0){
@@ -35,12 +37,12 @@ cluster <-
           else {return("The model given to argument sol= is invalid or in the wrong format. Please check the helpfile for pimdata using ?pimdata for the appropiate format.")}
         }
       }
-      if (results$options$neg.out) {
-        P$outcome <- 1 - data[,outcome]
+      if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
+        P$outcome <- results$tt$recoded.data[,outcome]
       } else {
-        P$outcome <- data[,outcome]		
+        P$outcome <- results$tt$recoded.data[,outcome]
       }
-      if (is.character(unit_id) & is.character(unit_id)) {
+      if (is.character(unit_id) & is.character(cluster_id)) {
         P$unit_id <- data[, unit_id]
         P$cluster_id <- data[, cluster_id]
       }
@@ -68,7 +70,7 @@ cluster <-
       E$output <- O
       E$unit_ids <- P$unit_id
       E$cluster_ids <- P$cluster_id	
-      
+      E$wiconsprint <- wicons
       class(E) <- 'clusterminimize'
       return(E)
   }
@@ -84,7 +86,7 @@ cluster <-
             else {outcome <- data[,outcome]}
             } # if outcome is character
            # when both are vectors;
-          if (is.character(unit_id) & is.character(unit_id)) {
+          if (is.character(unit_id) & is.character(cluster_id)) {
               if (is.null(data)) stop('You have not provided a dataframe. Please provide the dataframe in the argument data.')
             unit <- as.character(data[, unit_id])
             cluster <- as.character(data[, cluster_id])
@@ -185,6 +187,11 @@ cluster <-
                  sqrt(sum(((wc/sum(wc)) - (1/N))^p))
                }
            }
+           # Nr of cases in clusters and units:
+           CNRC <- data.frame(table(cluster))
+           cnrc <- paste(as.character(CNRC[,1])," (",as.character(CNRC[,2]),") ",sep = "")
+           CNRU <- data.frame(table(unit))
+           cnru <- paste(as.character(CNRU[,1])," (",as.character(CNRU[,2]),") ",sep = "")
            # Together:
            if (!necessity){
              r1 <- con.pool(x, y)
@@ -194,7 +201,9 @@ cluster <-
              r5 <- dWP(X, Y)
              r6 <- list('pooled'  = cvr.pool(x, y),
                         'between' = cvr.betw(X, Y),
-                        'within'  = cvr.with(X, Y))}
+                        'within'  = cvr.with(X, Y))
+             r7 <- cnrc
+             r8 <- cnru}
            else{
              r1 <- cvr.pool(x, y)
              r2 <- cvr.betw(X, Y)
@@ -203,15 +212,19 @@ cluster <-
              r5 <- dWP(X, Y)
              r6 <- list('pooled'  = con.pool(x, y),
                         'between' = con.betw(X, Y),
-                        'within'  = con.with(X, Y))  
+                        'within'  = con.with(X, Y))
+             r7 <- cnrc
+             r8 <- cnru
            }
-           
            r <- list('POCOS'=r1,
                      'BECOS'=r2,
                      'dBP'=r3,
-                     'WICOS'=r4,
+                     'WICONS'=r4,
                      'dWP'=r5,
-                     'Coverages'=r6)
+                     'Coverages'=r6,
+                     'wiconsprint'=wicons,
+                     'cluster_ids' = r7,
+                     'unit_ids' = r8)
            
            class(r) <- 'clusterdiagnostics'
            return(r)
@@ -268,7 +281,7 @@ cluster <-
               else {outcome <- data[,outcome]}
             } # if outcome is character
             # when both are vectors;
-            if (is.character(unit_id) & is.character(unit_id)) {
+            if (is.character(unit_id) & is.character(cluster_id)) {
               unit <- as.character(data[, unit_id])
               cluster <- as.character(data[, cluster_id])
             }
@@ -369,6 +382,12 @@ cluster <-
                     sqrt(sum(((wc/sum(wc)) - (1/N))^p))
                   }
               }
+              
+              # Nr of cases in clusters and units:
+              CNRC <- data.frame(table(cluster))
+              cnrc <- paste(as.character(CNRC[,1])," (",as.character(CNRC[,2]),") ",sep = "")
+              CNRU <- data.frame(table(unit))
+              cnru <- paste(as.character(CNRU[,1])," (",as.character(CNRU[,2]),") ",sep = "")
               # Together:
               if (!necessity){
                 r1 <- con.pool(x, y)
@@ -378,7 +397,9 @@ cluster <-
                 r5 <- dWP(X, Y)
                 r6 <- list('pooled'  = cvr.pool(x, y),
                            'between' = cvr.betw(X, Y),
-                           'within'  = cvr.with(X, Y))}
+                           'within'  = cvr.with(X, Y))
+                r7 <- cnrc
+                r8 <- cnru}
               else{
                 r1 <- cvr.pool(x, y)
                 r2 <- cvr.betw(X, Y)
@@ -387,15 +408,20 @@ cluster <-
                 r5 <- dWP(X, Y)
                 r6 <- list('pooled'  = con.pool(x, y),
                            'between' = con.betw(X, Y),
-                           'within'  = con.with(X, Y))  
+                           'within'  = con.with(X, Y))
+                r7 <- cnrc
+                r8 <- cnru
               }
               
               r <- list('POCOS'=r1,
                         'BECOS'=r2,
                         'dBP'=r3,
-                        'WICOS'=r4,
+                        'WICONS'=r4,
                         'dWP'=r5,
-                        'Coverages'=r6)
+                        'Coverages'=r6,
+                        'wiconsprint'=wicons,
+                        'cluster_ids' = r7,
+                        'unit_ids' = r8)
               
               class(r) <- 'clusterdiagnostics'
               return(r)

@@ -2,18 +2,26 @@ pimplot <-
   function(data = NULL,
            results,
            outcome,
-           neg.out=FALSE,
            incl.tt=NULL,
            ttrows= c(),
            necessity=FALSE,
            sol=1,
            all_labels=FALSE,
+           markers = TRUE,
            labcol="black", 
            jitter = FALSE,
            font = "sans",
            fontface = "italic", 
-           fontsize = 3)
-  { if(length(grep("~",outcome)) > 0){
+           fontsize = 3,
+           crisp = FALSE,
+           ...)
+  { 
+    dots <- list(...)
+    if(length(dots) != 0){
+      if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+      if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+    }
+    if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
     outcome<-gsub('\\~', '', outcome)
     outcome<-unlist(outcome)}
@@ -27,10 +35,12 @@ pimplot <-
           newtt <- oldtt[ttrows, ]
           P <- as.data.frame(results$tt$minmat)
           P <- P[colnames(P)%in%rownames(newtt)]
-          if (results$options$neg.out) {
-            P$out <- 1-data[, outcome]
+          if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
+            neg.out = TRUE
+            P$out <-  results$tt$recoded.data[,outcome]
           } else {
-            P$out <- data[, outcome]
+            neg.out = FALSE
+            P$out <-  results$tt$recoded.data[,outcome]
           }
           n_c <- ncol(P)-1
           par(ask=F)
@@ -46,14 +56,20 @@ pimplot <-
                             font = font,
                             fontface = fontface, 
                             fontsize = fontsize, 
-                            labs = fil)}
+                            labs = fil,
+                            crisp = crisp,
+                            shape = if (markers == FALSE){19}
+                                    else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
               else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
                                 fontface = fontface, 
                                 fontsize = fontsize, 
-                                labs = fil)}
+                                labs = fil,
+                                crisp = crisp,
+                                shape = if (markers == FALSE){19}
+                                        else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
               
             }
           for (i in 1:n_c) {
@@ -66,6 +82,11 @@ pimplot <-
           P <- pimdata(results=results, outcome=outcome, sol=sol)
           n_c <- ncol(P)-1
           par(ask=F)
+          if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
+            neg.out = TRUE
+          } else {
+            neg.out = FALSE
+          }
           aux.plot <-
             function(i)
             { if (all_labels) {fil <- rownames(P)}
@@ -81,14 +102,20 @@ pimplot <-
                 font = font,
                 fontface = fontface, 
                 fontsize = fontsize, 
-                labs = fil)}
+                labs = fil,
+                crisp = crisp,
+                shape = if (markers == FALSE){19}
+                        else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
               else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
                                 fontface = fontface, 
                                 fontsize = fontsize, 
-                                labs = fil)}
+                                labs = fil,
+                                crisp = crisp,
+                                shape = if (markers == FALSE){19}
+                                        else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
             }
           for (i in 1:n_c) {
             print(aux.plot(i))
@@ -102,10 +129,12 @@ pimplot <-
           newtt <- oldtt[ which(oldtt$incl>incl.tt), ]
           P <- as.data.frame(results$tt$minmat)
           P <- P[colnames(P)%in%rownames(newtt)]
-          if (results$options$neg.out) {
-            P$out <- 1-data[, outcome]
+          if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
+            neg.out = TRUE
+            P$out <- results$tt$recoded.data[,outcome]
           } else {
-            P$out <- data[, outcome]
+            neg.out = FALSE
+            P$out <- results$tt$recoded.data[,outcome]
           }
           n_c <- ncol(P)-1
           par(ask=F)
@@ -121,14 +150,20 @@ pimplot <-
                           font = font,
                           fontface = fontface, 
                           fontsize = fontsize, 
-                          labs = fil)}
+                          labs = fil,
+                          crisp = crisp,
+                          shape = if (markers == FALSE){19}
+                                  else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
               else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=paste("Row ", colnames(P)[i]), ylab=paste("~",outcome), main="Sufficiency Plot",
                                 labcol=labcol, 
                                 jitter = jitter,
                                 font = font,
                                 fontface = fontface, 
                                 fontsize = fontsize, 
-                                labs = fil)}
+                                labs = fil,
+                                crisp = crisp,
+                                shape = if (markers == FALSE){19}
+                                        else{ifelse((P$out < 0.5 & P[,i, drop=FALSE]>0.5), 9, 19)})}
   
             }
           for (i in 1:n_c) {
@@ -141,9 +176,11 @@ pimplot <-
     else { # for necessity
       if (is.null(data)) stop ("For analyses of necessity you need to provide the name of the dataframe!")
       P <- results$coms
-      if (neg.out) {
+      if (results$options$neg.out) {
+        neg.out = TRUE
         P$out <- 1-data[, outcome]
       } else {
+        neg.out = FALSE
         P$out <- data[, outcome]
       }
       n_c <- ncol(P)-1
@@ -160,14 +197,21 @@ pimplot <-
                       font = font,
                       fontface = fontface, 
                       fontsize = fontsize, 
-                      labs = fil)}
+                      labs = fil,
+                      crisp = crisp,
+                      shape = if (markers == FALSE){19}
+                              else{ifelse((P$out > 0.5 & P[,i, drop=FALSE]<0.5), 9, 19)})
+            }
           else {xy.plot(P[,i, drop=FALSE], 'out', data = P, xlab=colnames(P)[i], ylab=paste("~",outcome), necessity = TRUE, main="Necessity Plot",
                             labcol=labcol, 
                             jitter = jitter,
                             font = font,
                             fontface = fontface, 
                             fontsize = fontsize, 
-                            labs = fil)}
+                            labs = fil,
+                            crisp = crisp,
+                            shape = if (markers == FALSE){19}
+                                    else{ifelse((P$out > 0.5 & P[,i, drop=FALSE]<0.5), 9, 19)})}
   
         }
       for (i in 1:n_c) {

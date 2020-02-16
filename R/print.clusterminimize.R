@@ -4,7 +4,7 @@ function(x, ...)
     digits <- 3  
     aux.pocos <- function(y) return(y$POCOS)	
     aux.becos <- function(y) return(y$BECOS)	
-    aux.wicos <- function(y) return(y$WICOS)	
+    aux.wicons <- function(y) return(y$WICONS)	
     aux.dBP <- function(y) return(y$dBP)	
     aux.dWP <- function(y) return(y$dWP)	
     aux.pocvr <- function(y) return(y$Coverages$pooled)	
@@ -13,7 +13,7 @@ function(x, ...)
     
     pocos <- do.call(cbind, lapply(x$output, aux.pocos))
     becos <- do.call(cbind, lapply(x$output, aux.becos))
-    wicos <- do.call(cbind, lapply(x$output, aux.wicos))
+    wicons <- do.call(cbind, lapply(x$output, aux.wicons))
     dBP <- do.call(cbind, lapply(x$output, aux.dBP))
     dWP <- do.call(cbind, lapply(x$output, aux.dWP))
     pocvr <- do.call(cbind, lapply(x$output, aux.pocvr))
@@ -22,22 +22,34 @@ function(x, ...)
     
     te <- names(x$output)
     
-    colnames(pocos) <- colnames(becos) <- colnames(wicos) <- te
+    colnames(pocos) <- colnames(becos) <- colnames(wicons) <- te
     colnames(dWP) <- colnames(dBP) <- te
     
     rownames(pocos) <- rownames(pocvr) <- 'Pooled'
     
-    rownames(becos) <- rownames(becvr) <- paste('Between', names(table(x$cluster_ids))) 
+    # Nr of cases in clusters and units:
+    CNRC <- data.frame(table(x$cluster_ids))
+    cnrc <- paste(as.character(CNRC[,1])," (",as.character(CNRC[,2]),") ",sep = "")
+    CNRU <- data.frame(table(x$unit_ids))
+    cnru <- paste(as.character(CNRU[,1])," (",as.character(CNRU[,2]),") ",sep = "")
     
+    rownames(becos) <- rownames(becvr) <- paste('Between', cnrc) 
     
-    rownames(wicos) <- rownames(wicvr) <- paste('Within', names(table(x$unit_ids)))
+    rownames(wicons) <- rownames(wicvr) <- paste('Within', cnru)
     
     rownames(dBP) <- 'From Between to Pooled'
     rownames(dWP) <- 'From Within to Pooled'
     
-    coses <- rbind(pocos, becos, wicos)
+    if (x$wiconsprint == TRUE) {
+    coses <- rbind(pocos, becos, wicons)
     dists <- rbind(dBP, dWP)
     cvres <- rbind(pocvr, becvr, wicvr)
+    }
+    else{
+      coses <- rbind(pocos, becos)
+      dists <- rbind(dBP)
+      cvres <- rbind(pocvr, becvr)
+    }
     
     cat('Consistencies:\n---------------\n')
     print(round(coses, digits))

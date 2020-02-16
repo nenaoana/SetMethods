@@ -1,8 +1,15 @@
 pimdata <-
 function(results,
            outcome,
-           sol=1)
-  {if(length(grep("~",outcome)) > 0){
+           sol=1,
+         ...)
+  {
+  dots <- list(...)
+  if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+  }
+  if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
     outcome<-gsub('\\~', '', outcome)
     outcome<-unlist(outcome)}
@@ -33,10 +40,10 @@ function(results,
       }
     P$solution_formula <- apply(P, 1, max)
     data <- results$tt$initial.data
-    if (results$options$neg.out) {
-      P$out <- 1-data[, outcome]
+    if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
+      P$out <- results$tt$recoded.data[,outcome]
     } else {
-      P$out <- data[, outcome]
+      P$out <- results$tt$recoded.data[,outcome]
     }
     return(P)
   }

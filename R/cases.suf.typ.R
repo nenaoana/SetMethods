@@ -1,18 +1,22 @@
 cases.suf.typ <-
 function(results,
 		 outcome,
-		 neg.out=FALSE,
-		 sol=1)
-	{if(length(grep("~",outcome)) > 0){
+		 sol=1,
+		 ...)
+	{
+  dots <- list(...)
+  if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+  }
+  if(length(grep("~",outcome)) > 0){
 	  outcome<-outcome[grep("~",outcome)]
 	  outcome<-gsub('\\~', '', outcome)
 	  outcome<-unlist(outcome)}
     outcome <- toupper(outcome)
 		X <- pimdata(results=results, outcome=outcome, sol=sol)
-		if (!neg.out){
-		y <- results$tt$initial.data[, outcome]}
-		else{
-		y <- 1-results$tt$initial.data[, outcome]}  
+		y <- X[,"out", drop=FALSE]
+		names(y) <- outcome
 		aux <-
 			function(i)
 			{
@@ -35,8 +39,8 @@ function(results,
 		su <- vapply(cases, function(i) sum(R[R$case==i,3]>0.5), FUN.VALUE=numeric(1))
 		R$uniquely_cov <- R$case %in% cases[su==1]
 		R <- R[order(R$term,-R$uniquely_cov,R$St),]
-		if (neg.out){
-		  names(R)[names(R)==outcome]<- paste("~", outcome, sep="")}
+		  names(R)[names(R)==outcome]<- "Outcome"
+		  names(R)[names(R)=="St"]<-"Best"
 		M <- list()
 		M[[1]] <- list(title="Typical Cases", results=R)
 		class(M) <- 'matchessuf'

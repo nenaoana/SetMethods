@@ -2,16 +2,23 @@ matches.suf.typtyp <-
 function(results,
            outcome,
            term=1,
-           neg.out=FALSE,
            sol=1,
-           max_pairs=5, use.tilde = TRUE)
+           max_pairs=5,
+           ...)
 
-  {if(length(grep("~",outcome)) > 0){
+  {
+  dots <- list(...)
+  if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+  }
+  if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
     outcome<-gsub('\\~', '', outcome)
     outcome<-unlist(outcome)}
     outcome <- toupper(outcome)
     pdata <- pimdata(results=results, outcome=outcome, sol=sol)
+    if (term>(ncol(pdata)-2)){stop("The term selected does not exist for the chosen model of the solution. Check the solution again and pick another term or change the model using the argument sol.")}
     nterm <- colnames(pdata[term])
     data <- results$tt$initial.data
     data1 <- data.frame(matrix(NA,ncol=0,nrow=nrow(data)))
@@ -20,7 +27,7 @@ function(results,
     tl <- strsplit(tl, '\\*')
     tn <- unique(unlist(tl))
     #Code for working with ~:
-    if (use.tilde == TRUE) {
+    if (results$options$use.tilde == TRUE) {
       t_neg<-character(0)
       t_pre<-character(0)
       
@@ -45,32 +52,38 @@ function(results,
       colnames(data1[t_neg])<-tolower(colnames(data1[t_neg]))
     }
     
-    if (!neg.out){
-      Y <- data[outcome]}
-    else{
-      Y <- 1-data[outcome]}
+    Y <- pdata[,"out", drop=FALSE]
+    names(Y) <- outcome
     
-    if (length(tn)==1) {return("This term has a single condition!")}
     
-    else {
+    # Formulas and stuff
       M <- list()
       
     for (i in (1:length(tn)))
-    { focconj <- paste("Focal Conjunct", tn[i], sep = " ")
+    { 
+      focconj <- paste("Focal Conjunct", tn[i], sep = " ")
     if(length(grep("~",tn[i])) > 0){tn[i]<-unlist(gsub('\\~', '', tn[i]))}
       X <- data1[toupper(tn[i])]
-      co<- tn[-grep(tn[i], tn)]
-      co<- toupper(co)
-      codata<-data1[co]
-      if(ncol(codata)>1){
-        a<-do.call(pmin, codata[,])
-        codata1<-data.frame(a)
-        row.names(codata1)<-row.names(codata)}
+      if (length(tn)==1) {
+        codata <- X
+        codata1<-X
+        names(codata1)[1]<-"a"
+        codata$term<- X[,1]
+      }
       else{
-        codata1<-codata
-        names(codata1)[1]<-"a"}
-      
-      codata$term<-pmin(codata1$a,X[,])
+        # dataframe of the complementary conjuncts
+        co<- tn[-grep(tn[i], tn)]
+        co<- toupper(co)
+        codata<-data1[co]
+        if(ncol(codata)>1){
+          a<-do.call(pmin, codata[,])
+          codata1<-data.frame(a)
+          row.names(codata1)<-row.names(codata)}
+        else{
+          codata1<-codata
+          names(codata1)[1]<-"a"}
+        codata$term<-pmin(codata1$a,X[,]) 
+      }
 
       typical <-(codata$term>0.5) & (Y>0.5) & (codata$term<=Y)
       typ1 <- (X <= codata1$a)
@@ -133,22 +146,22 @@ function(results,
      
       matcres[,6] <- NA
       matcres[,7] <- NA
-      colnames(matcres)<-c("Typical1","Typical2","Distance","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
-      R<-cases.suf.typ (results=results, outcome=outcome, neg.out=neg.out, sol=sol)
+      colnames(matcres)<-c("Typical1","Typical2","Best","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
+      R<-cases.suf.typ (results=results, outcome=outcome, sol=sol)
       R <- R[[1]]$results
       for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
         if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,7]}
         if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,7]<-R[uu,7]}
       }}
       maxl<-min(max_pairs,nrow(matcres))
-      matcres<-matcres[order(-matcres$Typ1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Distance),]
+      matcres<-matcres[order(-matcres$Typ1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
       matcres <- matcres[matcres$Typ1MoreTypical==TRUE,]
       matcres <- matcres[, -c(5)]
       matcres <- matcres[matcres$Typical1!=matcres$Typical2,]
+      if (length(tn)==1){matcres$PairRank <- "-"}
       M[[i]] <- list(title=focconj, results=(head(matcres, maxl))) 
       }
     }
       class(M) <- 'matchessuf'
       return(M)
-    }
 }

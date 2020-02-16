@@ -14,7 +14,7 @@ function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FAL
         newtt <- oldtt[ttrows, ]
         P <- as.data.frame(results$tt$minmat)
         P <- P[colnames(P)%in%rownames(newtt)]
-        if (results$options$neg.out) {
+        if (results$options$neg.out | length(grep("~",results$call$outcome)) > 0) {
           P$out <- 1-dt[, y]
         } else {
           P$out <- dt[, y]

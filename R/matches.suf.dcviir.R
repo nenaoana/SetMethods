@@ -1,20 +1,24 @@
 matches.suf.dcviir <-
 function(results,
 		 outcome,
-		 neg.out=FALSE,
 		 sol=1,
-		 max_pairs=5)
-	{if(length(grep("~",outcome)) > 0){
+		 max_pairs=5,
+		 ...)
+	{
+  dots <- list(...)
+  if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+  }
+  if(length(grep("~",outcome)) > 0){
 	  outcome<-outcome[grep("~",outcome)]
 	  outcome<-gsub('\\~', '', outcome)
 	  outcome<-unlist(outcome)}
    outcome <- toupper(outcome)
 		X <- pimdata(results=results, outcome=outcome, sol=sol)
 		n <- rownames(X)
-		if (!neg.out){
-		  y <- results$tt$initial.data[, outcome]}
-		else{
-		  y <- 1-results$tt$initial.data[, outcome]}  
+		y <- X[,"out", drop=FALSE]
+		names(y) <- outcome
 		FS <- results$tt$recoded.data
 		FS <- FS[, -which(colnames(FS)==outcome)]
 		#	get tt row membership W
@@ -52,13 +56,13 @@ function(results,
 				return(s)
 			}
 		s <- apply(K_fil, 1, aux.f)
-		R <- data.frame(deviant_coverage=K_fil[,1],
-						individually_irrelevant=K_fil[,2],
-						distance=s,
-						best_matching_pair=rep(FALSE, length(s)))	
+		R <- data.frame(Deviant_coverage=K_fil[,1],
+						Individually_irrelevant=K_fil[,2],
+						Best=s,
+						Best_matching_pair=rep(FALSE, length(s)))	
 		#	merge with a TT
 		CS$ids <- rownames(CS)
-		R <- merge(R, CS, by.x='deviant_coverage', by.y='ids')
+		R <- merge(R, CS, by.x='Deviant_coverage', by.y='ids')
 		colnames(R)[5:ncol(R)] <- paste('TT_', colnames(R)[5:ncol(R)], sep='') 
 		tt_row_fil <- apply(R[, grep('TT_', colnames(R))], 1, 
 							function(r) paste(r, collapse=''))
@@ -68,12 +72,13 @@ function(results,
 		aux.list <-
 			function(x)
 			{
-				x <- x[order(x$distance), ]
-				x[x$distance==min(x$distance), 4] <- TRUE
+				x <- x[order(x$Best), ]
+				x[x$Best==min(x$Best), 4] <- TRUE
 				return(x[1:min(c(nrow(x), max_pairs)), ])
 			}
 		R_list <- lapply(split(R, tt_row_fil), aux.list)
 		R <- do.call(rbind, R_list)
+		R$Best <- round(R$Best, digits = 3)
 		rownames(R) <- NULL
 		M <- list()
 		M[[1]] <- list(title="Matching Deviant Coverage-IIR Cases", results=R)

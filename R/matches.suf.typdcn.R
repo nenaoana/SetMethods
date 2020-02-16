@@ -1,20 +1,23 @@
 matches.suf.typdcn <-
 function(results,
            outcome,
-         neg.out=FALSE,
            sol=1,
-           max_pairs=5)
-  {if(length(grep("~",outcome)) > 0){
+           max_pairs=5,
+         ...)
+  {
+  dots <- list(...)
+  if(length(dots) != 0){
+    if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
+    if ("use.tilde" %in% names(dots)){print("Argument use.tilde is deprecated. The usage of the tilde is identified automatically from the minimize solution.")}
+  }
+  if(length(grep("~",outcome)) > 0){
     outcome<-outcome[grep("~",outcome)]
     outcome<-gsub('\\~', '', outcome)
     outcome<-unlist(outcome)}
    outcome <- toupper(outcome)
     X <- pimdata(results=results, outcome=outcome, sol=sol)
-    if (!neg.out){
-      y <- results$tt$initial.data[, outcome]}
-    else{
-      y <- 1-results$tt$initial.data[, outcome]}
-    
+    y <- X[,"out", drop=FALSE]
+    names(y) <- outcome
     nt <- ncol(X)-2
     tn <- colnames(X)[1:nt]
     L <- list()
@@ -39,23 +42,24 @@ function(results,
             return(s)
           }
         s <- apply(K, 1, aux.f)
-        R <- data.frame(typical=K[,1],
-                        deviant_consistency=K[,2],
-                        distance=s,
-                        term=rep(term, length(s)),
-                        best_matching_pair=rep(FALSE, length(s)))	
+        R <- data.frame(Typical=K[,1],
+                        Deviant_consistency=K[,2],
+                        Best=s,
+                        Term=rep(term, length(s)),
+                        Best_matching_pair=rep(FALSE, length(s)))	
         R <- R[order(s), ]
-        R[R$distance==min(R$distance), 'best_matching_pair'] <- TRUE
+        R[R$Best==min(R$Best), 'Best_matching_pair'] <- TRUE
+        R$Best <- round(R$Best, digits = 3)
         rownames(R) <- NULL
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
       } else {
-        R <- data.frame(typical=NULL,
-                        deviant_consistency=NULL,
-                        distance=NULL,
-                        term=NULL,
-                        best_matching_pair=NULL)	
+        R <- data.frame(Typical=NULL,
+                        Deviant_consistency=NULL,
+                        Best=NULL,
+                        Term=NULL,
+                        Best_matching_pair=NULL)	
         L[[i]]<-R
         M[[i]] <- list(title=termp, results=R)
         class(M) <- 'matchessuf'
