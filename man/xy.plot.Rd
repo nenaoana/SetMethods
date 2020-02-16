@@ -9,11 +9,15 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
            main = "XY plot", 
            ylab = "Outcome", 
            xlab = "Condition",
-           necessity = FALSE, jitter = FALSE, 
+           necessity = FALSE,
+           jitter = FALSE, 
            font = "sans",
            fontface = "italic", 
            fontsize = 3,
-           labs = rownames(data))
+           labs = rownames(data),
+           crisp = FALSE,
+           shape = 19,
+           ...)
 }
 \arguments{
   \item{x}{vector containing the condition.}
@@ -25,7 +29,7 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
   \item{xlab}{a title for the x-axis. The default is \code{"Condition"}. See ?title.}
   \item{necessity}{logical. Indicates if the parameters of fit are calculated for a sufficient or necessary condition. The default is \code{FALSE}, therefore it calculates the parameters of fit for sufficiency. To get the parameters of fit for necessary conditions set \code{necessity} as \code{TRUE}.}
   \item{jitter}{
-		Logical. Should labels not overlab?
+		Logical. Should labels be jitter to not overlap?
 	}
 		\item{font}{
 		Font of the labels. Accepts "sans", "serif", and "mono" fonts.
@@ -37,6 +41,8 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
 		Fontsize of the labels.
 	}
 	\item{labs}{the vector of case labels. The default is the rownames of the dataset.}
+	\item{crisp}{Logical. Should a two-by-two table for crisp sets be returned?}
+	\item{shape}{The shape for the markers.}
 }
 %\details{}
 \value{It returns an enhanced XY plot.}

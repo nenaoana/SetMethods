@@ -8,8 +8,8 @@
 \tabular{ll}{
 Package: \tab SetMethods\cr
 Type: \tab Package\cr
-Version: \tab 2.4.1\cr
-Date: \tab 2019-02-17\cr
+Version: \tab 2.5\cr
+Date: \tab 2020-01-16\cr
 License: \tab GPL-2\cr
 }
 The package contains functions to perform set-theoretic multi-method research, theory evaluation, QCA for clustered data, Enhanced Standard Analyses, indirect calibration, calculate parameters of fit and produce XY plots and QCA Radar Charts. Furthermore, it contains all the data used in "Set-Theoretic Methods for the Social Sciences" and more.}
@@ -19,13 +19,17 @@ Ioana-Elena Oana [aut, cre], Juraj Medzihorsky [aut], Carsten Q. Schneider [aut]
 Maintainer: Ioana-Elena Oana <oana_ioana-elena@phd.ceu.edu>
 }
 \references{
-Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
+Oana, I.E., Schneider, C. Q., Thomann, E. (forthcoming). Qualitative Comparative Analysis (QCA) using R: A Gentle Introductiomn. Cambridge: Cambridge University Press.
+
+Oana, I.E., Schndeider, C.Q. (2018) SetMethods: An Add-on R Package for Advanced QCA. The R Journal 10(1): 507–33.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge
 
 Schneider, C. Q., Wagemann, C., Quaranta, M. (2012). How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
 
 Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods Research 42(4): 559-597
+
+Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Comparative Politics 2:65-80.
 
 Garcia-Castro, A., Arino, M. A.. 2013. A General Approach to Panel Data Set-Theoretic Research. COMPASSS Working Paper 2013-76
 

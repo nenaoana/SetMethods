@@ -1,7 +1,7 @@
 \name{cluster}
 \alias{cluster}
 \title{
-	Diagnostic tool for clustered data
+	Diagnostic tool for clustered data.
 }
 \description{
 	Function returns pooled, within, and between consistencies for the relationship between two sets, for an       object of class "qca", and for a Boolean expression.

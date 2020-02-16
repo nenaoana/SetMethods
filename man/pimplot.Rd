@@ -10,17 +10,19 @@
 pimplot(data = NULL,
            results,
            outcome,
-           neg.out=FALSE,
            incl.tt=NULL,
            ttrows= c(),
            necessity=FALSE,
            sol=1,
            all_labels=FALSE,
+           markers = TRUE,
            labcol="black", 
            jitter = FALSE,
            font = "sans",
            fontface = "italic", 
-           fontsize = 3)
+           fontsize = 3,
+           crisp = FALSE,
+           ...)
 }
 \arguments{
   \item{data}{
@@ -29,14 +31,10 @@ pimplot(data = NULL,
 		name of the outcome and of the conditions in capital letters. 
 	}
 	\item{results}{
-		An object of class "qca" when necessity is \code{FALSE}. An object of class "sS" when necessity is          \code{TRUE}. For performing pimplot of the sufficient solution for the negated outcome one must only         use the \code{minimize()} result from the sufficiency analysis of the negated outcome together with 
-		 \code{neg.out} set to \code{TRUE}.
+		An object of class "qca" when necessity is \code{FALSE}. An object of class "sS" when necessity is          \code{TRUE}. For performing pimplot of the sufficient solution for the negated outcome one must use the \code{minimize()} result from the sufficiency analysis of the negated outcome.
 	}
 	\item{outcome}{
-		A character string with the name of the outcome in capital letters. When performing pimplot of the        sufficient solution for the negated outcome one must only use the \code{minimize()} result from the           sufficiency analysis of the negated outcome in the argument \code{results} together with \code{neg.out} set to \code{TRUE}. Changing the name in the argument \code{outcome} or using a tilde is not necessary.
-	}
-	\item{neg.out}{
-		Logical. Should the negated outcome be used?
+		A character string with the name of the outcome in capital letters. When performing pimplot of the        sufficient solution for the negated outcome one must only use the \code{minimize()} result from the           sufficiency analysis of the negated outcome in the argument \code{results}. Changing the name in the argument \code{outcome} or using a tilde is not necessary, but recommended.
 	}
 	\item{incl.tt}{
 		A numerical vector of length 1 specifying the row consistency threshold above which it 
@@ -66,6 +64,9 @@ pimplot(data = NULL,
 	\item{all_labels}{
 		Logical. Print ALL case labels?
 	}
+	\item{markers}{
+		Logical. Print deviant consistency cases with different markers?
+	}
 	\item{labcol}{
 		Color of the labels.
 	}
@@ -81,6 +82,12 @@ pimplot(data = NULL,
 	\item{fontsize}{
 		Fontsize of the labels.
 	}
+	\item{crisp}{
+		Logical. Should the function return a two-by-two table for crisp sets?
+	}
+	\item{...}{
+		Other non essential arguments.
+	}
 }
 \value{
 	XY plots.
@@ -91,7 +98,7 @@ Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Compara
 Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods Research 42(4): 559-597
 }
 \author{
-	Ioana-Elena Oana and Juraj Medzihorsky
+	Ioana-Elena Oana
 }
 \seealso{
 	\code{\link[QCA:minimize]{minimize}}
@@ -114,6 +121,10 @@ sol_yp <- minimize(SCHF, outcome = "EXPORT",
 # Plot the prime implicants of the parsimonious solution:
 
 pimplot(data = SCHF, results = sol_yp, outcome = "EXPORT")
+
+# Plot a two-by-two table:
+
+pimplot(data = SCHF, results = sol_yp, outcome = "EXPORT", crisp = TRUE)
 
 # Plot all truth table rows with a consistency higher than 0.95:
 
