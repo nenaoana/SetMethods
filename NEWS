@@ -1,5 +1,14 @@
+Version 2.5
+	o Changed: function indirectCalibration() now returns an object of class "numeric", instead of class "SetMethods"
+	o Improved: functions xy.plot() and pimplot() has a new argument crisp for 		plotting relations between crisp sets.
+	o Fixed: function pimplot() now recognizes negation (both with ~ and with neg.out) 	in solutions (either from minimize or from superSubset) in an automatic fashion. Argument neg.out is now obsolete.
+	o Fixed: function pimplot() now recognizes the use (or not) of tilde automatically;
+	o Improved: function pimplot() now plots deviant cases consistency in kind for 		sufficiency and necessity with a different shape.
+	o Improved: function mmr(), arguments use.tilde and neg.out are now deprecated. The functions now recognise these automatically.
+	o New: function cluster() now combines all the previous cluster diagnostics functions. It also includes new options for turning off the printing of within parameters and bug fixes;
+	o New: function cluster.plot() now allows to plot consistencies and coverages across clusters.
 Version 2.4.1
- 	o Fixed: bug function pimplot() unable to plot solution with tilde
+	o Changed: function indirectCalibration() now returns an object of class 	"numeric", instead of class "SetMethods"
 Version 2.4
 	o Changed: xy.plot now works with names of columns in a specified dataset
 	o New: xy.plot and pimplot have a logical argument "jitter" for not overlapping 	labels

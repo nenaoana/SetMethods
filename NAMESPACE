@@ -7,7 +7,7 @@ S3method(print, theoryeval)
 S3method(print, thintersect)
 
 
-import(QCA, betareg, lattice, fmsb, ggplot2, ggrepel, scatterplot3d)
+import(QCA, betareg, lattice, fmsb, ggplot2, ggrepel, scatterplot3d, stargazer)
 importFrom("grDevices", "rgb")
 importFrom("graphics", "abline", "axis", "box", "identify", "mtext",
              "par", "plot", "text")
