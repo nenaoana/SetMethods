@@ -10,8 +10,8 @@ Author: Ioana-Elena Oana [aut, cre],
 	Carsten Q. Schneider [aut] 		
 Maintainer: Ioana-Elena Oana <oana_ioana-elena@phd.ceu.edu>
 Description: Functions for performing set-theoretic multi-method research, QCA for 		clustered data, theory evaluation, Enhanced Standard Analysis, indirect 		calibration, radar visualisations. Additionally it includes data to replicate the 	examples in the book by C. Q. Schneider and C. Wagemann "Set Theoretic Methods for 	the Social Sciences", Cambridge University Press and in the online appendix.
-Depends: QCA, methods, betareg, fmsb, ggplot2, ggrepel, R (>= 3.3.0)
-Imports: lattice, scatterplot3d
+Depends: QCA, methods, betareg, fmsb, ggplot2, ggrepel, R (>= 3.5.0)
+Imports: lattice, scatterplot3d, stargazer
 License: GPL-2
 Packaged: 2020-01-16 11:45 CET; Nena
 NeedsCompilation: no
