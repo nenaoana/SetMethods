@@ -104,7 +104,7 @@ function(theory,
     if (empirics$options$neg.out) {
       P$Outcome<-empirics$tt$recoded.data[,outcome]
     } else {
-      P$Outcome<empirics$tt$recoded.data[,outcome]
+      P$Outcome<-empirics$tt$recoded.data[,outcome]
     }
     return(P)
   }
