@@ -10,13 +10,13 @@
 }
 \usage{
 theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE, 
-                  print.data=FALSE, use.tilde = TRUE)
+                  print.data=FALSE, consH = FALSE, ...)
 }
 \arguments{
 	\item{theory}{
 		A character string specifying the theory.
 		Unions of conditions are performed with a "+", while intersections are performed with a "*".
-		If use.tilde is set to TRUE, conditions should be capitalized and negated conditions should be inserted with     a "~". If use.tilde is set to FALSE, negation can be denoted with lowercase letters, but the output will        always transform negation to a tilde.
+		Conditions should be capitalized and negated conditions should be inserted with a "~".
 	}
 	\item{empirics}{
 		An object of class 'qca'. When performing analyses for the negated outcome, just use the 
@@ -38,8 +38,11 @@ theory.evaluation(theory, empirics, outcome, sol = 1, print.fit=FALSE,
 	\item{print.fit}{
 		Logical. Print also the parameters of fit for the intersections between theory and empirics?
 	}
-	\item{use.tilde}{
-	Logical. If the theory or the solution formula do not use tilde for negation, set use.tilde to FALSE to         transform negation with a tilde.
+	\item{consH}{
+		Logical. Print also the Haesebrouck's consistency among the parameters of fit?
+	}
+	\item{...}{
+	Deprecated arguments (use.tilde).
 	}
 }
 %\details{}
@@ -75,7 +78,7 @@ t<-"~EMP*MA"
 
 # Perform theory evaluation (get only the names of the cases and the Boolean intersections):
 
-TH <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 2, 
+TH <- theory.evaluation(theory = t, empirics = sol_yi, outcome = "EXPORT", sol = 1, 
                   print.data=FALSE, print.fit=FALSE)
 TH
 

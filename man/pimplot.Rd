@@ -22,6 +22,7 @@ pimplot(data = NULL,
            fontface = "italic", 
            fontsize = 3,
            crisp = FALSE,
+           consH = FALSE,
            ...)
 }
 \arguments{
@@ -85,6 +86,7 @@ pimplot(data = NULL,
 	\item{crisp}{
 		Logical. Should the function return a two-by-two table for crisp sets?
 	}
+	\item{consH}{Logical. Should Haesebrouck's consistency be printed?}
 	\item{...}{
 		Other non essential arguments.
 	}

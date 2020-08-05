@@ -24,7 +24,6 @@ Data are used by Freitag and Schlicht (2009) to analyze social inequality in edu
 \references{Freitag, M, and Schlicht, R. (2009) "Educational Federalism in Germany: Foundations of Social Inequalities in Education", Governance 22(1), pp. 47-72.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.
-
-Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}}
+}
 \examples{data(FSR)}
 \keyword{datasets}

@@ -8,7 +8,7 @@
 	"qca".  
 }
 \usage{
-pimdata(results, outcome, sol = 1)
+pimdata(results, outcome, sol = 1, ...)
 }
 \arguments{
 	\item{results}{
@@ -23,6 +23,9 @@ pimdata(results, outcome, sol = 1)
 		For more complicated structures of model ambiguity, the intermediate solution can also be specified
 		by using a character string of the form "c1p3i2" where c = conservative solution, p = parsimonious solution
 		and i = intermediate solution.
+	}
+	\item{...}{
+		Deprecated arguments (neg.out, use.tilde)
 	}
 }
 \value{

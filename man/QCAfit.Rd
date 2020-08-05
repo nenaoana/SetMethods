@@ -3,7 +3,7 @@
 \title{Function calculating the parameters of fit}
 \description{QCAfit is a function calculating parameters of fit useful in QCA and fsQCA that are consistency, coverage, PRI, Haesebrouck's consistency, RoN and PRODUCT. It works with both single and multiple conditions.}
 \usage{QCAfit(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, 
-              product = FALSE, sol=1, ttrows= c())}
+              product = FALSE, sol=1, ttrows= c(), consH = FALSE)}
 \arguments{
   \item{x}{
     A vector containing the values of a condition, a matrix with more than one conditions, or an object of         class "qca" when necessity is \code{FALSE} and when outcome is specifyied as a character string.}
@@ -26,6 +26,9 @@
 		A vector specifying the names of the truth table rows for which the function reports parameters of fit. 
 		For using this option y must be a "qca" object.
 	}
+	\item{consH}{
+		Logical. Print also the Haesebrouck's consistency among the parameters of fit?
+	}
 }
 %\details{}
 \value{It returns a matrix containing the parameters of fit for each condition.}
@@ -35,8 +38,7 @@ Haesebrouck, T. (2015) Pitfalls in QCA's consistency measure. Journal of Compara
 Ragin, C. C. 2006. Set Relations in Social Research: Evaluating Their Consistency and Coverage. Political Analysis 14(3): 291-310.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge.	
-
-Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}}
+}
 \author{Mario Quaranta and Ioana-Elena Oana}
 %\note{}
 \seealso{

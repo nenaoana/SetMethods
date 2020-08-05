@@ -42,7 +42,7 @@ data(PAYF)
 # Create a sufficient solution using minimize:
 PS <- minimize(data = PAYF,
                         outcome  = "HL",
-                        conditions = conds,
+                        conditions = c("HE","GG","AH","HI","HW"),
                         incl.cut = 0.9,
                         n.cut = 2,
                         include = "?",

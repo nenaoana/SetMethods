@@ -17,6 +17,7 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
            labs = rownames(data),
            crisp = FALSE,
            shape = 19,
+           consH = FALSE,
            ...)
 }
 \arguments{
@@ -43,6 +44,8 @@ xy.plot produces XY plots and provides values for consistency, Haesebrouck's con
 	\item{labs}{the vector of case labels. The default is the rownames of the dataset.}
 	\item{crisp}{Logical. Should a two-by-two table for crisp sets be returned?}
 	\item{shape}{The shape for the markers.}
+	\item{consH}{Logical. Should Haesebrouck's consistency be printed?}
+	\item{...}{Other internal arguments. Do not specify!}
 }
 %\details{}
 \value{It returns an enhanced XY plot.}
@@ -54,7 +57,6 @@ Ragin, C. C. (2008) Redesigning Social Inquiry: Fuzzy Sets and Beyond. The Chica
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge Univeristy Press: Cambridge.
 
-Schneider, C. Q., Wagemann, C., Quaranta, M. (2012) How To... Use Software for Set-Theoretic Analysis. Online Appendix to "Set-Theoretic Methods for the Social Sciences". Available at \url{www.cambridge.org/schneider-wagemann}
 }
 \author{Mario Quaranta and Ioana-Elena Oana.}
 %\note{}

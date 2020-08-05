@@ -11,7 +11,9 @@ property.cube(data, labs = FALSE,
                           highlight.3d=TRUE,
                           dot.cex=0.5,
                           dot.col="black",
-                          dot.srt=15)
+                          dot.srt=15,
+                          dot.pos=3,
+                          dot.offset = 1)
 }
 \arguments{
   \item{data}{A dataframe with 3 conditions.}
@@ -24,6 +26,8 @@ property.cube(data, labs = FALSE,
   \item{dot.cex}{size of the case labels}
   \item{dot.col}{color of the case labels}
   \item{dot.srt}{rotation of the case labels}
+  \item{dot.pos}{position of the case labels (1-below, 2-left, 3-above, 4-right)}
+  \item{dot.offset}{distance of text label from the dot}
 }
 %\details{}
 \value{It returns an enhanced 3d scatter plot using the \code{scatterplot3d} package.}

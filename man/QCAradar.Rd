@@ -58,9 +58,9 @@ sol_yi <- minimize(SCHF, outcome = "EXPORT",
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
 
-# Display radar chart for the second intermediate solution:
+# Display radar chart for the intermediate solution:
 
-QCAradar(results = sol_yi, outcome = "EXPORT", fit=TRUE, sol = 2)
+QCAradar(results = sol_yi, outcome = "EXPORT", fit=TRUE, sol = 1)
 
 # Show a radar chart for the following boolean expression "A + ~B*Z*~C"
 

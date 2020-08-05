@@ -7,8 +7,8 @@
 	A function that selects best available cases for single case studies and best pairs of matching cases for comparative case studies.
 }
 \usage{
-smmr(results, outcome, neg.out = FALSE, sol = 1, match = NULL, 
-      cases = NULL, max_pairs = 5, term = 1, use.tilde = TRUE)
+smmr(results, outcome, sol = 1, match = NULL, 
+      cases = NULL, max_pairs = 5, term = 1, ...)
 }
 \arguments{
 	\item{results}{
@@ -16,9 +16,6 @@ smmr(results, outcome, neg.out = FALSE, sol = 1, match = NULL,
 	}
 	\item{outcome}{
 		A character string with the name of the outcome.
-	}
-	\item{neg.out}{
-		Logical. Should the negated outcome be used?
 	}
   \item{sol}{
 		A vector where the first number indicates the number of the
@@ -51,8 +48,8 @@ smmr(results, outcome, neg.out = FALSE, sol = 1, match = NULL,
 		A numeric vector where the first number indicates the number of the
 		term according to the order in the "qca" object.
 	}
-	\item{use.tilde}{
-		Logical. Are sets negated with a tilde in the solution?
+	\item{...}{
+		Deprecated arguments (neg.out, use.tilde)
 	}
 }
 \references{Schneider, C. Q., Rohlfing, I. 2013. Combining QCA and Process Tracing in Set-Theoretic Multi-Method Research. Sociological Methods and Research 42(4): 559-97

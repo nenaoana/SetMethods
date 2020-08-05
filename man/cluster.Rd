@@ -7,7 +7,9 @@
 	Function returns pooled, within, and between consistencies for the relationship between two sets, for an       object of class "qca", and for a Boolean expression.
 }
 \usage{
-cluster(data=NULL, results, outcome, unit_id, cluster_id, sol = 1, necessity = FALSE)
+cluster(data=NULL, results, outcome, 
+      unit_id, cluster_id, sol = 1, 
+      necessity = FALSE, wicons = FALSE)
 }
 \arguments{
   \item{data}{
@@ -41,6 +43,9 @@ cluster(data=NULL, results, outcome, unit_id, cluster_id, sol = 1, necessity = F
 	\item{necessity}{
 		Logical. Perform the diagnostic for the relationship of necessity?
 	}
+	\item{wicons}{
+		Logical. Should within consistencies and coverages be printed?
+	}
 }
 \references{
 Garcia-Castro, Roberto, and Miguel A. Arino. 2016. "A General Approach to Panel Data Set-Theoretic Research."" Journal of Advances in Management Sciences & Information Systems 2: 6376.
@@ -66,15 +71,15 @@ sol_yi <- minimize(SCHLF, outcome = "EXPORT",
                 include = "?", 					   
                 details = TRUE, show.cases = TRUE, dir.exp = c(0,0,0,0,0,0))
 
-# Get pooled, within, and between consistencies for the second intermediate solution:
+# Get pooled, within, and between consistencies for the intermediate solution:
 
 cluster(SCHLF, sol_yi, "EXPORT", unit_id = "COUNTRY", 
-              cluster_id = "YEAR", sol = 2)
+              cluster_id = "YEAR", sol = 1)
               
 # or:
 
 cluster(SCHLF, sol_yi, "EXPORT", unit_id = "COUNTRY", 
-              cluster_id = "YEAR", sol = "c1p1i2")
+              cluster_id = "YEAR", sol = "c1p1i1")
 
 # Get pooled, within, and between consistencies for EMP as necessary for EXPORT:
 
