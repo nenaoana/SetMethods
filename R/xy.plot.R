@@ -1,3 +1,4 @@
+utils::globalVariables(c("n"))
 xy.plot <-
   function(x, y, data, 
            labcol = "black",
@@ -12,6 +13,7 @@ xy.plot <-
            labs = rownames(data),
            crisp = FALSE,
            shape = 19,
+           consH = FALSE,
            ...)
   { if (is.data.frame(x)){ x <- colnames(x)}
     else{
@@ -59,7 +61,12 @@ xy.plot <-
       storage.mode(pris) <- "numeric"
       hcons <- format(hcon, digits = 3)
       storage.mode(hcons) <- "numeric"
+      if (consH == FALSE){
+      lab <- sprintf("Cons.Suf: %.3f; Cov.Suf: %.3f; PRI: %.3f", con, cov, pri)
+      }
+      else{
       lab <- sprintf("Cons.Suf: %.3f; Cov.Suf: %.3f; PRI: %.3f; Cons.Suf(H): %.3f", con, cov, pri, hcon)
+      }
       cons.c <- paste("Cons.Suf",
                       cons, sep = ": ")
       cove.c <- paste("Cov.Suf",

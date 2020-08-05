@@ -2,17 +2,17 @@ Package: SetMethods
 Type: Package
 Title: Functions for Set-Theoretic Multi-Method Research and Advanced
         QCA
-Version: 2.5
-Date: 2020-01-16
+Version: 2.6
+Date: 2020-07-31
 Author: Ioana-Elena Oana [aut, cre],
 	Juraj Medzihorsky [aut],  
 	Mario Quaranta [aut],
 	Carsten Q. Schneider [aut] 		
-Maintainer: Ioana-Elena Oana <oana_ioana-elena@phd.ceu.edu>
-Description: Functions for performing set-theoretic multi-method research, QCA for 		clustered data, theory evaluation, Enhanced Standard Analysis, indirect 		calibration, radar visualisations. Additionally it includes data to replicate the 	examples in the book by C. Q. Schneider and C. Wagemann "Set Theoretic Methods for 	the Social Sciences", Cambridge University Press and in the online appendix.
-Depends: QCA, methods, betareg, fmsb, ggplot2, ggrepel, R (>= 3.5.0)
-Imports: lattice, scatterplot3d, stargazer
+Maintainer: Ioana-Elena Oana <ioana.oana@eui.eu>
+Description: Functions for performing set-theoretic multi-method research, QCA for clustered data, theory evaluation, Enhanced Standard Analysis, indirect calibration, radar visualisations. Additionally it includes data to replicate the 	examples in the book by Oana, I.E, C. Q. Schneider, and E. Thomann. Qualitative Comparative Analysis (QCA) using R: A Gentle Introduction. Cambridge University Press and C. Q. Schneider and C. Wagemann "Set Theoretic Methods for the Social 	Sciences", Cambridge University Press.
+Depends: QCA, admisc, methods, ggplot2, ggrepel, stargazer, R (>= 3.5.0)
+Imports: scatterplot3d, fmsb, betareg
 License: GPL-2
-Packaged: 2020-01-16 11:45 CET; Nena
+Packaged: 2020-07-31 11:45 CET; Nena
 NeedsCompilation: no
-Date/Publication: 2019-02-17 15:19
+Date/Publication: 2020-07-31 15:19

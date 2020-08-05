@@ -1,3 +1,11 @@
+Version 2.6
+	o New: function stargazerTT() can be used for exporting truth tables in text, latex, and html format;
+	o New: function stargazerSol() can be used for exporting truth tables in text, latex, and html format;
+	o New: replication data for the material in the Oana, Schneider and Thomann (2020) book have been added to the package;
+	o New: a range of functions (rob.calibrange, rob.inclrange, rob.ncutrange, rob.cases, rob.corefit, rob.fit, rob.xyplot) have been added for performing the robustness test protocol in Oana and Schneider (unpublished manuscript);
+	o Fixed: bug in esa that sometimes did not identify some conditions in a truth table as 0s;
+	o Improved: obsolete and helper functions have been moved in the background (such as the functions for SMMR);
+	o Changed: function mmr() has now been renamed to smmr();
 Version 2.5
 	o Changed: function indirectCalibration() now returns an object of class "numeric", instead of class "SetMethods"
 	o Improved: functions xy.plot() and pimplot() has a new argument crisp for 		plotting relations between crisp sets.

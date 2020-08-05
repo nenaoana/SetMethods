@@ -7,7 +7,9 @@ property.cube <- function(data,
                           highlight.3d=TRUE,
                           dot.cex=0.5,
                           dot.col="black",
-                          dot.srt=15)
+                          dot.srt=15,
+                          dot.pos=3,
+                          dot.offset = 1)
 
 {
 s3d <- scatterplot3d(data, type="p", angle=35, scale.y=0.7, pch=16,
@@ -15,5 +17,5 @@ s3d <- scatterplot3d(data, type="p", angle=35, scale.y=0.7, pch=16,
               main=main, xlab=xlab, ylab=ylab, zlab = zlab)
 if (labs){
 text(s3d$xyz.convert(data), labels = rownames(data),
-     cex= dot.cex, col = dot.col, srt=dot.srt)}
+     cex= dot.cex, col = dot.col, srt=dot.srt, pos = dot.pos, offset =  dot.offset)}
 }

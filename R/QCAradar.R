@@ -4,7 +4,7 @@ QCAradar <-
            fit = FALSE,
            sol= 1)
   { 
-    if (is(results,'qca')) {
+    if (is(results,'QCA_min')) {
     PD <- pimdata(results=results, outcome=outcome, sol=sol)
     nc <- ncol(PD)-2
     cond <- results$tt$options$conditions
@@ -147,6 +147,6 @@ QCAradar <-
         aux.plot(ncs)
         
       }
-      else {stop("Argument results is of the wrong format! Please input a 'qca' object or a boolean expression!")}
+      else {stop("Argument results is of the wrong format! Please input a 'QCA_min' object or a boolean expression!")}
     } 
   }

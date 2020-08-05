@@ -1,8 +1,8 @@
 QCAfit <-
-function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FALSE, sol=1, ttrows= c())
+function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FALSE, sol=1, ttrows= c(), consH= FALSE)
   {
   # For qca objects:
-  if (is(x,'qca'))
+  if (is(x,'QCA_min'))
   {   
       if (necessity==TRUE) stop('You cannot calculate parameters of fit for necessity for a qca sufficient solution')
       if (!is.character(y)) stop('When using qca object, the outcome must be of type character. 
@@ -24,7 +24,7 @@ function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FAL
         row.names(a) <- colnames(P[,1:nc])
         colnames(a) <- c("Cons.Suf","Cov.Suf","PRI","Cons.Suf(H)")
         for (i in 1:nc) {
-          a[i,] <-QCAfit(P[,i],P$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol)
+          a[i,] <-QCAfit(P[,i],P$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol, consH=TRUE)
         }
       }
     else { 
@@ -34,9 +34,9 @@ function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FAL
       row.names(a) <- colnames(X[,1:nc])
       colnames(a) <- c("Cons.Suf","Cov.Suf","PRI","Cons.Suf(H)")
       for (i in 1:nc) {
-        a[i,] <-QCAfit(X[,i],X$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol)
+        a[i,] <-QCAfit(X[,i],X$out, cond.lab = cond.lab, necessity = necessity, neg.out = neg.out, product = product, sol=sol, consH = TRUE)
       }}
-    
+      if (consH == FALSE){a <- a[,1:length(a)-1]}
       return(a)
   }
   
@@ -98,7 +98,7 @@ function(x, y, cond.lab = NULL, necessity = TRUE, neg.out = FALSE, product = FAL
   else {
   rownames(suf) <- cond.lab
   rownames(nec) <- cond.lab}
-	
+	if (consH == FALSE){suf <- suf[,1:ncol(suf)-1]}
 	if(necessity == FALSE){
         return(suf)
 		} 

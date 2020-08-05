@@ -25,7 +25,7 @@ cluster.plot <-
        labs(title = names(cluster.res$output[i]), x="Clusters", y="Consistency")+
        theme(axis.text.x = element_text(size=size, angle=angle))+
        scale_x_discrete(breaks=xtick,
-                        labels=ticklab)}
+                        labels=cluster.res$output[[i]]$cluster_ids)}
      else{
        p <- ggplot(dt, aes(y = dt[,2], x = factor(dt[,1]))) + 
          geom_point() +  
@@ -52,7 +52,7 @@ cluster.plot <-
             labs(title = "", x="Clusters", y="Consistency")+
             theme(axis.text.x = element_text(size=size, angle=angle))+
             scale_x_discrete(breaks=xtick,
-                             labels=ticklab)}
+                             labels=cluster.res$output[[i]]$cluster_ids)}
         else{
           p <- ggplot(dt, aes(y = dt[,2], x = factor(dt[,1]))) + 
             geom_point() +  

@@ -8,7 +8,7 @@ cluster <-
            necessity=FALSE,
            wicons = FALSE)
   { 
-    if (is(results,'qca')) 
+    if (is(results,'QCA_min')) 
     {
     if (is.null(data)) stop('You have not provided a dataframe. Please provide the dataframe in the long format to the argument data.')
     if(length(grep("~",outcome)) > 0){
@@ -60,7 +60,7 @@ cluster <-
       aux <-
         function(i)
         {
-          return(cluster.diagnostics(P[,i], P$outcome, P$unit_id, P$cluster_id))
+          return(cluster.diagnostics(P[,i], P$outcome, P$unit_id, P$cluster_id, wicons=wicons))
         }
       
       O <- lapply(1:n_c, aux)
