@@ -6,7 +6,7 @@ rob.xyplot <-
             jitter = TRUE,
             fontsize = 3,
             labs = TRUE)
-  { 
+  {
     if (class(test_sol) == "list")
     {
       P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
@@ -19,21 +19,6 @@ rob.xyplot <-
     else {
       P2 <- pimdata(results = test_sol, outcome = outcome)
     }
-      if (class(test_sol) == "list")
-      {
-        P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
-        for (i in length(test_sol))
-        {
-          Pi <- pimdata(results = test_sol[[i]], outcome = outcome)
-          P3$solution_formula <- pmax(Pi$solution_formula, P3$solution_formula)
-        }
-      }
-      else {
-        P3 <- pimdata(results = test_sol, outcome = outcome)
-      }
-    
-    
-    
     P1 <- pimdata(results = initial_sol, outcome = outcome)
     
     #CF <-  core.fit(test_sol, initial_sol, outcome)
@@ -41,10 +26,8 @@ rob.xyplot <-
     RCR <- rob.case.ratio(test_sol, initial_sol, outcome)
     
     m2 <-deparse(substitute(initial_sol))
-    PS <- data.frame(P1$solution_formula, P2$solution_formula, P3$solution_formula, P1$out)
-    names(PS) <- c("is", "mints", "maxts", "out")
-    PS$ts <- NA
-    PS$ts <- ifelse(PS$is>0.5,PS$mints, PS$maxts)
+    PS <- data.frame(P1$solution_formula, P2$solution_formula, P1$out)
+    names(PS) <- c("is", "ts", "out")
     rownames(PS) <- rownames(P1)
     
     # Format Pofs for plot printing:
@@ -52,40 +35,28 @@ rob.xyplot <-
     #Ccov <- CF[2]
     Rcon <- format(RF[,2], digits = 3)
     Rcov <- format(RF[,1], digits = 3)
-    RSC_minTS <- format(RF[,3], digits = 3)
-    RSC_maxTS <- format(RF[,4], digits = 3)
-    RCRtyp_minTS <- format(RCR[,1], digits = 3)
-    RCRcons_minTS <- format(RCR[,2], digits = 3)
-    #RCRtyp_maxTS <- format(RCR[,4], digits = 3)
-    #RCRcons_maxTS <- format(RCR[,5], digits = 3)
-    SSR_minTS <- RCR[,3]
-    #SSR_maxTS <- RCR[,6]
-    subtt <- paste("RF_cons: ", Rcon, "; RF_cov: ", Rcov, "; RF_SC_minTS: ", RSC_minTS, "; RF_SC_maxTS: ", RSC_maxTS, "\n" ,"RCR_typ: ", RCRtyp_minTS, "; RCR_dev: ", RCRcons_minTS, "; SSR: ", SSR_minTS,sep = "")
-      rob=TRUE
+    RSC <- format(RF[,3], digits = 3)
+    RCRtyp <- format(RCR[,1], digits = 3)
+    RCRcons <- format(RCR[,2], digits = 3)
+    SSrel <- RCR[,3]
+    subtt <- paste("RF_cons: ", Rcon, "; RF_cov: ", Rcov, "; RF_SC: ", RSC, "; RCR_typ: ", RCRtyp, "; RCR_dev: ", RCRcons, "; SSR: ", SSrel,sep = "")
+    rob=TRUE
     if (labs == TRUE){
       if (all_labels) {fil <- rownames(PS)}
       else {fil <- rownames(PS)
-      fil[with(PS, (PS[1] < 0.5  & PS[5]<0.5))] <- ""
-      fil[with(PS, (PS[1] > 0.5  & PS[5]>0.5))] <- ""}
-      p <- xy.plot("is", "ts",
+      fil[with(PS, (PS[1] < 0.5  & PS[2]<0.5))] <- ""
+      fil[with(PS, (PS[1] > 0.5  & PS[2]>0.5))] <- ""}
+      xy.plot("is", "ts",
               data = PS,
-              xlab = "Initial Solution (IS)", ylab = "Min/Max Test Set (TS)", main = "Robustness Plot",
+              xlab = "Initial Solution (IS)", ylab = "Test Set (TS)", main = "Robustness Plot",
               labs = fil,
               shape = ifelse(PS$out > 0.5, 19, 9), jitter=jitter, fontsize = fontsize,
-              rob = TRUE, rbfit = subtt)
-      p+annotate ("rect", xmin = 0.5, xmax = 1, ymin = -Inf, ymax = 1, alpha = .2)+
-        annotate("label", x = 0.75, y = 0, label = "minTS", size = 4, fontface = "bold")+
-        annotate("label", x = 0.25, y = 0, label = "maxTS", size = 4, fontface = "bold") # Label to horizontal cut-off line.
-    }
+              rob = TRUE, rbfit = subtt)}
     else {
-      p<-xy.plot("is", "ts",
+      xy.plot("is", "ts",
               data = PS,
-              xlab = "Initial Solution (IS)", ylab = "Min/Max Test Set (TS)", main = "Robustness Plot", 
+              xlab = "Initial Solution (IS)", ylab = "Test Set (TS)", main = "Robustness Plot", 
               labs=NULL,
               shape = ifelse(PS$out > 0.5, 19, 9), fontsize = fontsize,
-              rob = TRUE, rbfit = subtt)
-      p+annotate ("rect", xmin = 0.5, xmax = 1, ymin = -Inf, ymax = 1, alpha = .2)+
-        annotate("label", x = 0.75, y = 0, label = "minTS", size = 4, fontface = "bold")+
-        annotate("label", x = 0.25, y = 0, label = "maxTS", size = 4, fontface = "bold") # Label to horizontal cut-off line.
-      }
+              rob = TRUE, rbfit = subtt)}
   }
