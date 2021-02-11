@@ -34,7 +34,7 @@ matches.suf.dcviir <-
     tt_row <- apply(CS, 1,	function(i) paste(i, collapse=''))
     x <- X[, 'solution_formula']	
     y <- X[, 'out']
-    devcove <- ((x<0.5) & (y>0.5)) & (w<=y)
+    devcove <- ((x<0.5) & (y>0.5)) #& (w<=y)
     indirre <- ((x<0.5) & (y<0.5)) 
     rnt <- n[devcove]
     rnd <- n[indirre]                     
@@ -71,18 +71,35 @@ matches.suf.dcviir <-
                         function(r) paste(r, collapse=''))
     R <- R[order(tt_row_fil), ]
     tt_row_fil <- tt_row_fil[order(tt_row_fil)]
+    
+    R$Cons_TT_DCV <- FALSE
+    constt <- w<=y
+    for (h in 1:nrow(R)){
+      if(as.logical(constt[as.character(R$Deviant_coverage[h])]==TRUE)){R[h,"Cons_TT_DCV"] <- TRUE}
+    }
+    
     #	find the best match for each TT row	
     aux.list <-
       function(x)
       {
-        x <- x[order(x$Best), ]
+        x <- x[order(x$Best,-x$Cons_TT_DCV), ]
         x[x$Best==min(x$Best), 4] <- TRUE
         return(x[1:min(c(nrow(x), max_pairs)), ])
       }
+    
     R_list <- lapply(split(R, tt_row_fil), aux.list)
     R <- do.call(rbind, R_list)
     R$Best <- round(R$Best, digits = 3)
     rownames(R) <- NULL
+    # R$GlobUncovIIR < FALSE
+    # for (h in 1:nrow(R)){
+    #   if(X[as.character(R$Individually_irrelevant[h]),"solution_formula"]<0.5){R$GlobUncovIRR[h] <- TRUE}
+    # }
+    # R$Cons_TT_DCV <- FALSE
+    # for (h in 1:nrow(R)){
+    #   if(X[as.character(R$Deviant_coverage[h]),"solution_formula"]<0.5){R$GlobUncovIRR[h] <- TRUE}
+    # }
+    
     M <- list()
     M[[1]] <- list(title="Matching Deviant Coverage-IIR Cases", results=R)
     class(M) <- 'matchessuf'
@@ -143,6 +160,7 @@ matches.suf.typdcn <-
         R[R$Best==min(R$Best), 'Best_matching_pair'] <- TRUE
         R$Best <- round(R$Best, digits = 3)
         rownames(R) <- NULL
+        R <- R[,-4]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
@@ -151,7 +169,8 @@ matches.suf.typdcn <-
                         Deviant_consistency=NULL,
                         Best=NULL,
                         Term=NULL,
-                        Best_matching_pair=NULL)	
+                        Best_matching_pair=NULL)
+        R <- R[,-4]
         L[[i]]<-R
         M[[i]] <- list(title=termp, results=R)
         class(M) <- 'matchessuf'
@@ -169,7 +188,7 @@ matches.suf.typiir <-
            max_pairs=5,
            ...)
     
-  {
+  { termnr = term
     dots <- list(...)
     if(length(dots) != 0){
       if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
@@ -237,6 +256,7 @@ matches.suf.typiir <-
         # dataframe of the complementary conjuncts
         co<- tn[-grep(tn[i], tn)]
         co<- toupper(co)
+        co <- unlist(gsub('\\~', '', co))
         codata<-data1[co]
         if(ncol(codata)>1){
           a<-do.call(pmin, codata[,])
@@ -249,8 +269,8 @@ matches.suf.typiir <-
       }
       typical <-((codata$term>0.5) & (Y>0.5) & (codata$term<=Y))
       indirre <- ((codata$term<0.5) & (Y<0.5))
-      # typ1 <- (X <= codata1$a)
-      # typ2 <- (X > codata1$a)
+      # typ1 <- (X < codata1$a)
+      # typ2 <- (X >= codata1$a)
       # iir3 <- (X < 0.5) & (codata1$a>0.5)
       # iir4 <- ((X < 0.5) &  (codata1$a < 0.5) & (X <= codata1$a))
       # iir5 <- ((X < 0.5) &  (codata1$a < 0.5) & (codata1$a < X))
@@ -266,7 +286,8 @@ matches.suf.typiir <-
           K <- expand.grid(ty, ir)
           x <- X[,toupper(tn[i])]
           y <- Y[,outcome]
-          mincc <- codata1[,"a"]
+          if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
+          else{mincc <- codata1[,"a"]}
           term <- codata[,"term"]
           aux.f <-
             function(p)
@@ -276,8 +297,8 @@ matches.suf.typiir <-
               s <- ((1-(x[i]-x[j]))+ #big diff. in FC
                       (1-(y[i]-y[j]))+ #big diff in Y
                       abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
-                      2*abs(y[i]-term[i])+ 
-                      2*abs(y[j]-term[j]))
+                      2*abs(y[i]-x[i])+ 
+                      2*abs(y[j]-x[j]))
               return(s)
             }
           aux.ff <-
@@ -325,6 +346,26 @@ matches.suf.typiir <-
           maxl<-min(max_pairs,nrow(matcres))
           matcres<-matcres[order(matcres$PairRank,-matcres$UniqCovTyp, -matcres$GlobUncovIIR, matcres$Best),]
           if (length(tn)==1){matcres$PairRank <- "-"}
+          
+          matcres$Most_typical_term <- FALSE
+          mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+          mtt <- mtt[[1]]$results
+          mttc <- mtt[mtt$term==colnames(pdata)[termnr],"case"]
+          for (h in 1:nrow(matcres)){
+            if (matcres$Typical[h] %in% mttc){matcres$Most_typical_term[h] <- TRUE}
+          }
+         
+          
+          matcres$Most_typical_FC <- FALSE
+          mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr)
+          mtfc <- mtfc[[i]]$results
+          if(length(tn)==1){mtfcc <- rownames(mtfc)[(mtfc$Most_typical==TRUE)]}
+          else{ mtfcc <- rownames(mtfc)[(mtfc$Most_typical_FC==TRUE)]}          
+          for (h in 1:nrow(matcres)){
+            if (matcres$Typical[h] %in% mtfcc){matcres$Most_typical_FC[h] <- TRUE}
+          }
+          
+          
           M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
         }  
       }
@@ -343,7 +384,7 @@ matches.suf.typtyp <-
            max_pairs=5,
            ...)
     
-  {
+  { termnr <- term
     dots <- list(...)
     if(length(dots) != 0){
       if ("neg.out" %in% names(dots)){print("Argument neg.out is deprecated. The negated outcome is identified automatically from the minimize solution.")}
@@ -411,6 +452,7 @@ matches.suf.typtyp <-
         # dataframe of the complementary conjuncts
         co<- tn[-grep(tn[i], tn)]
         co<- toupper(co)
+        co <- unlist(gsub('\\~', '', co))
         codata<-data1[co]
         if(ncol(codata)>1){
           a<-do.call(pmin, codata[,])
@@ -433,7 +475,8 @@ matches.suf.typtyp <-
         K <- expand.grid(ty, ty)
         x <- X[,toupper(tn[i])]
         y <- Y[,outcome]
-        mincc <- codata1[,"a"]
+        if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
+        else{mincc <- codata1[,"a"]}
         term <- codata[,"term"]
         aux.f <-
           function(p)
@@ -443,8 +486,8 @@ matches.suf.typtyp <-
             s <- ((0.5-(x[i]-x[j]))+ #big diff. in FC
                     (0.5-(y[i]-y[j]))+ #big diff in Y
                     abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
-                    2*abs(y[i]-term[i])+ 
-                    2*abs(y[j]-term[j]))
+                    2*abs(y[i]-x[i])+ 
+                    2*abs(y[j]-x[j]))
             return(s)
           }
         aux.f2 <-
@@ -484,7 +527,7 @@ matches.suf.typtyp <-
         matcres[,6] <- NA
         matcres[,7] <- NA
         colnames(matcres)<-c("Typical1","Typical2","Best","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
-        R<-cases.suf.typ (results=results, outcome=outcome, sol=sol)
+        R <-cases.suf.typ(results=results, outcome=outcome, sol=sol)
         R <- R[[1]]$results
         for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
           if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,7]}
@@ -496,6 +539,32 @@ matches.suf.typtyp <-
         matcres <- matcres[, -c(5)]
         matcres <- matcres[matcres$Typical1!=matcres$Typical2,]
         if (length(tn)==1){matcres$PairRank <- "-"}
+        
+        matcres$Most_typical_term1 <- FALSE
+        matcres$Most_typical_term2 <- FALSE
+        mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+        mtt <- mtt[[1]]$results
+        mttc <- mtt[mtt$term==colnames(pdata)[termnr],"case"]
+        for (h in 1:nrow(matcres)){
+          if (matcres$Typical1[h] %in% mttc){matcres$Most_typical_term1[h] <- TRUE}
+        }
+        for (h in 1:nrow(matcres)){
+          if (matcres$Typical2[h] %in% mttc){matcres$Most_typical_term2[h] <- TRUE}
+        }
+        
+        matcres$Most_typical_FC1 <- FALSE
+        matcres$Most_typical_FC2 <- FALSE
+        mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr)
+        mtfc <- mtfc[[i]]$results
+        if(length(tn)==1){mtfcc <- rownames(mtfc)[mtfc$Most_typical==TRUE]}
+        else{mtfcc <- rownames(mtfc)[mtfc$Most_typical_FC==TRUE]}
+        for (h in 1:nrow(matcres)){
+          if (matcres$Typical1[h] %in% mtfcc){matcres$Most_typical_FC1[h] <- TRUE}
+        }
+        for (h in 1:nrow(matcres)){
+          if (matcres$Typical2[h] %in% mtfcc){matcres$Most_typical_FC2[h] <- TRUE}
+        }
+        
         M[[i]] <- list(title=focconj, results=(head(matcres, maxl))) 
       }
     }

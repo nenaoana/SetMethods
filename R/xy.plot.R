@@ -112,7 +112,8 @@ xy.plot <-
                   fontface = fontface,
                   segment.size = 0.04,
                   force = 0.07,
-                  max.iter = 2e3) +
+                  max.iter = 2e3,
+                  max.overlaps = 30) +
   xlim(0,1)+
   ylim(0,1)+
   theme_classic(base_size = 16) +

@@ -83,7 +83,8 @@ cases.suf.dcv <-
                         s=rep(FALSE, sum(fil)),
                         Term=rep(colnames(X)[i], sum(fil)),
                         Case=rownames(X)[fil], ttr=CS[rownames(X)[fil],"TT_row_membership"])
-        s <- abs(Z$ttr-Z$y) + (1-Z$ttr)
+        #s <- abs(Z$ttr-Z$y) + (1-Z$ttr)
+        s <- (1-Z$ttr)
         suppressWarnings(Z$s[s==min(s)] <- TRUE)
         Z$Sd <- s 
         colnames(Z)[1:3] <- c('TermMembership', outcome, 'Most_deviant')
@@ -108,11 +109,17 @@ cases.suf.dcv <-
       for (s in 1:nrow(ttsplit)){
         if(all(ttsplit[s,sortnames] == Z[n,sortnames]) & ttsplit[s,"x"] == Z[n, "Best"]){Z[n,"Most_Dev_Cov"] <- TRUE}
       }}
+    Z$Cons_TT <- FALSE
+    for (n in 1:nrow(Z)){
+      if(Z[n,"TT_row_membership"] <= Z[n,"Outcome"]){Z[n,"Cons_TT"] <- TRUE}
+    }
+    Z <- Z[do.call("order", c(Z[sortnames], 1-Z["Cons_TT"], Z["Best"])), ]
     M <- list()
     M[[1]] <- list(title="Deviant Coverage Cases", results=Z)
     class(M) <- 'matchessuf'
     return(M)
   }
+
 # IIR
 cases.suf.iir <-
   function(results,
@@ -180,7 +187,6 @@ cases.suf.typ.fct <-
            outcome,
            term=1,
            sol=1,
-           max_pairs=5,
            ...)
   {
     dots <- list(...)
@@ -266,7 +272,8 @@ cases.suf.typ.fct <-
         }
         names(Z)[names(Z)==outcome]<- "Outcome"
         names(Z)[names(Z)=="St"]<- "Best"
-        Z <- Z[order(Z$Uniquely_cov,Z$Best),]
+        Z$Rank <- "-"
+        Z <- Z[order(1-Z$Uniquely_cov,Z$Best),]
         M <- list()
         M[[1]] <- list(title=fct, results=Z)
       }
@@ -313,12 +320,12 @@ cases.suf.typ.fct <-
           s <- (abs(Z$y-Z$x) + (1-Z$termm))
           suppressWarnings(Z$s[s==min(s)] <- TRUE)
           Z$St <- s
-          colnames(Z) <- c('FocalConj', outcome, 'CompConj','Term', 'Most_typical','Best')
+          colnames(Z) <- c('FocalConj', outcome, 'CompConj','Term', 'Most_typical_FC','Best')
           Z<-Z[, c( 1, 3, 4, 2, 6, 5)]
-          Z$Most_typical_Val <- s
+          #Z$Most_typical_Val <- s
           Z$Rank <- NA
-          Z[ty1,8] <- 1
-          Z[ty2,8] <- 2
+          Z[ty1,7] <- 1
+          Z[ty2,7] <- 2
           Z <- Z[order(Z$Rank, Z$Best),]
           PDU <- PD[ty,-c(ncol(PD), ncol(PD)-1, term), drop = FALSE]
           PDU <- apply(PDU, 1, function(x) sum(x>0.5))
@@ -326,11 +333,18 @@ cases.suf.typ.fct <-
           for (j in ty) {
             if (PDU[j]==0) {Z[j,"UniqCov"] <- TRUE}
             else {Z[j,"UniqCov"] <- FALSE}}
-          Z<-Z[, c( 1, 4, 2, 3, 5, 6, 7, 9, 8)]
-          Z <- Z[order(Z$Rank, 1-Z$UniqCov, Z$Best, Z$Most_typical_Val),]
-          Z[,c(1:5,7)] <- round(Z[,c(1:5,7)], digits=3)
+          Z<-Z[, c( 1, 4, 2, 3, 5, 6, 8, 7)]
+          Z <- Z[order(Z$Rank, 1-Z$UniqCov, Z$Best),]
+          Z[,c(1:5,8)] <- round(Z[,c(1:5,8)], digits=3)
           names(Z)[names(Z)==outcome]<- "Outcome"
-          M[[i]] <- list(title=fct, results=head(Z, max_pairs))
+          Z$Most_typical_term <- FALSE
+          mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+          mtt <- mtt[[1]]$results
+          mttc <- mtt[mtt$term==colnames(PD)[term],"case"]
+          for (h in 1:nrow(Z)){
+            if (rownames(Z)[h] == mttc){Z$Most_typical_term[h] <- TRUE}
+          }
+          M[[i]] <- list(title=fct, results=Z)
         }
       }
     }
