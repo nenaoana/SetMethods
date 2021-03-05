@@ -1,0 +1,17 @@
+bibentry(bibtype = "article",
+         title = "SetMethods: An Add-on R Package for Advanced QCA",
+         author = personList(as.person("Ioana-Elena Oana"),
+                    as.person("Carsten Schneider")),
+        year = "2018",
+	journal = "The R Journal",
+	volume = "10",
+	number = "1",
+	page = "507--533",
+        url = "https://journal.r-project.org/archive/2018/RJ-2018-031/index.html",
+
+textVersion  =
+paste0("Oana, Ioana-Elena and Carsten Q. Schneider. 2018.",
+    "SetMethods: An Add-on R Package for Advanced QCA.",
+    "The R Journal 10(1): 507-33.",
+    "URL https://journal.r-project.org/archive/2018/RJ-2018-031/index.html.")
+)

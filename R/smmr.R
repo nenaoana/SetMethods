@@ -8,7 +8,7 @@ smmr <-
            term = 1,
            ...)
   { 
-    print("Note that the name of the mmr function has been changes to smmr!")
+    #print("Note that the name of the mmr function has been changes to smmr!")
     if (is.null(match)) stop('You have not specifyied whether you want single case MMR or comparative MMR. 
                              Please use match= FALSE for single case MMR or match= TRUE for comparative MMR.')
     if (is.null(cases)) stop('You have not specifyied the cases to be identified. 
@@ -22,7 +22,7 @@ smmr <-
     if (!match) {
     if (cases==1) {R <- cases.suf.typ(results, outcome, sol)
     return(R)}
-    if (cases==2) {R <- cases.suf.typ.fct(results, outcome, term, sol)
+    if (cases==2) {R <- cases.suf.typ.fct(results, outcome, term, sol, max_pairs=max_pairs)
     return(R)}
     if (cases==3) {R <- cases.suf.dcn(results, outcome, sol)
     return(R)}
@@ -62,13 +62,25 @@ smmr <-
     return(R)}
     if (cases==3) {R <- matches.suf.typdcn(results,
                                            outcome,
-                                           sol) 
+                                           sol,
+                                           max_pairs) 
     return(R)}
     if (cases==4) {R <- matches.suf.dcviir(results,
                                            outcome,
-                                           sol) 
+                                           sol,
+                                           max_pairs) 
     return(R)}
-    if (cases==5) {
+    if (cases==5) {R <- matches.suf.typtypnfc(results,
+                                           outcome,
+                                           sol,
+                                           max_pairs) 
+    return(R)}
+    if (cases==6) {R <- matches.suf.typiirnfc(results,
+                                              outcome,
+                                              sol,
+                                              max_pairs) 
+    return(R)}
+    if (cases==7) {
       M <- list()
       R1 <-  matches.suf.typtyp(results,
                                 outcome,
@@ -92,9 +104,19 @@ smmr <-
                                sol,
                                max_pairs) 
       M[[4]] <- list(title="Dev.Cov.-IIR", results=R4[[1]]$results)
+      R5 <- matches.suf.typtypnfc(results,
+                               outcome,
+                               sol,
+                               max_pairs) 
+      M[[5]] <- list(title="Typical-Typical - Term", results=R5[[1]]$results)
+      R6 <- matches.suf.typtypnfc(results,
+                                  outcome,
+                                  sol,
+                                  max_pairs) 
+      M[[6]] <- list(title="Typical-IIR - Term", results=R6[[1]]$results)
       class(M) <- 'matchessuf'
       return(M)}  
-    if (cases>5 | cases<1) {print("Invalid case type. 
+    if (cases>7 | cases<1) {print("Invalid case type. 
                                   Check help file using ?mmr for selecting a case type")}
   }
   }

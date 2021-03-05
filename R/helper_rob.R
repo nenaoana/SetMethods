@@ -1,4 +1,12 @@
 # Robustness Helpers:
+rob.union <- function(test_sol)
+{
+  ts <- ""
+  for (i in 1:length(test_sol)){ts <- c(ts,test_sol[[i]]$solution[[1]])}
+  ts <- paste(ts[2:length(ts)], collapse = "+")
+  ts <- simplify(ts)
+  return(ts)
+}
 
 rob.evaluation <-
   function(test_sol, 
@@ -17,15 +25,33 @@ rob.evaluation <-
     else {
       P2 <- pimdata(results = test_sol, outcome = outcome)
     }
+    
+    if (class(test_sol) == "list")
+    {
+      P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
+      for (j in length(test_sol))
+      {
+        Pj <- pimdata(results = test_sol[[j]], outcome = outcome)
+        P3$solution_formula <- pmax(Pj$solution_formula, P3$solution_formula)
+      }
+    }
+    else {
+      P3 <- pimdata(results = test_sol, outcome = outcome)
+    }
+    
     P1 <- pimdata(results = initial_sol, outcome = outcome)
     
-    P <- data.frame(P1$solution_formula, P2$solution_formula)
-    names(P) <- c("Sol.Formula1", "Sol.Formula2")
+    P <- data.frame(P1$solution_formula, P2$solution_formula, P3$solution_formula)
+    names(P) <- c("Sol.Formula1", "Sol.Formula2", "Sol.Formula3")
     row.names(P) <- row.names(P1)
     P$'S1*S2' <- pmin( P$Sol.Formula1, P$Sol.Formula2)
-    P$'s1*S2' <- pmin(1-P$Sol.Formula1,   P$Sol.Formula2)
+    P$'S1*S3' <- pmin( P$Sol.Formula1, P$Sol.Formula3) # here we apply the max S1S3
+    P$'s1*S2' <- pmin(1-P$Sol.Formula1,   P$Sol.Formula2) 
+    P$'s1*S3' <- pmin(1-P$Sol.Formula1,   P$Sol.Formula3) # here we apply the max s1S3
     P$'S1*s2' <- pmin(  P$Sol.Formula1, 1-P$Sol.Formula2)
+    P$'S1*s3' <- pmin(  P$Sol.Formula1, 1-P$Sol.Formula3) # here we apply the max S1s3
     P$'s1*s2' <- pmin(1-P$Sol.Formula1, 1-P$Sol.Formula2)
+    P$'s1*s3' <- pmin(1-P$Sol.Formula1, 1-P$Sol.Formula3) # here we apply the max s1s3
     P$'Outcome' <- P1$out
     
     
@@ -51,21 +77,32 @@ rob.case.ratio <-
     ND <- rob.evaluation(test_sol = test_sol, 
                                 initial_sol = initial_sol, 
                                 outcome=outcome)
-    SSrel <- sum(ND$'S1*s2'>0.5)*sum(ND$'s1*S2' >0.5)
-    SSrel <- ifelse(SSrel==0, TRUE, FALSE)
-    RCR_typ <- sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5))/
-      (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'s1*S2'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5)))
-    RCR_cons <- sum((ND$'S1*S2'>0.5)&(ND$'Outcome' <0.5))/
-      (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'s1*S2'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' <0.5)))
-    RCR <- data.frame("Robustness_Case_Ratio"= c(RCR_typ, RCR_cons,SSrel))
+    #SSrel_minTS <- sum(ND$'S1*s2'>0.5)*sum(ND$'s1*S3' >0.5)
+    #SSrel_minTS <- ifelse(SSrel_minTS==0, TRUE, FALSE)
+    #SSrel_maxTS <- sum(ND$'S1*s3'>0.5)*sum(ND$'s1*S3' >0.5)
+    #SSrel_maxTS <- ifelse(SSrel_maxTS==0, TRUE, FALSE)
+    Shaky <- sum(ND$'S1*s2'>0.5)
+    Poss <- sum(ND$'s1*S3'>0.5)
+    if (Shaky==0 & Poss==0){RC_Rank<- 1}
+    if (Shaky==0 & Poss>0){RC_Rank<- 2}
+    if (Shaky>0 & Poss==0){RC_Rank<- 3}
+    if (Shaky>0 & Poss>0){RC_Rank<- 4}
+    RCR_typ_minTS <- sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5))/
+      (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5)))
+    #RCR_typ_maxTS <- sum((ND$'S1*S3'>0.5)&(ND$'Outcome' >0.5))/
+    #  (sum((ND$'S1*s3'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'S1*S3'>0.5)&(ND$'Outcome' >0.5)))
+    RCR_cons_minTS <- sum((ND$'S1*S2'>0.5)&(ND$'Outcome' <0.5))/
+      (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' <0.5)))
+    #RCR_cons_maxTS <- sum((ND$'S1*S3'>0.5)&(ND$'Outcome' <0.5))/
+    # (sum((ND$'S1*s3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'S1*S3'>0.5)&(ND$'Outcome' <0.5)))
+    RCR <- data.frame("Robustness_Case_Ratio"= c(RCR_typ_minTS, RCR_cons_minTS,RC_Rank))#, RCR_typ_maxTS, RCR_cons_maxTS, SSrel_maxTS))
     RCR <- t(RCR)
-    colnames(RCR) <- c("RCR_typ","RCR_dev","SSR")
-    RCR[,1:2] <- round(RCR[,1:2], digits = 3)
-    RCR[,3] <- as.logical(RCR[,3])
+    colnames(RCR) <- c("RCR_typ","RCR_dev","RC_Rank")#,"RCR_typ_maxTS","RCR_dev_maxTS","SSR_maxTS")
+    RCR[,c(1:2)] <- round(RCR[,c(1:2)], digits = 3)
     return(RCR)
   }
 
-robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = TRUE)
+robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = TRUE, maxTS = FALSE)
 { 
   if (class(test_sol) == "list"){
     results1 = test_sol[[1]]
@@ -109,6 +146,12 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
   
   else {test_int <- s2}
   
+  if (class(test_sol) == "list")
+  {
+      test_union <- rob.union(test_sol)
+  }
+  else {test_union <- s2}
+  
   tild <- function(x)
   {
     x <- unlist(strsplit(x, '\\*'))
@@ -121,20 +164,76 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
   if (!use.tilde){  
     emp2 <- as.vector(unlist(sapply(test_int, function(x)  tild(x))))
     emp2 <- paste(emp2, collapse = "+")
+    emp3 <- as.vector(unlist(sapply(test_union, function(x)  tild(x))))
+    emp3 <- paste(emp3, collapse = "+")
     emp1 <- as.vector(unlist(sapply(s1, function(x)  tild(x))))
     emp1 <- paste(emp1, collapse = "+")}
   else {
     emp2 <- toupper(test_int)
+    emp3 <- toupper(test_union)
     emp1 <- toupper(s1)}
   
   thintersect <- list()
   
+  if(maxTS==FALSE){
   thintersect$S1S2 <- intersectExp(emp1,emp2)
   thintersect$s1S2 <- intersectExp(negateExp(emp1),emp2)
   thintersect$S1s2 <- intersectExp(emp1,negateExp(emp2))
-  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp2))
+  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp2))}
+  else{
+  thintersect$S1S2 <- intersectExp(emp1,emp3)
+  thintersect$s1S2 <- intersectExp(negateExp(emp1),emp3)
+  thintersect$S1s2 <- intersectExp(emp1,negateExp(emp3))
+  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp3))}
   
   class(thintersect) <- 'robtersect'
   return(thintersect)
+}
+
+robust.rank<-function(test_sol, 
+                      initial_sol, 
+                      outcome)
+
+{
+  if (class(test_sol) == "list")
+  {
+    P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
+    for (i in length(test_sol))
+    {
+      Pi <- pimdata(results = test_sol[[i]], outcome = outcome)
+      P2$solution_formula <- pmin(Pi$solution_formula, P2$solution_formula)
+    }
+  }
+  else {
+    P2 <- pimdata(results = test_sol, outcome = outcome)
+  }
+  
+  if (class(test_sol) == "list")
+  {
+    P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
+    for (j in length(test_sol))
+    {
+      Pj <- pimdata(results = test_sol[[j]], outcome = outcome)
+      P3$solution_formula <- pmax(Pj$solution_formula, P3$solution_formula)
+    }
+  }
+  else {
+    P3 <- pimdata(results = test_sol, outcome = outcome)
+  }
+  
+  P1 <- pimdata(results = initial_sol, outcome = outcome)
+  
+  P <- data.frame(P1$solution_formula, P2$solution_formula, P3$solution_formula)
+  
+  rankis<-NA
+  if(all(P[,1]==P[,2]) & all(P[,1]==P[,3])){rankis<-1}
+  if(all(P[,1]==P[,2]) & all(P[,1]<P[,3])){rankis<-2}
+  if(all(P[,1]<P[,2]) & all(P[,1]<P[,3])){rankis<-3}
+  if(all(P[,1]>P[,2]) & (all(P[,1]>=P[,3]))){rankis<-4}
+  if(all(P[,1]>P[,2]) & (all(P[,1]<P[,3]))){rankis<-5}
+  if(all(P[,1]>P[,2]) & !(all(P[,1]<=P[,3])|all(P[,1]>=P[,3]))){rankis<-6}
+  if(!(all(P[,1]<=P[,2])|all(P[,1]>=P[,2])) & all(P[,1]<P[,3])){rankis<-6}
+  if(!(all(P[,1]<=P[,2])|all(P[,1]>-P[,2])) & !(all(P[,1]<=P[,3])|all(P[,1]>=P[,3]))){rankis<-7}
+  return(rankis)
 }
 

@@ -1,4 +1,4 @@
-export(ambig.cases, rob.calibrange, cluster.plot, cluster, rob.corefit, esa, rob.inclrange, indirectCalibration, intersectExp, LR.intersect, rob.ncutrange, negateExp, pimdata, pimplot, property.cube, QCAfit, QCAradar, rob.cases, rob.fit, rob.xyplot, skew.check, smmr, stargazerSol, stargazerTT, theory.evaluation, xy.plot,rob.testrank)
+export(ambig.cases, rob.calibrange, cluster.plot, cluster, rob.corefit, esa, rob.inclrange, indirectCalibration, intersectExp, LR.intersect, rob.ncutrange, negateExp, pimdata, pimplot, property.cube, QCAfit, QCAradar, rob.cases, rob.fit, rob.xyplot, skew.check, smmr, stargazerSol, stargazerTT, theory.evaluation, xy.plot,rob.singletest)
 
 S3method(print, clusterdiagnostics)
 S3method(print, clusterminimize)
