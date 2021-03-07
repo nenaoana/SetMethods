@@ -690,7 +690,7 @@ matches.suf.typiirnfc <-
         R$UniqCov <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$uniquely_cov==TRUE)]       
+        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
           if (R$Typical[h] %in% mtfcc){R$UniqCov[h] <- TRUE}
         }
@@ -798,7 +798,7 @@ matches.suf.typtypnfc <-
         R$UniqCov1 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$uniquely_cov==TRUE)]       
+        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
           if (R$Typical1[h] %in% mtfcc){R$UniqCov1[h] <- TRUE}
         }
@@ -806,7 +806,7 @@ matches.suf.typtypnfc <-
         R$UniqCov2 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$uniquely_cov==TRUE)]       
+        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
           if (R$Typical2[h] %in% mtfcc){R$UniqCov2[h] <- TRUE}
         }
