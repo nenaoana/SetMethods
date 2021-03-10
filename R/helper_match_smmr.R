@@ -335,14 +335,14 @@ matches.suf.typiir <-
             {
               i <- which(rownames(X)==p[1])
               j <- which(rownames(X)==p[2])
-              if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]>0.5)) {order<-c(1)}
-              else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]>0.5)) {order<-c(2)}
+              if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(1)}
+              else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(2)}
                 else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]> x[j])) {order<-c(3)}
                   else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(4)}
                     else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (x[j] < mincc[j])) {order<-c(5)}
                       else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(6)}
-                        else {if ((x[i] < mincc[i]) & (mincc[j]<0.5) & (x[j]>0.5)) {order<-c(7)}
-                          else {if ((x[i] >= mincc[i]) & (mincc[j]<0.5) & (x[j]>0.5)) {order<-c(8)}
+                        else {if ((x[i] < mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(7)}
+                          else {if ((x[i] >= mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(8)}
                           }}}}}}}
               return(order)
             }
