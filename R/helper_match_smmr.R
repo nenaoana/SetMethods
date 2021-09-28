@@ -374,12 +374,17 @@ matches.suf.typiir <-
             }}
           maxl<-min(max_pairs,nrow(matcres))
           
-          matcres$ConsFC <- FALSE
+          matcres$ConsFC_Typ <- FALSE
           for (h in 1:nrow(matcres)){
-            if (matcres$Typical[h] %in% cfc){matcres$ConsFC[h] <- TRUE}
+            if (matcres$Typical[h] %in% cfc){matcres$ConsFC_Typ[h] <- TRUE}
           }
           
-          matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC, -matcres$UniqCov, -matcres$GlobUncov, matcres$Best),]
+          matcres$ConsFC_IIR <- FALSE
+          for (h in 1:nrow(matcres)){
+            if (matcres$IIR[h] %in% cfc){matcres$ConsFC_IIR[h] <- TRUE}
+          }
+          
+          matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC_Typ, -matcres$UniqCov, -matcres$ConsFC_IIR, -matcres$GlobUncov, matcres$Best),]
           if (length(tn)==1){matcres$PairRank <- "-"}
           
           matcres$MostTypTerm <- FALSE
@@ -400,7 +405,10 @@ matches.suf.typiir <-
             if (matcres$Typical[h] %in% mtfcc){matcres$MostTypFC[h] <- TRUE}
           }
           
-          matcres <- matcres[,c(1,2,5,6,3,4,7,8,9)]
+          matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC_Typ, -matcres$UniqCov, -matcres$ConsFC_IIR, -matcres$GlobUncov, matcres$Best, -matcres$MostTypFC, -matcres$MostTypTerm),]
+          
+          
+          matcres <- matcres[,c(1,2,5,6,3,4,7,9,10,8)]
           M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
         }  
       }
@@ -649,9 +657,11 @@ matches.suf.typiirnfc <-
       x <- X[, term]
       y <- X[, 'out']
       typical <- (x>0.5) & (y>0.5) & (x<=y) 
-      iir <- (x<0.5) & (y<0.5) 
+      iir <- (x<0.5) & (y<0.5)
+      ciir <- (x<0.5) & (y<0.5) & (x<=y)
       rnt <- rownames(X)[typical]
       rni <- rownames(X)[iir]
+      consiir <- rownames(X)[ciir]
       K <- expand.grid(rnt, rni) 
       if (nrow(K)>0) {
         aux.f <-
@@ -702,8 +712,13 @@ matches.suf.typiirnfc <-
         }
         colnames(R) <- c("Typical","IIR","Best","MostTyp","UniqCov","GlobUncov")
         
-        R <- R[order(1-R$UniqCov, 1-R$GlobUncov,R$Best,1-R$MostTyp),]
-        R <- R[,c(1,2,5,6,3,4)]
+        R$ConsIIR <- FALSE
+        for (h in 1:nrow(R)){
+          if (R$IIR[h] %in% consiir){R$ConsIIR[h] <- TRUE}
+        }
+        
+        R <- R[order(1-R$UniqCov, 1-R$ConsIIR, 1-R$GlobUncov, R$Best, 1-R$MostTyp),]
+        R <- R[,c(1,2,5,6,3,4,7)]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'

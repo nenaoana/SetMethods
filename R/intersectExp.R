@@ -76,6 +76,7 @@ intersectExp <- function (expression1, expression2)
   combff <- unique(combff)
   combff <- sapply(combff, function(x) paste(x, collapse = "*"))
   combff <- paste(combff, collapse = " + ")
+  if (combff!="Empty Set"){combff <- simplify(combff)[[1]]}
   }
   return(combff)
 }

@@ -141,7 +141,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((tu.thresholds[2] - test.thresholds[2]) == max.runs*step) 
+      if ((tu.thresholds[2] - test.thresholds[2]) >= max.runs*step) 
       {tu.thresholds[2] = NA
       break}
       if (tu.thresholds[2]>= range(raw.data[,test.cond.raw])[2]) {break}
@@ -181,7 +181,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((test.thresholds[2]-tl.thresholds[2]) == max.runs*step) 
+      if ((test.thresholds[2]-tl.thresholds[2]) >= max.runs*step) 
       {tl.thresholds[2] = NA
       break}
       if (tl.thresholds[2]<= range(raw.data[,test.cond.raw])[1]) {break}
@@ -221,7 +221,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((tu1.thresholds[3]-test.thresholds[3]) == max.runs*step) 
+      if ((tu1.thresholds[3]-test.thresholds[3]) >= max.runs*step) 
       {tu1.thresholds[3] = NA
       break}
     }
@@ -260,7 +260,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((test.thresholds[3]-tl1.thresholds[3]) == max.runs*step) 
+      if ((test.thresholds[3]-tl1.thresholds[3]) >= max.runs*step) 
       {tl1.thresholds[3] = NA
       break}
     }
@@ -300,7 +300,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((tu0.thresholds[1]-test.thresholds[1]) == max.runs*step) 
+      if ((tu0.thresholds[1]-test.thresholds[1]) >= max.runs*step) 
       {tu0.thresholds[1] = NA
       break}
     }
@@ -339,7 +339,7 @@ rob.calibrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
-      if ((test.thresholds[1]-tl0.thresholds[1]) == max.runs*step) 
+      if ((test.thresholds[1]-tl0.thresholds[1]) >= max.runs*step) 
       {tl0.thresholds[1] = NA
       break}
     }

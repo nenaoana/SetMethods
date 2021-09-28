@@ -83,10 +83,10 @@ rob.case.ratio <-
     #SSrel_maxTS <- ifelse(SSrel_maxTS==0, TRUE, FALSE)
     Shaky <- sum(ND$'S1*s2'>0.5)
     Poss <- sum(ND$'s1*S3'>0.5)
-    if (Shaky==0 & Poss==0){RC_Rank<- 1}
-    if (Shaky==0 & Poss>0){RC_Rank<- 2}
-    if (Shaky>0 & Poss==0){RC_Rank<- 3}
-    if (Shaky>0 & Poss>0){RC_Rank<- 4}
+    if (Shaky==0 & Poss==0){RCC_Rank<- 1}
+    if (Shaky==0 & Poss>0){RCC_Rank<- 2}
+    if (Shaky>0 & Poss==0){RCC_Rank<- 3}
+    if (Shaky>0 & Poss>0){RCC_Rank<- 4}
     RCR_typ_minTS <- sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5))/
       (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' >0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' >0.5)))
     #RCR_typ_maxTS <- sum((ND$'S1*S3'>0.5)&(ND$'Outcome' >0.5))/
@@ -95,9 +95,9 @@ rob.case.ratio <-
       (sum((ND$'S1*s2'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'S1*S2'>0.5)&(ND$'Outcome' <0.5)))
     #RCR_cons_maxTS <- sum((ND$'S1*S3'>0.5)&(ND$'Outcome' <0.5))/
     # (sum((ND$'S1*s3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'s1*S3'>0.5)&(ND$'Outcome' <0.5))+sum((ND$'S1*S3'>0.5)&(ND$'Outcome' <0.5)))
-    RCR <- data.frame("Robustness_Case_Ratio"= c(RCR_typ_minTS, RCR_cons_minTS,RC_Rank))#, RCR_typ_maxTS, RCR_cons_maxTS, SSrel_maxTS))
+    RCR <- data.frame("Robustness_Case_Ratio"= c(RCR_typ_minTS, RCR_cons_minTS,RCC_Rank))#, RCR_typ_maxTS, RCR_cons_maxTS, SSrel_maxTS))
     RCR <- t(RCR)
-    colnames(RCR) <- c("RCR_typ","RCR_dev","RC_Rank")#,"RCR_typ_maxTS","RCR_dev_maxTS","SSR_maxTS")
+    colnames(RCR) <- c("RCR_typ","RCR_dev","RCC_Rank")#,"RCR_typ_maxTS","RCR_dev_maxTS","SSR_maxTS")
     RCR[,c(1:2)] <- round(RCR[,c(1:2)], digits = 3)
     return(RCR)
   }
@@ -169,22 +169,22 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
     emp1 <- as.vector(unlist(sapply(s1, function(x)  tild(x))))
     emp1 <- paste(emp1, collapse = "+")}
   else {
-    emp2 <- toupper(test_int)
-    emp3 <- toupper(test_union)
-    emp1 <- toupper(s1)}
+    emp2 <- paste(toupper(test_int), collapse = "+")
+    emp3 <- paste(toupper(test_union), collapse = "+")
+    emp1 <- paste(toupper(s1), collapse = "+")}
   
   thintersect <- list()
   
   if(maxTS==FALSE){
   thintersect$S1S2 <- intersectExp(emp1,emp2)
-  thintersect$s1S2 <- intersectExp(negateExp(emp1),emp2)
-  thintersect$S1s2 <- intersectExp(emp1,negateExp(emp2))
-  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp2))}
+  thintersect$s1S2 <- intersectExp(negate(emp1)[[1]][1],emp2)
+  thintersect$S1s2 <- intersectExp(emp1,negate(emp2)[[1]][1])
+  thintersect$s1s2 <- intersectExp(negate(emp1)[[1]][1],negate(emp2)[[1]][1])}
   else{
   thintersect$S1S2 <- intersectExp(emp1,emp3)
-  thintersect$s1S2 <- intersectExp(negateExp(emp1),emp3)
-  thintersect$S1s2 <- intersectExp(emp1,negateExp(emp3))
-  thintersect$s1s2 <- intersectExp(negateExp(emp1),negateExp(emp3))}
+  thintersect$s1S2 <- intersectExp(negate(emp1)[[1]][1],emp3)
+  thintersect$S1s2 <- intersectExp(emp1,negate(emp3)[[1]][1])
+  thintersect$s1s2 <- intersectExp(negate(emp1)[[1]][1],negate(emp3)[[1]][1])}
   
   class(thintersect) <- 'robtersect'
   return(thintersect)

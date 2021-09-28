@@ -3,7 +3,10 @@ cluster.plot <-
            labs = TRUE,
            size = 5,
            angle = 0,
-           wicons = FALSE)
+           wicons = FALSE,
+           wiconslabs = FALSE,
+           wiconssize = 5,
+           wiconsangle = 90)
   {
     if (class(cluster.res)!= 'clusterdiagnostics' & class(cluster.res)!= 'clusterminimize') 
       stop("cluster.res must be a result of a cluster diagnostics obtained with the cluster() function!")
@@ -74,7 +77,25 @@ cluster.plot <-
       xtickw<-seq(1, length(ticklabw), by=1)
       
       if (class(cluster.res) == 'clusterminimize'){
+      if (wiconslabs == TRUE) {
       for (i in 1:length(cluster.res$output)){
+        CTw[[i]] <- cluster.res$output[[i]]$WICONS
+        dtw <- data.frame(x = xtickw, y = CTw[[i]])
+        dtw <- dtw[order(dtw$y),] 
+        dtw$xr <- reorder(dtw$x, 1-dtw$y)
+        pw <- ggplot(dtw, aes(y = dtw[,2], x = dtw[,3])) + 
+          geom_point() +  
+          ylim( 0,1) + 
+          theme_classic(base_size = 16)+
+          geom_hline(yintercept = cluster.res$output[[i]]$POCOS)+
+          labs(title = names(cluster.res$output[i]), x="Units", y="Consistency")+
+          theme(axis.text.x = element_text(size=wiconssize, angle=wiconsangle))+
+          scale_x_discrete(breaks=xtickw,
+                           labels=cluster.res$output[[i]]$unit_ids)
+        suppressWarnings(print(pw))
+        
+      }}
+      else{
         CTw[[i]] <- cluster.res$output[[i]]$WICONS
         dtw <- data.frame(x = xtickw, y = CTw[[i]])
         dtw <- dtw[order(dtw$y),] 
@@ -87,10 +108,11 @@ cluster.plot <-
           labs(title = names(cluster.res$output[i]), x="Units", y="Consistency")+
           theme(axis.text.x = element_blank())
         suppressWarnings(print(pw))
-      }
+      }  
     }
     # CMIN - E
     else{
+      if (wiconslabs == TRUE) {
       CTw[[1]] <- cluster.res$WICONS
       dtw <- data.frame(x = xtickw, y = CTw[[1]])
       dtw <- dtw[order(dtw$y),] 
@@ -101,8 +123,25 @@ cluster.plot <-
         theme_classic(base_size = 16)+
         geom_hline(yintercept = cluster.res$POCOS)+
         labs(title = "", x="Units", y="Consistency")+
-        theme(axis.text.x = element_blank())
+        theme(axis.text.x = element_text(size=wiconssize, angle=wiconsangle))+
+        scale_x_discrete(breaks=xtickw,
+                         labels=cluster.res$output[[i]]$unit_ids)
       suppressWarnings(print(pw))
+      }
+      else{
+        CTw[[1]] <- cluster.res$WICONS
+        dtw <- data.frame(x = xtickw, y = CTw[[1]])
+        dtw <- dtw[order(dtw$y),] 
+        dtw$xr <- reorder(dtw$x, 1-dtw$y)
+        pw <- ggplot(dtw, aes(y = dtw[,2], x = dtw[,3])) + 
+          geom_point() +  
+          ylim( 0,1) + 
+          theme_classic(base_size = 16)+
+          geom_hline(yintercept = cluster.res$POCOS)+
+          labs(title = "", x="Units", y="Consistency")+
+          theme(axis.text.x = element_blank())
+        suppressWarnings(print(pw))
+      }
     }}
   }
 

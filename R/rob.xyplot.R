@@ -59,10 +59,10 @@ rob.xyplot <-
     RCRcons_minTS <- format(RCR[,2], digits = 3)
     #RCRtyp_maxTS <- format(RCR[,4], digits = 3)
     #RCRcons_maxTS <- format(RCR[,5], digits = 3)
-    RC_Rank <- RCR[,3]
+    RCC_Rank <- RCR[,3]
     #SSR_maxTS <- RCR[,6]
     #subtt <- paste("RF_cons: ", Rcon, "; RF_cov: ", Rcov, "; RF_SC_minTS: ", RSC_minTS, "; RF_SC_maxTS: ", RSC_maxTS, "\n" ,"RCR_typ: ", RCRtyp_minTS, "; RCR_dev: ", RCRcons_minTS)
-    subtt <- paste("RF_cons: ", Rcon, "; RF_cov: ", Rcov, "; RF_SC_minTS: ", RSC_minTS, "; RF_SC_maxTS: ", RSC_maxTS, "\n" ,"RCR_typ: ", RCRtyp_minTS, "; RCR_dev: ", RCRcons_minTS, "; RC_Rank: ", RC_Rank,sep = "")
+    subtt <- paste("RF_cons: ", Rcon, "; RF_cov: ", Rcov, "; RF_SC_minTS: ", RSC_minTS, "; RF_SC_maxTS: ", RSC_maxTS, "\n" ,"RCR_typ: ", RCRtyp_minTS, "; RCR_dev: ", RCRcons_minTS, "; RCC_Rank: ", RCC_Rank,sep = "")
     rob=TRUE
     if (labs == TRUE){
       if (all_labels) {fil <- rownames(PS)}

@@ -54,6 +54,10 @@ rob.ncutrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
+      
+      if ((n.cut-n.cut.tl) >= max.runs*step) 
+      {n.cut.tl = NA
+      break}
     }
     
     # Test range n.cut upper:
@@ -90,6 +94,9 @@ rob.ncutrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
+      if ((n.cut.tu - n.cut) >= max.runs*step) 
+      {n.cut.tu = NA
+      break}
     }
     
     NCUT = c(n.cut.tl+step, n.cut.tu-step)

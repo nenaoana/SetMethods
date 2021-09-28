@@ -14,7 +14,7 @@ rob.singletest <-
     robdf[i,2] <- RCR[,3]
     robdf[i,3] <- RF[,3]
     }
-    names(robdf) <- c("Model", "RC_Rank", "SC")
-    robdf <- robdf[order(-robdf$RC_Rank,robdf$SC),]
+    names(robdf) <- c("Model", "RCC_Rank", "SC")
+    robdf <- robdf[order(-robdf$RCC_Rank,robdf$SC),]
     return(robdf)
   }

@@ -207,7 +207,7 @@ cases.theory.evaluation <-
                              
                              else {rownames(ND)[(ND$'~T*~S'>0.5)&(ND$'Outcome'>0.5)]}),
                 
-                'TS~Y'=list('Intersection'='Inconsistent Most Likely (T*E and Y < 0.5)',
+                'TS~Y'=list('Intersection'='Inconsistent Most Likely (T*S and Y < 0.5)',
                             
                             'Boolean'=paste('Boolean Expression:', INT$TE),
                             
@@ -297,10 +297,15 @@ theory.fit <-
   function(theory_data, consH = FALSE)
   {            
     n_c <- ncol(theory_data)-1
-    theory_fit <- data.frame(matrix(NA, ncol=4, nrow=0))  
+    if(consH == FALSE){
+    theory_fit <- data.frame(matrix(NA, ncol=3, nrow=0))}
+    else{theory_fit <- data.frame(matrix(NA, ncol=4, nrow=0))}
     for (i in (1:n_c)){
       theory_fit <- rbind(theory_fit, QCAfit(theory_data[,i], theory_data[, ncol(theory_data)], necessity = FALSE, consH = consH))}
     rownames(theory_fit) <- names(theory_data[1:n_c])
+    if(consH == FALSE){
+      names(theory_fit) <- c("Cons.Suf","Cov.Suf","PRI")}
+    else{names(theory_fit) <- c("Cons.Suf","Cov.Suf","PRI","Cons.Suf(H)")}
     return(theory_fit)
   }
 
@@ -341,15 +346,15 @@ theory.intersections <- function(theory, empirics, sol = 1, use.tilde = TRUE)
     th <- as.vector(unlist(sapply(th, function(x)  tild(x))))
     theory <- paste(th, collapse = "+")}
   else {
-    emp <- toupper(s)
-    theory <- toupper(theory)}
+    emp <- paste(toupper(s), collapse = "+")
+    theory <- paste(toupper(theory), collapse = "+")}
   
   thintersect <- list()
   
   thintersect$TE <- intersectExp(theory,emp)
-  thintersect$tE <- intersectExp(negateExp(theory),emp)
-  thintersect$Te <- intersectExp(theory,negateExp(emp))
-  thintersect$te <- intersectExp(negateExp(theory),negateExp(emp))
+  thintersect$tE <- intersectExp(negate(theory)[[1]][1],emp)
+  thintersect$Te <- intersectExp(theory,negate(emp)[[1]][1])
+  thintersect$te <- intersectExp(negateExp(theory),negate(emp)[[1]][1])
   
   class(thintersect) <- 'thintersect'
   return(thintersect)

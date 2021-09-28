@@ -39,6 +39,7 @@ rob.inclrange <-
     while (setequal(is,s))
     { print("Searching for thresholds, this takes me a while for now, sorry...")
       incl.cut.tl = incl.cut.tl - step
+      if (incl.cut.tl <= 0) { break }
       sol <- suppressWarnings(minimize(input = data,
                                        outcome  = outcome,
                                        conditions = conditions,
@@ -52,6 +53,10 @@ rob.inclrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
+      if ((incl.cut-incl.cut.tl) >= (max.runs*step)) 
+      {incl.cut.tl = NA
+      break}
+      if (incl.cut.tl<=0) {break}
     }
     
     # Test range raw consistency threshold upper:
@@ -74,6 +79,7 @@ rob.inclrange <-
     while (setequal(is,s))
     { print("Searching for thresholds, this takes me a while for now, sorry...")
       incl.cut.tu = incl.cut.tu + step
+      if (incl.cut.tu >= 1) { break }
       sol <- try(suppressWarnings(minimize(input = data,
                                            outcome  = outcome,
                                            conditions = conditions,
@@ -88,6 +94,10 @@ rob.inclrange <-
       else {
         s = sol$i.sol$C1P1$solution[[1]]
       }
+      if ((incl.cut.tu-incl.cut) >= (max.runs*step)) 
+      {incl.cut.tu = NA
+      break}
+      if (incl.cut.tu>=0) {break}
     }
     RCT = c(incl.cut.tl+step, incl.cut.tu-step)
     TH <- data.frame(RCT)
