@@ -11,23 +11,35 @@ cluster.plot(cluster.res,
            labs = TRUE,
            size = 5,
            angle = 0,
-           wicons = FALSE)
+           wicons = FALSE,
+           wiconslabs = FALSE,
+           wiconssize = 5,
+           wiconsangle = 90)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cluster.res}{An object of class "cluster.res". This is the result of a cluster diagnostics obtained with the cluster() function.
 }
 \item{labs}{
-Logical. Should labels for the clusters and units be printed?  
+Logical. Should labels for the clusters be printed?  
 }
 \item{size}{
-Label font size.
+Label font size for the clusters.
 }
 \item{angle}{
-Label rotation.
+Label rotation for the clusters.
 }
 \item{wicons}{
 Logical. Should within consistency plots be returned?
+}
+\item{wiconslabs}{
+Logical. Should labels for the units be printed?  
+}
+\item{wiconssize}{
+Label font size for the units.
+}
+\item{wiconsangle}{
+Label rotation for the units.
 }
 }
 \references{
