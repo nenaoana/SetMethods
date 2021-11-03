@@ -47,13 +47,14 @@ rob.calibrange <-
         tu.thresholds = tu.thresholds + step;
         c.data = calib.data;
         c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tu.thresholds);
-        suppressWarnings(sol <- minimize(input = c.data,
-                                         outcome  = outcome,
-                                         conditions = conditions,
-                                         incl.cut = incl.cut,
-                                         n.cut = n.cut,
-                                         include = include,
-                                         ...));
+        sol <- try(suppressWarnings(minimize(input = c.data,
+                                             outcome  = outcome,
+                                             conditions = conditions,
+                                             incl.cut = incl.cut,
+                                             n.cut = n.cut,
+                                             include = include,
+                                             ...)), silent = TRUE)
+        if (class(sol) == "try-error") {break}
         if (is.null(init.sol$i.sol)) {
           s = sol$solution[[1]]
         }
@@ -87,13 +88,14 @@ rob.calibrange <-
         tl.thresholds = tl.thresholds - step
         c.data = calib.data
         c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tl.thresholds)
-        suppressWarnings(sol <- minimize(input = c.data,
-                                         outcome  = outcome,
-                                         conditions = conditions,
-                                         incl.cut = incl.cut,
-                                         n.cut = n.cut,
-                                         include = include,
-                                         ...))
+        sol <- try(suppressWarnings(minimize(input = c.data,
+                                             outcome  = outcome,
+                                             conditions = conditions,
+                                             incl.cut = incl.cut,
+                                             n.cut = n.cut,
+                                             include = include,
+                                             ...)), silent = TRUE)
+        if (class(sol) == "try-error") {break}
         if (is.null(init.sol$i.sol)) {
           s = sol$solution[[1]]
         }
@@ -128,13 +130,14 @@ rob.calibrange <-
       tu.thresholds[2] = tu.thresholds[2] + step;
       c.data = calib.data;
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tu.thresholds);
-      suppressWarnings(sol <- minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...));
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -168,13 +171,14 @@ rob.calibrange <-
       tl.thresholds[2] = tl.thresholds[2] - step
       c.data = calib.data
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tl.thresholds)
-      suppressWarnings(sol <- minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -208,13 +212,14 @@ rob.calibrange <-
       tu1.thresholds[3] = tu1.thresholds[3] + step
       c.data = calib.data
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tu1.thresholds)
-      suppressWarnings(sol <- minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -247,13 +252,14 @@ rob.calibrange <-
       tl1.thresholds[3] = tl1.thresholds[3] - step
       c.data = calib.data
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tl1.thresholds)
-      suppressWarnings(sol <- minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -287,13 +293,14 @@ rob.calibrange <-
       tu0.thresholds[1] = tu0.thresholds[1] + step
       c.data = calib.data
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tu0.thresholds)
-      suppressWarnings(sol <- minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -326,13 +333,14 @@ rob.calibrange <-
       tl0.thresholds[1] = tl0.thresholds[1] - step
       c.data = calib.data
       c.data[,test.cond.calib] <- calibrate(raw.data[,test.cond.raw], type=type, thresholds = tl0.thresholds)
-      sol <- suppressWarnings(minimize(input = c.data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = c.data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }

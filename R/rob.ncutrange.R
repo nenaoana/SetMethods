@@ -41,13 +41,14 @@ rob.ncutrange <-
     { print("Searching for thresholds, this takes me a while for now, sorry...")
       n.cut.tl = n.cut.tl - step
       if (n.cut.tl < 1) { break }
-      sol <- suppressWarnings(minimize(input = data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut.tl,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut.tl,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -81,13 +82,14 @@ rob.ncutrange <-
     { print("Searching for thresholds, this takes me a while for now, sorry...")
       n.cut.tu = n.cut.tu + step
       if (n.cut.tl == nrow(data)) { break }
-      sol <- suppressWarnings(minimize(input = data,
-                                       outcome  = outcome,
-                                       conditions = conditions,
-                                       incl.cut = incl.cut,
-                                       n.cut = n.cut.tu,
-                                       include = include,
-                                       ...))
+      sol <- try(suppressWarnings(minimize(input = data,
+                                           outcome  = outcome,
+                                           conditions = conditions,
+                                           incl.cut = incl.cut,
+                                           n.cut = n.cut.tu,
+                                           include = include,
+                                           ...)), silent = TRUE)
+      if (class(sol) == "try-error") {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
