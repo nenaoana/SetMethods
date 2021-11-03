@@ -1,7 +1,8 @@
 Version 3.0
-	o Improved: the range of functions (rob.calibrange, rob.inclrange, rob.ncutrange, rob.cases, rob.corefit, rob.fit, rob.xyplot, rob.singletest) for performing the robustness test protocol in Oana and Schneider (unpublished manuscript) have been updated to reflect new changes in the protocol;
+	o Improved: the range of functions (rob.calibrange, rob.inclrange, rob.ncutrange, rob.cases, rob.corefit, rob.fit, rob.xyplot, rob.singletest) for performing the robustness test protocol in Oana and Schneider (2021) have been updated to reflect new changes in the protocol;
 	o Improved: the output of the smmr() function has been updated to reflect the changes in case selection guidelines in Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press. 
 	o Fixed: bug in xy.plot() showing an error for max.overlaps has been fixed.
+	o Improved: function cluster.plot() can now also print units labels.
 Version 2.6
 	o New: function stargazerTT() can be used for exporting truth tables in text, latex, and html format;
 	o New: function stargazerSol() can be used for exporting truth tables in text, latex, and html format;
