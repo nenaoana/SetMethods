@@ -9,8 +9,8 @@
 \tabular{ll}{
 Package: \tab SetMethods\cr
 Type: \tab Package\cr
-Version: \tab 3.0\cr
-Date: \tab 2021-03-04\cr
+Version: \tab 3.1\cr
+Date: \tab 2021-12-01\cr
 License: \tab GPL-2\cr
 }
 The package contains functions to perform set-theoretic multi-method research, theory evaluation, QCA for clustered data, Enhanced Standard Analyses, indirect calibration, calculate parameters of fit and produce XY plots and QCA Radar Charts, perform robustness tests, etc.. Furthermore, it contains all the data used in the Schneider and Wagemann (2012) and Oana, Schneider, and Thomann (2021) books.}
@@ -20,11 +20,13 @@ Ioana-Elena Oana [aut, cre], Juraj Medzihorsky [aut], Carsten Q. Schneider [aut]
 Maintainer: Ioana-Elena Oana <ioana.oana@eui.eu>
 }
 \references{
-Oana, I.E., Schneider, C. Q., Thomann, E. (2021). Qualitative Comparative Analysis (QCA) using R: A Gentle Introductiomn. Cambridge: Cambridge University Press.
+Oana, I.E., Schneider, C. Q., Thomann, E. (2021). Qualitative Comparative Analysis (QCA) using R: A Beginner's Guide. Cambridge: Cambridge University Press.
 
-Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press.
+Oana, I.E., Schneider, C. Q. (2021). A Robustness Test Protocol for Applied QCA: Theory and R Software Application. Sociological Methods and Research. https://doi.org/10.1177/00491241211036158.
 
 Oana, I.E., Schndeider, C.Q. (2018) SetMethods: An Add-on R Package for Advanced QCA.The R Journal 10(1): 507-33.
+
+Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press.
 
 Schneider, C. Q., Wagemann, C. (2012) Set-Theoretic Methods for the Social Sciences, Cambridge University Press: Cambridge
 

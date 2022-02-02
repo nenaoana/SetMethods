@@ -57,6 +57,7 @@ Schneider, C. Q., Wagemann, C. 2012. Set-Theoretic Methods for the Social Scienc
 	\code{\link[QCA:minimize]{minimize}}
 }
 \examples{
+\dontrun{
 # Import your data. For example:
 
 data(SCHF)
@@ -88,7 +89,7 @@ TH$cases
 
 # Or only the parameters of fit:
 
-TH$fit
+TH$fit}
 
 }
 \keyword{QCA}

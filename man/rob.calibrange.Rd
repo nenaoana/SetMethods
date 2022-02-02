@@ -86,7 +86,7 @@ rob.calibrange(
   test.cond.calib = "DEVELOPED",
   test.thresholds = c(400, 550, 900),
   step = 500,
-  max.runs = 10,
+  max.runs = 2,
   outcome  = "SURVIVED",
   conditions = c("URBAN","LITERATE","INDUSTRIAL","STABLE"),
   incl.cut = 0.8,

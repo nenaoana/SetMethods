@@ -31,6 +31,7 @@ Oana, Ioana-Elena, Carsten Q. Schneider, and Eva Thomann (forthcoming). Qualitat
 Ioana-Elena Oana
 }
 \examples{
+\dontrun{
 # Load the data:
 data(PAYF)
 
@@ -74,7 +75,7 @@ TS <- list(TS1, TS2)
 
 rob.cases(test_sol = TS, 
                  initial_sol = IS, 
-                 outcome = "HL")
+                 outcome = "HL")}
 
 
 }
