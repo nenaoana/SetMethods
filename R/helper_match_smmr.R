@@ -59,30 +59,30 @@ matches.suf.dcviir <-
         return(s)
       }
     s <- apply(K_fil, 1, aux.f)
-    R <- data.frame(DevCov=K_fil[,1],
+    R <- data.frame(DCOV=K_fil[,1],
                     IIR=K_fil[,2],
                     Best=s,
                     Best_matching_pair=rep(FALSE, length(s)))	
     #	merge with a TT
     CS$ids <- rownames(CS)
-    R <- merge(R, CS, by.x='DevCov', by.y='ids')
+    R <- merge(R, CS, by.x='DCOV', by.y='ids')
     colnames(R)[5:ncol(R)] <- paste('TT_', colnames(R)[5:ncol(R)], sep='') 
     tt_row_fil <- apply(R[, grep('TT_', colnames(R))], 1, 
                         function(r) paste(r, collapse=''))
     R <- R[order(tt_row_fil), ]
     tt_row_fil <- tt_row_fil[order(tt_row_fil)]
     sortnames<-names(R)[5:(ncol(R))]
-    R$ConsTT_DCV <- FALSE
+    R$`TT_DCV<=Y` <- FALSE
     constt <- w<=y
     for (h in 1:nrow(R)){
-      if(as.logical(constt[as.character(R$DevCov[h])]==TRUE)){R[h,"ConsTT_DCV"] <- TRUE}
+      if(as.logical(constt[as.character(R$DCOV[h])]==TRUE)){R$`TT_DCV<=Y`[h] <- TRUE}
     }
     
     #	find the best match for each TT row	
     aux.list <-
       function(x)
       {
-        x <- x[order(-x$ConsTT_DCV, x$Best), ]
+        x <- x[order(-x$`TT_DCV<=Y`, x$Best), ]
         x[x$Best==min(x$Best), 4] <- TRUE
         return(x[1:min(c(nrow(x), max_pairs)), ])
       }
@@ -92,14 +92,14 @@ matches.suf.dcviir <-
     R$Best <- round(R$Best, digits = 3)
     rownames(R) <- NULL
     R <- R[,-4]
-    R <- cbind(R[,1:2],R[sortnames],R["Best"],R["ConsTT_DCV"])
+    R <- cbind(R[,1:2],R[sortnames],R["TT_DCV<=Y"],R["Best"])
     # R$GlobUncov< FALSE
     # for (h in 1:nrow(R)){
     #   if(X[as.character(R$IIR[h]),"solution_formula"]<0.5){R$GlobUncovIRR[h] <- TRUE}
     # }
-    # R$ConsTT_DCV <- FALSE
+    # R$`TT_DCV<=Y` <- FALSE
     # for (h in 1:nrow(R)){
-    #   if(X[as.character(R$DevCov[h]),"solution_formula"]<0.5){R$GlobUncovIRR[h] <- TRUE}
+    #   if(X[as.character(R$DCOV[h]),"solution_formula"]<0.5){R$GlobUncovIRR[h] <- TRUE}
     # }
     
     M <- list()
@@ -153,8 +153,8 @@ matches.suf.typdcn <-
             return(s)
           }
         s <- apply(K, 1, aux.f)
-        R <- data.frame(Typical=K[,1],
-                        DevCons=K[,2],
+        R <- data.frame(TYP=K[,1],
+                        DCON=K[,2],
                         Best=s,
                         Term=rep(term, length(s)),
                         Best_matching_pair=rep(FALSE, length(s)))	
@@ -167,31 +167,31 @@ matches.suf.typdcn <-
         R$MostTypTerm <- FALSE
         mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
         mtt <- mtt[[1]]$results
-        mttc <- mtt[mtt$term==colnames(X)[i],"case"]
+        mttc <- mtt[mtt$Term==colnames(X)[i],"Case"]
         for (h in 1:nrow(R)){
-          if (R$Typical[h] %in% mttc){R$MostTypTerm[h] <- TRUE}
+          if (R$TYP[h] %in% mttc){R$MostTypTerm[h] <- TRUE}
         }
         
         
-        R$MostDevCons <- FALSE
+        R$MostDCON <- FALSE
         mtt <- cases.suf.dcn(results = results, outcome = outcome, sol = sol)
         mtt <- mtt[[1]]$results
         mtt <- mtt[mtt$Term==colnames(X)[i],]
-        mttc <- mtt$Cases[(mtt$MostDevCons==TRUE)]
+        mttc <- mtt$Cases[(mtt$MostDCON==TRUE)]
         for (h in 1:nrow(R)){
-          if (R$DevCons[h] %in% mttc){R$MostDevCons[h] <- TRUE}
+          if (R$DCON[h] %in% mttc){R$MostDCON[h] <- TRUE}
         }
-        R <- R[order(R$Best, -R$MostTypTerm, -R$MostDevCons),]
+        R <- R[order(R$Best, -R$MostTypTerm, -R$MostDCON),]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
       } else {
-        R <- data.frame(Typical=NULL,
-                        DevCons=NULL,
+        R <- data.frame(TYP=NULL,
+                        DCON=NULL,
                         Best=NULL,
                         Term=NULL,
                         Best_matching_pair=NULL,
-                        MostDevCons=NULL,
+                        MostDCON=NULL,
                         MostTypTerm= NULL)
         R <- R[,-c(4,5)]
         L[[i]]<-R
@@ -209,6 +209,7 @@ matches.suf.typiir <-
            term=1,
            sol=1,
            max_pairs=5,
+           nec.cond=NULL,
            ...)
     
   { termnr = term
@@ -222,6 +223,11 @@ matches.suf.typiir <-
       outcome<-gsub('\\~', '', outcome)
       outcome<-unlist(outcome)}
     outcome <- toupper(outcome)
+    
+    if (!is.null(nec.cond)){
+      if(length(grep("\\+",nec.cond)) > 0){
+        nec.cond<-unlist(strsplit(nec.cond, '\\+'))}}
+    
     pdata <- pimdata(results=results, outcome=outcome, sol=sol)
     if (term>(ncol(pdata)-2)){stop("The term selected does not exist for the chosen model of the solution. Check the solution again and pick another term or change the model using the argument sol.")}
     nterm <- colnames(pdata[term])
@@ -266,13 +272,18 @@ matches.suf.typiir <-
     M <- list()
     for (i in (1:length(tn)))
     { 
-      focconj <- paste("Focal Conjunct", tn[i], sep = " ")
+      if (tn[i] %in% nec.cond){
+      focconj <- paste("Necessary Focal Conjunct", tn[i], sep = " ")}
+      else{
+      focconj <- paste("Focal Conjunct", tn[i], sep = " ")}
       if(length(grep("~",tn[i])) > 0){tn[i]<-unlist(gsub('\\~', '', tn[i]))}
       X <- data1[toupper(tn[i])]
       if (length(tn)==1) {
         codata <- X
         codata1<-X
         names(codata1)[1]<-"a"
+        codata2<-X
+        names(codata2)[1]<-"b"
         codata$term<- X[,1]
       }
       else{
@@ -284,10 +295,17 @@ matches.suf.typiir <-
         if(ncol(codata)>1){
           a<-do.call(pmin, codata[,])
           codata1<-data.frame(a) # the minimum of the complementary conjuncts
-          row.names(codata1)<-row.names(codata)}
+          row.names(codata1)<-row.names(codata)
+          b<-do.call(pmax, codata[,])
+          codata2<-data.frame(b) # the maximum of the complementary conjuncts
+          row.names(codata2)<-row.names(codata)
+          }
         else{
           codata1<-codata
-          names(codata1)[1]<-"a"}
+          names(codata1)[1]<-"a"
+          codata2<-codata
+          names(codata2)[1]<-"b"
+          }
         codata$term<-pmin(codata1$a,X[,])
       }
       typical <-((codata$term>0.5) & (Y>0.5) & (codata$term<=Y))
@@ -295,9 +313,17 @@ matches.suf.typiir <-
       
       fc <- X[,toupper(tn[i]), drop=FALSE]
       consfc <-(fc<=Y)
+      consfc2 <-(fc>=Y)
+      cleancorr<-((consfc==T & (codata1<fc|codata1>Y)) | (consfc==F & (codata1>fc|codata1<Y)))
+      cleancorr2<-((consfc2==T & (codata2>fc|codata2<Y)) | (consfc2==F & (codata2<fc|codata2>Y)))
       #typ1 <- (X <= codata1$a)
-      #typ2 <- (X > codata1$a)
+      #TYP2 <- (X > codata1$a)
       cfc <- rownames(data1)[consfc]
+      cfc2 <- rownames(data1)[consfc2]
+      
+      ccorr <-  rownames(data1)[cleancorr]
+      ccorr2 <-  rownames(data1)[cleancorr2]
+      
       # typ1 <- (X < codata1$a)
       # typ2 <- (X >= codata1$a)
       # iir3 <- (X < 0.5) & (codata1$a>0.5)
@@ -307,110 +333,257 @@ matches.suf.typiir <-
       
       ty <- rownames(data1)[typical]
       ir <- rownames(data1)[indirre]
-      
-      if (identical(ir, character(0))) {M[[i]] <-list(title=focconj, results="no individually irrelevant cases")}
-      else { 
-        if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
+      if (tn[i] %in% nec.cond){
+        if (identical(ir, character(0))) {M[[i]] <-list(title=focconj, results="no individually irrelevant cases")}
         else { 
-          K <- expand.grid(ty, ir)
-          x <- X[,toupper(tn[i])]
-          y <- Y[,outcome]
-          if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
-          else{mincc <- codata1[,"a"]}
-          term <- codata[,"term"]
-          aux.f <-
-            function(p)
-            {
-              i <- which(rownames(X)==p[1])
-              j <- which(rownames(X)==p[2])
-              s <- ((1-(x[i]-x[j]))+ #big diff. in FC
-                      (1-(y[i]-y[j]))+ #big diff in Y
-                      abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
-                      2*abs(y[i]-x[i])+ 
-                      abs(y[j]-x[j])) # for IIR not multiplied
-              return(s)
-            }
-          aux.ff <-
-            function(p)
-            {
-              i <- which(rownames(X)==p[1])
-              j <- which(rownames(X)==p[2])
-              if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(1)}
-              else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(2)}
-                else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]> x[j])) {order<-c(3)}
-                  else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(4)}
-                    else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (x[j] < mincc[j])) {order<-c(5)}
-                      else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(6)}
-                        else {if ((x[i] < mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(7)}
-                          else {if ((x[i] >= mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(8)}
-                          }}}}}}}
-              return(order)
-            }
-          
-          s <- apply(K, 1, aux.f)
-          order <- apply(K, 1, aux.ff)
-          
-          matcres <- data.frame(Typical=K[,1],
-                                IIR=K[,2],
-                                Distance=round(s, digits=3),
-                                PairRank=order)
-          
-          matcres[,5] <- NA
-          matcres[,6] <- NA
-          colnames(matcres)<-c("Typical","IIR","Best","PairRank", "UniqCov","GlobUncov")
-          R<-cases.suf.typ(results=results, outcome=outcome, sol=sol)
-          R <- R[[1]]$results
-          for(u in 1:nrow(matcres)) { 
-            for (uu in 1:nrow(R)){
-              if (as.character(matcres[u,1])==as.character(R[uu,1])) 
-              {matcres[u,5]<-R[uu,5]}
-            }}
-          for(u in 1:nrow(matcres)) { 
-            for (uu in 1:nrow(pdata)){
-              if (as.character(matcres[u,2])==rownames(pdata[uu,])) { 
-                if (pdata[uu,"solution_formula"]< 0.5) {matcres[u,6]<-TRUE}
-                else {matcres[u,6]<-FALSE}
+          if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
+          else { 
+            K <- expand.grid(ty, ir)
+            x <- X[,toupper(tn[i])]
+            y <- Y[,outcome]
+            if(length(tn)==1){maxcc <- rep(1,length(codata2[,"b"]))}
+            else{maxcc <- codata2[,"b"]}
+            if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
+            else{mincc <- codata1[,"a"]}
+            term <- codata[,"term"]
+            aux.f <-
+              function(p)
+              {
+                i <- which(rownames(X)==p[1])
+                j <- which(rownames(X)==p[2])
+                s <- ((1-(x[i]-x[j]))+ #big diff. in FC
+                        (1-(y[i]-y[j]))+ #big diff in Y
+                        abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
+                        2*abs(y[i]-x[i])+ 
+                        abs(y[j]-x[j])) # for IIR not multiplied
+                return(s)
               }
-            }}
-          maxl<-min(max_pairs,nrow(matcres))
-          
-          matcres$ConsFC_Typ <- FALSE
-          for (h in 1:nrow(matcres)){
-            if (matcres$Typical[h] %in% cfc){matcres$ConsFC_Typ[h] <- TRUE}
-          }
-          
-          matcres$ConsFC_IIR <- FALSE
-          for (h in 1:nrow(matcres)){
-            if (matcres$IIR[h] %in% cfc){matcres$ConsFC_IIR[h] <- TRUE}
-          }
-          
-          matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC_Typ, -matcres$UniqCov, -matcres$ConsFC_IIR, -matcres$GlobUncov, matcres$Best),]
-          if (length(tn)==1){matcres$PairRank <- "-"}
-          
-          matcres$MostTypTerm <- FALSE
-          mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
-          mtt <- mtt[[1]]$results
-          mttc <- mtt[mtt$term==colnames(pdata)[termnr],"case"]
-          for (h in 1:nrow(matcres)){
-            if (matcres$Typical[h] %in% mttc){matcres$MostTypTerm[h] <- TRUE}
-          }
-         
-          
-          matcres$MostTypFC <- FALSE
-          mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100)
-          mtfc <- mtfc[[i]]$results
-          if(length(tn)==1){mtfcc <- rownames(mtfc)[(mtfc$MostTyp==TRUE)]}
-          else{ mtfcc <- rownames(mtfc)[(mtfc$MostTypFC==TRUE)]}          
-          for (h in 1:nrow(matcres)){
-            if (matcres$Typical[h] %in% mtfcc){matcres$MostTypFC[h] <- TRUE}
-          }
-          
-          matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC_Typ, -matcres$UniqCov, -matcres$ConsFC_IIR, -matcres$GlobUncov, matcres$Best, -matcres$MostTypFC, -matcres$MostTypTerm),]
-          
-          
-          matcres <- matcres[,c(1,2,5,6,3,4,7,9,10,8)]
-          M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
-        }  
+            aux.ff <-
+              function(p)
+              {
+                i <- which(rownames(X)==p[1])
+                j <- which(rownames(X)==p[2])
+                if ((x[i] >= maxcc[i]) & (x[j]>=maxcc[j]) & (x[j]<0.5)) {order<-c(1)}
+                else {if ((x[i] < maxcc[i]) & (x[j]>= maxcc[j]) & (x[j] < 0.5)) {order<-c(2)}
+                  else {if ((x[i] >= maxcc[i]) & (x[j]<maxcc[j]) & (x[j] < 0.5) & (maxcc[j]>=0.5)) {order<-c(3)}
+                    else {if ((x[i] < maxcc[i]) & (x[j]<maxcc[j]) & (x[j] < 0.5) & (maxcc[j]>=0.5)) {order<-c(4)}
+                      else {if ((x[i] >= maxcc[i]) & (x[j]<maxcc[j]) & (x[j] < 0.5) & (maxcc[j]<0.5)) {order<-c(5)}
+                        else{if ((x[i] < maxcc[i]) & (x[j]<maxcc[j]) & (x[j] < 0.5) & (maxcc[j]<0.5)) {order<-c(6)}
+                          else{ if ((x[i] >= maxcc[i]) & (x[j] >= 0.5)) {order<-c(7)}
+                            else{ if ((x[i] < maxcc[i]) & (x[j] >= 0.5)) {order<-c(8)}
+                            }}}}}}}
+                return(order)
+              }
+            
+            s <- apply(K, 1, aux.f)
+            order <- apply(K, 1, aux.ff)
+            
+            matcres <- data.frame(TYP=K[,1],
+                                  IIR=K[,2],
+                                  Distance=round(s, digits=3),
+                                  PairRank=order)
+            
+            matcres[,5] <- NA
+            matcres[,6] <- NA
+            colnames(matcres)<-c("TYP","IIR","Best","PairRank", "UniqCov","GlobUncov")
+            R<-cases.suf.typ(results=results, outcome=outcome, sol=sol)
+            R <- R[[1]]$results
+            for(u in 1:nrow(matcres)) { 
+              for (uu in 1:nrow(R)){
+                if (as.character(matcres[u,1])==as.character(R[uu,1])) 
+                {matcres[u,5]<-R[uu,5]}
+              }}
+            for(u in 1:nrow(matcres)) { 
+              for (uu in 1:nrow(pdata)){
+                if (as.character(matcres[u,2])==rownames(pdata[uu,])) { 
+                  if (pdata[uu,"solution_formula"]< 0.5) {matcres[u,6]<-TRUE}
+                  else {matcres[u,6]<-FALSE}
+                }
+              }}
+            maxl<-min(max_pairs,nrow(matcres))
+            
+            matcres$`FC>=Y_Typ` <- FALSE
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% cfc2){matcres$`FC>=Y_Typ`[h] <- TRUE}
+            }
+            
+            matcres$`FC>=Y_IIR` <- FALSE
+            for (h in 1:nrow(matcres)){
+              if (matcres$IIR[h] %in% cfc2){matcres$`FC>=Y_IIR`[h] <- TRUE}
+            }
+            
+            matcres<-matcres[order(matcres$PairRank,-matcres$`FC>=Y_Typ`, -matcres$UniqCov, -matcres$`FC>=Y_IIR`, -matcres$GlobUncov, matcres$Best),]
+            if (length(tn)==1){matcres$PairRank <- "-"}
+            
+            matcres$MostTypTerm <- FALSE
+            mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+            mtt <- mtt[[1]]$results
+            mttc <- mtt[mtt$Term==colnames(pdata)[termnr],"Case"]
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% mttc){matcres$MostTypTerm[h] <- TRUE}
+            }
+            
+            
+            matcres$MostTypFC <- FALSE
+            mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100, nec.cond = nec.cond)
+            mtfc <- mtfc[[i]]$results
+            if(length(tn)==1){mtfcc <- rownames(mtfc)[(mtfc$MostTyp==TRUE)]}
+            else{ mtfcc <- rownames(mtfc)[(mtfc$MostTypFC==TRUE)]}          
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% mtfcc){matcres$MostTypFC[h] <- TRUE}
+            }
+            
+            matcres$CleanCorr <- 0
+            for (h in 1:nrow(matcres)){
+              if ((matcres$IIR[h] %in% ccorr2) & (matcres$TYP[h] %in% ccorr2)){matcres$CleanCorr[h] <- 3}
+              if (!(matcres$IIR[h] %in% ccorr2) & (matcres$TYP[h] %in% ccorr2)){matcres$CleanCorr[h] <- 2}
+              if ((matcres$IIR[h] %in% ccorr2) & !(matcres$TYP[h] %in% ccorr2)){matcres$CleanCorr[h] <- 1}
+            }
+            
+            matcres<-matcres[order(matcres$PairRank,-matcres$CleanCorr,-matcres$`FC>=Y_Typ`, -matcres$UniqCov, -matcres$`FC>=Y_IIR`, -matcres$GlobUncov, matcres$Best, -matcres$MostTypFC, -matcres$MostTypTerm),]
+            matcres$CleanCorr <- as.character(matcres$CleanCorr)
+            matcres$CleanCorr[matcres$CleanCorr=="0"] <- "none"
+            matcres$CleanCorr[matcres$CleanCorr=="1"] <- "iir"
+            matcres$CleanCorr[matcres$CleanCorr=="2"] <- "typ"
+            matcres$CleanCorr[matcres$CleanCorr=="3"] <- "both"
+            
+            matcres$`FC>=Y` <- 0
+            for (h in 1:nrow(matcres)){
+              if (matcres$`FC>=Y_Typ`[h] & matcres$`FC>=Y_IIR`[h]){matcres$`FC>=Y`[h] <- "both"}
+              if (matcres$`FC>=Y_Typ`[h] & !matcres$`FC>=Y_IIR`[h]){matcres$`FC>=Y`[h] <- "typ"}
+              if (!matcres$`FC>=Y_Typ`[h] & matcres$`FC>=Y_IIR`[h]){matcres$`FC>=Y`[h] <- "iir"}
+              if (!matcres$`FC>=Y_Typ`[h] & !matcres$`FC>=Y_IIR`[h]){matcres$`FC>=Y`[h] <- "none"}
+            }
+            matcres <- matcres[,c(1,2,4,11,12,5,6,3,10,9)]
+            
+            M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
+          }  
+        }
+      }
+      else{
+        if (identical(ir, character(0))) {M[[i]] <-list(title=focconj, results="no individually irrelevant cases")}
+        else { 
+          if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
+          else { 
+            K <- expand.grid(ty, ir)
+            x <- X[,toupper(tn[i])]
+            y <- Y[,outcome]
+            if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
+            else{mincc <- codata1[,"a"]}
+            term <- codata[,"term"]
+            aux.f <-
+              function(p)
+              {
+                i <- which(rownames(X)==p[1])
+                j <- which(rownames(X)==p[2])
+                s <- ((1-(x[i]-x[j]))+ #big diff. in FC
+                        (1-(y[i]-y[j]))+ #big diff in Y
+                        abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
+                        2*abs(y[i]-x[i])+ 
+                        abs(y[j]-x[j])) # for IIR not multiplied
+                return(s)
+              }
+            aux.ff <-
+              function(p)
+              {
+                i <- which(rownames(X)==p[1])
+                j <- which(rownames(X)==p[2])
+                if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(1)}
+                else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]>=0.5)) {order<-c(2)}
+                  else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]> x[j])) {order<-c(3)}
+                    else {if ((x[i] < mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(4)}
+                      else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (x[j] < mincc[j])) {order<-c(5)}
+                        else {if ((x[i] >= mincc[i]) & (x[j]<0.5) & (mincc[j]<0.5) & (mincc[j]<= x[j])) {order<-c(6)}
+                          else {if ((x[i] < mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(7)}
+                            else {if ((x[i] >= mincc[i]) & (mincc[j]<0.5) & (x[j]>=0.5)) {order<-c(8)}
+                            }}}}}}}
+                return(order)
+              }
+            
+            s <- apply(K, 1, aux.f)
+            order <- apply(K, 1, aux.ff)
+            
+            matcres <- data.frame(TYP=K[,1],
+                                  IIR=K[,2],
+                                  Distance=round(s, digits=3),
+                                  PairRank=order)
+            
+            matcres[,5] <- NA
+            matcres[,6] <- NA
+            colnames(matcres)<-c("TYP","IIR","Best","PairRank", "UniqCov","GlobUncov")
+            R<-cases.suf.typ(results=results, outcome=outcome, sol=sol)
+            R <- R[[1]]$results
+            for(u in 1:nrow(matcres)) { 
+              for (uu in 1:nrow(R)){
+                if (as.character(matcres[u,1])==as.character(R[uu,1])) 
+                {matcres[u,5]<-R[uu,5]}
+              }}
+            for(u in 1:nrow(matcres)) { 
+              for (uu in 1:nrow(pdata)){
+                if (as.character(matcres[u,2])==rownames(pdata[uu,])) { 
+                  if (pdata[uu,"solution_formula"]< 0.5) {matcres[u,6]<-TRUE}
+                  else {matcres[u,6]<-FALSE}
+                }
+              }}
+            maxl<-min(max_pairs,nrow(matcres))
+            
+            matcres$`FC<=Y_Typ` <- FALSE
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% cfc){matcres$`FC<=Y_Typ`[h] <- TRUE}
+            }
+            
+            matcres$`FC<=Y_IIR` <- FALSE
+            for (h in 1:nrow(matcres)){
+              if (matcres$IIR[h] %in% cfc){matcres$`FC<=Y_IIR`[h] <- TRUE}
+            }
+            
+            matcres<-matcres[order(matcres$PairRank,-matcres$`FC<=Y_Typ`, -matcres$UniqCov, -matcres$`FC<=Y_IIR`, -matcres$GlobUncov, matcres$Best),]
+            if (length(tn)==1){matcres$PairRank <- "-"}
+            
+            matcres$MostTypTerm <- FALSE
+            mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+            mtt <- mtt[[1]]$results
+            mttc <- mtt[mtt$Term==colnames(pdata)[termnr],"Case"]
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% mttc){matcres$MostTypTerm[h] <- TRUE}
+            }
+            
+            
+            matcres$MostTypFC <- FALSE
+            mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100)
+            mtfc <- mtfc[[i]]$results
+            if(length(tn)==1){mtfcc <- rownames(mtfc)[(mtfc$MostTyp==TRUE)]}
+            else{ mtfcc <- rownames(mtfc)[(mtfc$MostTypFC==TRUE)]}          
+            for (h in 1:nrow(matcres)){
+              if (matcres$TYP[h] %in% mtfcc){matcres$MostTypFC[h] <- TRUE}
+            }
+            
+            matcres$CleanCorr <- 0
+            for (h in 1:nrow(matcres)){
+              if ((matcres$IIR[h] %in% ccorr) & (matcres$TYP[h] %in% ccorr)){matcres$CleanCorr[h] <- 3}
+              if (!(matcres$IIR[h] %in% ccorr) & (matcres$TYP[h] %in% ccorr)){matcres$CleanCorr[h] <- 2}
+              if ((matcres$IIR[h] %in% ccorr) & !(matcres$TYP[h] %in% ccorr)){matcres$CleanCorr[h] <- 1}
+            }
+            
+            matcres<-matcres[order(matcres$PairRank,-matcres$CleanCorr,-matcres$`FC<=Y_Typ`, -matcres$UniqCov, -matcres$`FC<=Y_IIR`, -matcres$GlobUncov, matcres$Best, -matcres$MostTypFC, -matcres$MostTypTerm),]
+            matcres$CleanCorr <- as.character(matcres$CleanCorr)
+            matcres$CleanCorr[matcres$CleanCorr=="0"] <- "none"
+            matcres$CleanCorr[matcres$CleanCorr=="1"] <- "iir"
+            matcres$CleanCorr[matcres$CleanCorr=="2"] <- "typ"
+            matcres$CleanCorr[matcres$CleanCorr=="3"] <- "both"
+            
+            matcres$`FC<=Y` <- 0
+            for (h in 1:nrow(matcres)){
+              if (matcres$`FC<=Y_Typ`[h] & matcres$`FC<=Y_IIR`[h]){matcres$`FC<=Y`[h] <- "both"}
+              if (matcres$`FC<=Y_Typ`[h] & !matcres$`FC<=Y_IIR`[h]){matcres$`FC<=Y`[h] <- "typ"}
+              if (!matcres$`FC<=Y_Typ`[h] & matcres$`FC<=Y_IIR`[h]){matcres$`FC<=Y`[h] <- "iir"}
+              if (!matcres$`FC<=Y_Typ`[h] & !matcres$`FC<=Y_IIR`[h]){matcres$`FC<=Y`[h] <- "none"}
+            }
+            
+            matcres <- matcres[,c(1,2,4,11,12,5,6,3,10,9)]
+            M[[i]] <- list(title=focconj, results=(head(matcres, maxl)))         
+          }  
+        }
       }
     }
     class(M) <- 'matchessuf'
@@ -425,6 +598,7 @@ matches.suf.typtyp <-
            term=1,
            sol=1,
            max_pairs=5,
+           nec.cond=NULL,
            ...)
     
   { termnr <- term
@@ -438,6 +612,11 @@ matches.suf.typtyp <-
       outcome<-gsub('\\~', '', outcome)
       outcome<-unlist(outcome)}
     outcome <- toupper(outcome)
+    
+    if (!is.null(nec.cond)){
+      if(length(grep("\\+",nec.cond)) > 0){
+        nec.cond<-unlist(strsplit(nec.cond, '\\+'))}}
+    
     pdata <- pimdata(results=results, outcome=outcome, sol=sol)
     if (term>(ncol(pdata)-2)){stop("The term selected does not exist for the chosen model of the solution. Check the solution again and pick another term or change the model using the argument sol.")}
     nterm <- colnames(pdata[term])
@@ -482,13 +661,18 @@ matches.suf.typtyp <-
     
     for (i in (1:length(tn)))
     { 
-      focconj <- paste("Focal Conjunct", tn[i], sep = " ")
+      if (tn[i] %in% nec.cond){
+        focconj <- paste("Necessary Focal Conjunct", tn[i], sep = " ")}
+      else{
+        focconj <- paste("Focal Conjunct", tn[i], sep = " ")}
       if(length(grep("~",tn[i])) > 0){tn[i]<-unlist(gsub('\\~', '', tn[i]))}
       X <- data1[toupper(tn[i])]
       if (length(tn)==1) {
         codata <- X
         codata1<-X
         names(codata1)[1]<-"a"
+        codata2<-X
+        names(codata2)[1]<-"b"
         codata$term<- X[,1]
       }
       else{
@@ -499,27 +683,45 @@ matches.suf.typtyp <-
         codata<-data1[co]
         if(ncol(codata)>1){
           a<-do.call(pmin, codata[,])
-          codata1<-data.frame(a)
-          row.names(codata1)<-row.names(codata)}
+          codata1<-data.frame(a) # the minimum of the complementary conjuncts
+          row.names(codata1)<-row.names(codata)
+          b<-do.call(pmax, codata[,])
+          codata2<-data.frame(b) # the maximum of the complementary conjuncts
+          row.names(codata2)<-row.names(codata)
+        }
         else{
           codata1<-codata
-          names(codata1)[1]<-"a"}
-        codata$term<-pmin(codata1$a,X[,]) 
+          names(codata1)[1]<-"a"
+          codata2<-codata
+          names(codata2)[1]<-"b"
+        }
+        codata$term<-pmin(codata1$a,X[,])
       }
       
       typical <-(codata$term>0.5) & (Y>0.5) & (codata$term<=Y)
       fc <- X[,toupper(tn[i]), drop=FALSE]
       consfc <-(fc<=Y)
+      cleancorr<-((consfc==T & (codata1<fc|codata1>Y)) | (consfc==F & (codata1>fc|codata1<Y)))
+      ccorr <-  rownames(data1)[cleancorr]
+      
+      consfc2 <-(fc>=Y)
+      cleancorr2<-((consfc2==T & (codata2>fc|codata2<Y)) | (consfc2==F & (codata2<fc|codata2>Y)))
+      ccorr2 <-  rownames(data1)[cleancorr2]
+      
       #typ1 <- (X <= codata1$a)
       #typ2 <- (X > codata1$a)
       
       ty <- rownames(data1)[typical]
       cfc <- rownames(data1)[consfc]
+      cfc2 <- rownames(data1)[consfc2]
+      if (tn[i] %in% nec.cond){
       if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
       else {
         K <- expand.grid(ty, ty)
         x <- X[,toupper(tn[i])]
         y <- Y[,outcome]
+        if(length(tn)==1){maxcc <- rep(1,length(codata2[,"b"]))}
+        else{maxcc <- codata2[,"b"]}
         if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
         else{mincc <- codata1[,"a"]}
         term <- codata[,"term"]
@@ -549,10 +751,10 @@ matches.suf.typtyp <-
           {
             i <- which(rownames(X)==p[1])
             j <- which(rownames(X)==p[2])
-            if ((x[i] < mincc[i]) & (x[j] < mincc[j])) {order<-c(1)}
-            else { if ((x[i] < mincc[i]) & (x[j] >= mincc[j])) {order<-c(2)}
-              else { if ((x[i] >= mincc[i]) & (x[j] < mincc[j])) {order<-c(3)}
-                else { if ((x[i] >= mincc[i]) & (x[j] >= mincc[j])) {order<-c(4)}
+            if ((x[i] >= maxcc[i]) & (x[j] >= maxcc[j])) {order<-c(1)}
+            else { if ((x[i] >= maxcc[i]) & (x[j] < maxcc[j])) {order<-c(2)}
+              else { if ((x[i] < maxcc[i]) & (x[j] >= maxcc[j])) {order<-c(3)}
+                else { if ((x[i] < maxcc[i]) & (x[j] < maxcc[j])) {order<-c(4)}
                 }
               }
             }
@@ -563,15 +765,15 @@ matches.suf.typtyp <-
         order <- apply(K, 1, aux.f3)
         mt <- apply(K, 1, aux.f2)
         
-        matcres <- data.frame(Typical=K[,1],
+        matcres <- data.frame(TYP=K[,1],
                               IIR=K[,2],
                               Distance=round(s, digits=3),
                               PairRank=order,
-                              Typ1moreTypical=mt)  
+                              TYP1moreTypical=mt)  
         
         matcres[,6] <- NA
         matcres[,7] <- NA
-        colnames(matcres)<-c("Typical1","Typical2","Best","PairRank","Typ1MoreTypical","UniqCov1","UniqCov2")
+        colnames(matcres)<-c("TYP1","TYP2","Best","PairRank","TYP1MoreTypical","UniqCov1","UniqCov2")
         R <-cases.suf.typ(results=results, outcome=outcome, sol=sol)
         R <- R[[1]]$results
         for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
@@ -579,46 +781,250 @@ matches.suf.typtyp <-
           if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,7]<-R[uu,5]}
         }}
         maxl<-min(max_pairs,nrow(matcres))
-        matcres<-matcres[order(-matcres$Typ1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
-        matcres <- matcres[matcres$Typ1MoreTypical==TRUE,]
+        matcres<-matcres[order(-matcres$TYP1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
+        matcres <- matcres[matcres$TYP1MoreTypical==TRUE,]
         matcres <- matcres[, -c(5)]
-        matcres <- matcres[matcres$Typical1!=matcres$Typical2,]
+        matcres <- matcres[matcres$TYP1!=matcres$TYP2,]
         if (length(tn)==1){matcres$PairRank <- "-"}
-        matcres$ConsFC1 <- FALSE
-        matcres$ConsFC2 <- FALSE
+        matcres$`FC>=Y1` <- FALSE
+        matcres$`FC>=Y1` <- FALSE
         for (h in 1:nrow(matcres)){
-          if (matcres$Typical1[h] %in% cfc){matcres$ConsFC1[h] <- TRUE}
+          if (matcres$TYP1[h] %in% cfc2){matcres$`FC>=Y1`[h] <- TRUE}
         }
         for (m in 1:nrow(matcres)){
-          if (matcres$Typical2[m] %in% cfc){matcres$ConsFC2[m] <- TRUE}
+          if (matcres$TYP2[m] %in% cfc2){matcres$`FC>=Y2`[m] <- TRUE}
         }
-        matcres<-matcres[order(matcres$PairRank,-matcres$ConsFC1, -matcres$ConsFC2,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
+        
+        matcres$CleanCorr <- 0
+        for (h in 1:nrow(matcres)){
+          if ((matcres$TYP1[h] %in% ccorr2) & (matcres$TYP2[h] %in% ccorr2)){matcres$CleanCorr[h] <- 3}
+          if ((matcres$TYP1[h] %in% ccorr2) & !(matcres$TYP2[h] %in% ccorr2)){matcres$CleanCorr[h] <- 2}
+          if (!(matcres$TYP1[h] %in% ccorr2) & (matcres$TYP2[h] %in% ccorr2)){matcres$CleanCorr[h] <- 1}
+        }
+        
+        matcres<-matcres[order(matcres$PairRank,-matcres$CleanCorr,-matcres$`FC>=Y1`, -matcres$`FC>=Y2`,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
+        
+        matcres$CleanCorr <- as.character(matcres$CleanCorr)
+        matcres$CleanCorr[matcres$CleanCorr=="0"] <- "none"
+        matcres$CleanCorr[matcres$CleanCorr=="1"] <- "typ2"
+        matcres$CleanCorr[matcres$CleanCorr=="2"] <- "typ1"
+        matcres$CleanCorr[matcres$CleanCorr=="3"] <- "both"
+        
         matcres$MostTypTerm1 <- FALSE
         matcres$MostTypTerm2 <- FALSE
         mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
         mtt <- mtt[[1]]$results
-        mttc <- mtt[mtt$term==colnames(pdata)[termnr],"case"]
+        mttc <- mtt[mtt$Term==colnames(pdata)[termnr],"Case"]
         for (h in 1:nrow(matcres)){
-          if (matcres$Typical1[h] %in% mttc){matcres$MostTypTerm1[h] <- TRUE}
+          if (matcres$TYP1[h] %in% mttc){matcres$MostTypTerm1[h] <- TRUE}
         }
         for (h in 1:nrow(matcres)){
-          if (matcres$Typical2[h] %in% mttc){matcres$MostTypTerm2[h] <- TRUE}
+          if (matcres$TYP2[h] %in% mttc){matcres$MostTypTerm2[h] <- TRUE}
         }
         matcres$MostTypFC1 <- FALSE
         matcres$MostTypFC2 <- FALSE
-        mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100)
+        mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100, nec.cond=nec.cond)
         mtfc <- mtfc[[i]]$results
         if(length(tn)==1){mtfcc <- rownames(mtfc)[mtfc$MostTyp==TRUE]}
         else{mtfcc <- rownames(mtfc)[mtfc$MostTypFC==TRUE]}
         for (h in 1:nrow(matcres)){
-          if (matcres$Typical1[h] %in% mtfcc){matcres$MostTypFC1[h] <- TRUE}
+          if (matcres$TYP1[h] %in% mtfcc){matcres$MostTypFC1[h] <- TRUE}
         }
         for (h in 1:nrow(matcres)){
-          if (matcres$Typical2[h] %in% mtfcc){matcres$MostTypFC2[h] <- TRUE}
+          if (matcres$TYP2[h] %in% mtfcc){matcres$MostTypFC2[h] <- TRUE}
         }
-        matcres <- matcres[, c(1, 2, 5, 6, 3, 4, 7, 8, 9, 10, 11, 12)]
+        
+        matcres$`FC>=Y` <- 0
+        for (h in 1:nrow(matcres)){
+          if (matcres$`FC>=Y1`[h] & matcres$`FC>=Y2`[h]){matcres$`FC>=Y`[h] <- "both"}
+          if (matcres$`FC>=Y1`[h] & !matcres$`FC>=Y2`[h]){matcres$`FC>=Y`[h] <- "typ1"}
+          if (!matcres$`FC>=Y1`[h] & matcres$`FC>=Y2`[h]){matcres$`FC>=Y`[h] <- "typ2"}
+          if (!matcres$`FC>=Y1`[h] & !matcres$`FC>=Y2`[h]){matcres$`FC>=Y`[h] <- "none"}
+        }
+        
+        matcres$MostTypTerm <- 0
+        for (h in 1:nrow(matcres)){
+          if (matcres$MostTypTerm1[h] & matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "both"}
+          if (matcres$MostTypTerm1[h] & !matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "typ1"}
+          if (!matcres$MostTypTerm1[h] & matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "typ2"}
+          if (!matcres$MostTypTerm1[h] & !matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "none"}
+        }
+        
+        matcres$MostTypFC <- 0
+        for (h in 1:nrow(matcres)){
+          if (matcres$MostTypFC1[h] & matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "both"}
+          if (matcres$MostTypFC1[h] & !matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "typ1"}
+          if (!matcres$MostTypFC1[h] & matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "typ2"}
+          if (!matcres$MostTypFC1[h] & !matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "none"}
+        }
+        
+        matcres$UniqCov <- 0
+        for (h in 1:nrow(matcres)){
+          if (matcres$UniqCov1[h] & matcres$UniqCov2[h]){matcres$UniqCov[h] <- "both"}
+          if (matcres$UniqCov1[h] & !matcres$UniqCov2[h]){matcres$UniqCov[h] <- "typ1"}
+          if (!matcres$UniqCov1[h] & matcres$UniqCov2[h]){matcres$UniqCov[h] <- "typ2"}
+          if (!matcres$UniqCov1[h] & !matcres$UniqCov2[h]){matcres$UniqCov[h] <- "none"}
+        }
+        
+        matcres <- matcres[, c(1, 2, 4, 9,14,17,3,16,15)]
         matcres <- matcres[1:(min(c(nrow(matcres), max_pairs))), ]
         M[[i]] <- list(title=focconj, results=(head(matcres, maxl))) 
+      }
+      }
+      else{
+        if (identical(ty, character(0))) {M[[i]] <-list(title=focconj, results="no typical cases")}
+        else {
+          K <- expand.grid(ty, ty)
+          x <- X[,toupper(tn[i])]
+          y <- Y[,outcome]
+          if(length(tn)==1){mincc <- rep(0,length(codata1[,"a"]))}
+          else{mincc <- codata1[,"a"]}
+          term <- codata[,"term"]
+          aux.f <-
+            function(p)
+            {
+              i <- which(rownames(X)==p[1])
+              j <- which(rownames(X)==p[2])
+              s <- ((0.5-(x[i]-x[j]))+ #big diff. in FC
+                      (0.5-(y[i]-y[j]))+ #big diff in Y
+                      abs(mincc[i]-mincc[j])+ #small diff in complementary conj.
+                      2*abs(y[i]-x[i])+ 
+                      2*abs(y[j]-x[j]))
+              return(s)
+            }
+          aux.f2 <-
+            function(p)
+            {
+              i <- which(rownames(X)==p[1])
+              j <- which(rownames(X)==p[2])
+              sm<-(2*(y[i]-term[i]) + (1-term[i]))
+              sn<-(2*(y[j]-term[j]) + (1-term[j]))     
+              return(sm<=sn)
+            }
+          aux.f3 <-
+            function(p)
+            {
+              i <- which(rownames(X)==p[1])
+              j <- which(rownames(X)==p[2])
+              if ((x[i] < mincc[i]) & (x[j] < mincc[j])) {order<-c(1)}
+              else { if ((x[i] < mincc[i]) & (x[j] >= mincc[j])) {order<-c(2)}
+                else { if ((x[i] >= mincc[i]) & (x[j] < mincc[j])) {order<-c(3)}
+                  else { if ((x[i] >= mincc[i]) & (x[j] >= mincc[j])) {order<-c(4)}
+                  }
+                }
+              }
+              return(order)
+            }  
+          
+          s <- apply(K, 1, aux.f)
+          order <- apply(K, 1, aux.f3)
+          mt <- apply(K, 1, aux.f2)
+          
+          matcres <- data.frame(TYP=K[,1],
+                                IIR=K[,2],
+                                Distance=round(s, digits=3),
+                                PairRank=order,
+                                TYP1moreTypical=mt)  
+          
+          matcres[,6] <- NA
+          matcres[,7] <- NA
+          colnames(matcres)<-c("TYP1","TYP2","Best","PairRank","TYP1MoreTypical","UniqCov1","UniqCov2")
+          R <-cases.suf.typ(results=results, outcome=outcome, sol=sol)
+          R <- R[[1]]$results
+          for(u in 1:nrow(matcres)) { for (uu in 1:nrow(R)){
+            if (as.character(matcres[u,1])==as.character(R[uu,1])) {matcres[u,6]<-R[uu,5]}
+            if (as.character(matcres[u,2])==as.character(R[uu,1])) {matcres[u,7]<-R[uu,5]}
+          }}
+          maxl<-min(max_pairs,nrow(matcres))
+          matcres<-matcres[order(-matcres$TYP1MoreTypical, matcres$PairRank,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
+          matcres <- matcres[matcres$TYP1MoreTypical==TRUE,]
+          matcres <- matcres[, -c(5)]
+          matcres <- matcres[matcres$TYP1!=matcres$TYP2,]
+          if (length(tn)==1){matcres$PairRank <- "-"}
+          matcres$`FC<=Y1` <- FALSE
+          matcres$`FC<=Y2` <- FALSE
+          for (h in 1:nrow(matcres)){
+            if (matcres$TYP1[h] %in% cfc){matcres$`FC<=Y1`[h] <- TRUE}
+          }
+          for (m in 1:nrow(matcres)){
+            if (matcres$TYP2[m] %in% cfc){matcres$`FC<=Y2`[m] <- TRUE}
+          }
+          
+          matcres$CleanCorr <- 0
+          for (h in 1:nrow(matcres)){
+            if ((matcres$TYP1[h] %in% ccorr) & (matcres$TYP2[h] %in% ccorr)){matcres$CleanCorr[h] <- 3}
+            if ((matcres$TYP1[h] %in% ccorr) & !(matcres$TYP2[h] %in% ccorr)){matcres$CleanCorr[h] <- 2}
+            if (!(matcres$TYP1[h] %in% ccorr) & (matcres$TYP2[h] %in% ccorr)){matcres$CleanCorr[h] <- 1}
+          }
+          
+          matcres<-matcres[order(matcres$PairRank,-matcres$CleanCorr,-matcres$`FC<=Y1`, -matcres$`FC<=Y2`,-matcres$UniqCov1, -matcres$UniqCov2, matcres$Best),]
+          
+          matcres$CleanCorr <- as.character(matcres$CleanCorr)
+          matcres$CleanCorr[matcres$CleanCorr=="0"] <- "none"
+          matcres$CleanCorr[matcres$CleanCorr=="1"] <- "typ2"
+          matcres$CleanCorr[matcres$CleanCorr=="2"] <- "typ1"
+          matcres$CleanCorr[matcres$CleanCorr=="3"] <- "both"
+          
+          matcres$MostTypTerm1 <- FALSE
+          matcres$MostTypTerm2 <- FALSE
+          mtt <- cases.suf.typ.most(results = results, outcome = outcome, sol = sol)
+          mtt <- mtt[[1]]$results
+          mttc <- mtt[mtt$Term==colnames(pdata)[termnr],"Case"]
+          for (h in 1:nrow(matcres)){
+            if (matcres$TYP1[h] %in% mttc){matcres$MostTypTerm1[h] <- TRUE}
+          }
+          for (h in 1:nrow(matcres)){
+            if (matcres$TYP2[h] %in% mttc){matcres$MostTypTerm2[h] <- TRUE}
+          }
+          matcres$MostTypFC1 <- FALSE
+          matcres$MostTypFC2 <- FALSE
+          mtfc <- cases.suf.typ.fct(results = results, outcome = outcome, sol = sol, term = termnr, max_pairs = 100^100)
+          mtfc <- mtfc[[i]]$results
+          if(length(tn)==1){mtfcc <- rownames(mtfc)[mtfc$MostTyp==TRUE]}
+          else{mtfcc <- rownames(mtfc)[mtfc$MostTypFC==TRUE]}
+          for (h in 1:nrow(matcres)){
+            if (matcres$TYP1[h] %in% mtfcc){matcres$MostTypFC1[h] <- TRUE}
+          }
+          for (h in 1:nrow(matcres)){
+            if (matcres$TYP2[h] %in% mtfcc){matcres$MostTypFC2[h] <- TRUE}
+          }
+          
+          matcres$`FC<=Y` <- 0
+          for (h in 1:nrow(matcres)){
+            if (matcres$`FC<=Y1`[h] & matcres$`FC<=Y2`[h]){matcres$`FC<=Y`[h] <- "both"}
+            if (matcres$`FC<=Y1`[h] & !matcres$`FC<=Y2`[h]){matcres$`FC<=Y`[h] <- "typ1"}
+            if (!matcres$`FC<=Y1`[h] & matcres$`FC<=Y2`[h]){matcres$`FC<=Y`[h] <- "typ2"}
+            if (!matcres$`FC<=Y1`[h] & !matcres$`FC<=Y2`[h]){matcres$`FC<=Y`[h] <- "none"}
+          }
+          
+          matcres$MostTypTerm <- 0
+          for (h in 1:nrow(matcres)){
+            if (matcres$MostTypTerm1[h] & matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "both"}
+            if (matcres$MostTypTerm1[h] & !matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "typ1"}
+            if (!matcres$MostTypTerm1[h] & matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "typ2"}
+            if (!matcres$MostTypTerm1[h] & !matcres$MostTypTerm2[h]){matcres$MostTypTerm[h] <- "none"}
+          }
+          
+          matcres$MostTypFC <- 0
+          for (h in 1:nrow(matcres)){
+            if (matcres$MostTypFC1[h] & matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "both"}
+            if (matcres$MostTypFC1[h] & !matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "typ1"}
+            if (!matcres$MostTypFC1[h] & matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "typ2"}
+            if (!matcres$MostTypFC1[h] & !matcres$MostTypFC2[h]){matcres$MostTypFC[h] <- "none"}
+          }
+          
+          matcres$UniqCov <- 0
+          for (h in 1:nrow(matcres)){
+            if (matcres$UniqCov1[h] & matcres$UniqCov2[h]){matcres$UniqCov[h] <- "both"}
+            if (matcres$UniqCov1[h] & !matcres$UniqCov2[h]){matcres$UniqCov[h] <- "typ1"}
+            if (!matcres$UniqCov1[h] & matcres$UniqCov2[h]){matcres$UniqCov[h] <- "typ2"}
+            if (!matcres$UniqCov1[h] & !matcres$UniqCov2[h]){matcres$UniqCov[h] <- "none"}
+          }
+          
+          matcres <- matcres[, c(1, 2, 4, 9, 14, 17, 3, 16, 15)]
+          matcres <- matcres[1:(min(c(nrow(matcres), max_pairs))), ]
+          M[[i]] <- list(title=focconj, results=(head(matcres, maxl))) 
+        }
       }
     }
     class(M) <- 'matchessuf'
@@ -676,7 +1082,7 @@ matches.suf.typiirnfc <-
             return(s)
           }
         s <- apply(K, 1, aux.f)
-        R <- data.frame(Typical=K[,1],
+        R <- data.frame(TYP=K[,1],
                         IIR=K[,2],
                         Best=s,
                         Term=rep(term, length(s))
@@ -690,9 +1096,9 @@ matches.suf.typiirnfc <-
         R$MostTyp <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$MostTyp==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$MostTyp==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical[h] %in% mtfcc){R$MostTyp[h] <- TRUE}
+          if (R$TYP[h] %in% mtfcc){R$MostTyp[h] <- TRUE}
         }
         
         # Uniquely cov:
@@ -700,9 +1106,9 @@ matches.suf.typiirnfc <-
         R$UniqCov <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical[h] %in% mtfcc){R$UniqCov[h] <- TRUE}
+          if (R$TYP[h] %in% mtfcc){R$UniqCov[h] <- TRUE}
         }
         
         # Globally irrelevant:
@@ -710,7 +1116,7 @@ matches.suf.typiirnfc <-
         for (m in 1:nrow(R)){
           if (X[R$IIR[m],"solution_formula"]<0.5){R$GlobUncov[m] <- TRUE}
         }
-        colnames(R) <- c("Typical","IIR","Best","MostTyp","UniqCov","GlobUncov")
+        colnames(R) <- c("TYP","IIR","Best","MostTyp","UniqCov","GlobUncov")
         
         R$ConsIIR <- FALSE
         for (h in 1:nrow(R)){
@@ -723,7 +1129,7 @@ matches.suf.typiirnfc <-
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
       } else {
-        R <- data.frame(Typical=NULL,
+        R <- data.frame(TYP=NULL,
                         IIR=NULL,
                         Best=NULL,
                         MostTyp=NULL,
@@ -796,15 +1202,15 @@ matches.suf.typtypnfc <-
           }
         s <- apply(K, 1, aux.f)
         mt <- apply(K, 1, aux.f2)
-        R <- data.frame(Typical1=K[,1],
-                        Typical2=K[,2],
+        R <- data.frame(TYP1=K[,1],
+                        TYP2=K[,2],
                         Best=s,
                         Term=rep(term, length(s)),
-                        Typ1MoreTypical=mt)
+                        TYP1MoreTypical=mt)
         
-        R <- R[R$Typ1MoreTypical==TRUE,]
+        R <- R[R$TYP1MoreTypical==TRUE,]
         R <- R[, -c(5)]
-        R <- R[R$Typical1!=R$Typical2,]
+        R <- R[R$TYP1!=R$TYP2,]
         R <- R[order(s), ]
         R$Best <- round(R$Best, digits = 3)
         rownames(R) <- NULL
@@ -813,49 +1219,63 @@ matches.suf.typtypnfc <-
         R$UniqCov1 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical1[h] %in% mtfcc){R$UniqCov1[h] <- TRUE}
+          if (R$TYP1[h] %in% mtfcc){R$UniqCov1[h] <- TRUE}
         }
         # UniqCov2:
         R$UniqCov2 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$UniqCov==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$UniqCov==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical2[h] %in% mtfcc){R$UniqCov2[h] <- TRUE}
+          if (R$TYP2[h] %in% mtfcc){R$UniqCov2[h] <- TRUE}
         }
         # Most typical1:
-        R$MostTyp1 <- FALSE
+        R$MostTYP1 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$MostTyp==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$MostTyp==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical1[h] %in% mtfcc){R$MostTyp1[h] <- TRUE}
+          if (R$TYP1[h] %in% mtfcc){R$MostTYP1[h] <- TRUE}
         }
         # Most typical2:
-        R$MostTyp2 <- FALSE
+        R$MostTYP2 <- FALSE
         mtfc <- cases.suf.typ(results = results, outcome = outcome, sol = sol)
         mtfc <- mtfc[[1]]$results
-        mtfcc <- mtfc$case[(mtfc$MostTyp==TRUE)]       
+        mtfcc <- mtfc$Case[(mtfc$MostTyp==TRUE)]       
         for (h in 1:nrow(R)){
-          if (R$Typical2[h] %in% mtfcc){R$MostTyp2[h] <- TRUE}
+          if (R$TYP2[h] %in% mtfcc){R$MostTYP2[h] <- TRUE}
         }
-        colnames(R) <- c("Typical1","Typical2","Best","UniqCov1","UniqCov2","MostTyp1","MostTyp2")
-        R <- R[order(1-R$UniqCov1,1-R$UniqCov2,R$Best,1-R$MostTyp1,1-R$MostTyp2),]
-        R <- R[,c(1,2,4,5,3,6,7)]
+        colnames(R) <- c("TYP1","TYP2","Best","UniqCov1","UniqCov2","MostTYP1","MostTYP2")
+        R <- R[order(1-R$UniqCov1,1-R$UniqCov2,R$Best,1-R$MostTYP1,1-R$MostTYP2),]
+        
+        R$UniqCov <- 0
+        for (h in 1:nrow(R)){
+          if (R$UniqCov1[h] & R$UniqCov2[h]){R$UniqCov[h] <- "both"}
+          if (R$UniqCov1[h] & !R$UniqCov2[h]){R$UniqCov[h] <- "typ1"}
+          if (!R$UniqCov1[h] & R$UniqCov2[h]){R$UniqCov[h] <- "typ2"}
+          if (!R$UniqCov1[h] & !R$UniqCov2[h]){R$UniqCov[h] <- "none"}
+        }
+        
+        R$MostTyp <- 0
+        for (h in 1:nrow(R)){
+          if (R$MostTYP1[h] & R$MostTYP2[h]){R$MostTyp[h] <- "both"}
+          if (R$MostTYP1[h] & !R$MostTYP2[h]){R$MostTyp[h] <- "typ1"}
+          if (!R$MostTYP1[h] & R$MostTYP2[h]){R$MostTyp[h] <- "typ2"}
+          if (!R$MostTYP1[h] & !R$MostTYP2[h]){R$MostTyp[h] <- "none"}
+        }
+        
+        R <- R[,c(1,2,8,3,9)]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
       } else {
-        R <- data.frame(Typical1=NULL,
-                        Typical2=NULL,
+        R <- data.frame(TYP1=NULL,
+                        TYP2=NULL,
+                        UniqCov=NULL,
                         Best=NULL,
-                        UniqCov1=NULL,
-                        UniqCov2=NULL,
-                        MostTyp1=NULL,
-                        MostTyp2=NULL)
-        R <- R[,c(1,2,4,5,3,6,7)]
+                        MostTyp=NULL)
         L[[i]]<-R
         M[[i]] <- list(title=termp, results=R)
         class(M) <- 'matchessuf'

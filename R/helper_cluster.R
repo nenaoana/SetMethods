@@ -9,14 +9,14 @@ cluster.diagnostics <-
   con.ragin <-
     function(X, Y)
     {
-      sum( apply(cbind(X, Y), 1, min) )/sum(X)
+      S <- (sum( apply(cbind(X, Y), 1, min) )+1e-10)/(sum(X)+1e-10)
     }
   #	Pooled consistency suff.
   con.pool <-
     function(x, y)
     {
       z <- cbind(as.vector(x), as.vector(y))
-      sum(apply(z, 1, min))/sum(x)
+      (sum(apply(z, 1, min))+1e-10)/(sum(x)+1e-10)
     }
   #	Between consistency suff.
   con.betw <-
@@ -34,14 +34,14 @@ cluster.diagnostics <-
   cvr.ragin <-
     function(X, Y)
     {
-      sum(apply(cbind(X, Y), 1, min))/sum(Y)
+      (sum(apply(cbind(X, Y), 1, min))+1e-10)/(sum(Y)+1e-10)
     }
   #	Pooled coverage suff.
   cvr.pool <-
     function(x, y)
     {
       z <- cbind(as.vector(x), as.vector(y))
-      sum(apply(z, 1, min))/sum(y)
+      (sum(apply(z, 1, min))+1e-10)/(sum(y)+1e-10)
     }
   #	Between coverage suff.
   cvr.betw <-
@@ -64,7 +64,7 @@ cluster.diagnostics <-
       {
         J <- ncol(X)
         bc <- con.betw(X, Y)
-        sqrt(sum(((bc/sum(bc)) - (1/J))^p))
+        sqrt(sum((((bc+1e-10)/(sum(bc)+1e-10)) - (1/J))^p))
       }
     #	d(Within, Pooled), Euclidean for p=2
     dWP <-
@@ -72,7 +72,7 @@ cluster.diagnostics <-
       {
         N <- nrow(X)
         wc <- con.with(X, Y)
-        sqrt(sum(((wc/sum(wc)) - (1/N))^p))
+        sqrt(sum((((wc+1e-10)/(sum(wc)+1e-10)) - (1/N))^p))
       }}
   else{
     #	d(Between, Pooled), Euclidean for p=2
@@ -81,7 +81,7 @@ cluster.diagnostics <-
       {
         J <- ncol(X)
         bc <- cvr.betw(X, Y)
-        sqrt(sum(((bc/sum(bc)) - (1/J))^p))
+        sqrt(sum((((bc+1e-10)/(sum(bc)+1e-10)) - (1/J))^p))
       }
     #	d(Within, Pooled), Euclidean for p=2
     dWP <-
@@ -89,7 +89,7 @@ cluster.diagnostics <-
       {
         N <- nrow(X)
         wc <- cvr.with(X, Y)
-        sqrt(sum(((wc/sum(wc)) - (1/N))^p))
+        sqrt(sum((((wc+1e-10)/(sum(wc)+1e-10)) - (1/N))^p))
       }
   }
   
