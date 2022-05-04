@@ -9,8 +9,8 @@
 \tabular{ll}{
 Package: \tab SetMethods\cr
 Type: \tab Package\cr
-Version: \tab 3.1\cr
-Date: \tab 2021-12-01\cr
+Version: \tab 3.2\cr
+Date: \tab 2022-04-12\cr
 License: \tab GPL-2\cr
 }
 The package contains functions to perform set-theoretic multi-method research, theory evaluation, QCA for clustered data, Enhanced Standard Analyses, indirect calibration, calculate parameters of fit and produce XY plots and QCA Radar Charts, perform robustness tests, etc.. Furthermore, it contains all the data used in the Schneider and Wagemann (2012) and Oana, Schneider, and Thomann (2021) books.}
