@@ -97,7 +97,6 @@ rob.inclrange <-
       if ((incl.cut.tu-incl.cut) >= (max.runs*step)) 
       {incl.cut.tu = NA
       break}
-      if (incl.cut.tu>=0) {break}
     }
     RCT = c(incl.cut.tl+step, incl.cut.tu-step)
     TH <- data.frame(RCT)
