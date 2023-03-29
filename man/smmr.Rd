@@ -8,7 +8,7 @@
 }
 \usage{
 smmr(results, outcome, sol = 1, match = NULL, 
-      cases = NULL, max_pairs = 5, term = 1, nec.cond =NULL, necessity = FALSE...)
+      cases = NULL, max_pairs = 5, term = 1, nec.cond =NULL, necessity = FALSE, ...)
 }
 \arguments{
 	\item{results}{
@@ -84,6 +84,8 @@ smmr(results, outcome, sol = 1, match = NULL,
 
 data(SCHF)
 
+## SUFFICIENCY SMMR examples:
+
 # Get the parsimonious solution:
 
 sol_yp <- minimize(SCHF, outcome = "EXPORT",
@@ -103,6 +105,19 @@ smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=1, term = 2)
 # Get matching typical-DCN cases:
 
 smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=3)
+
+## NECESSITY SMMR examples:
+
+# Imagine you found condition "STOCK + MA" is nececssary for outcome "EXPORT".
+
+# Get typical cases for each disjunct of the necessary condition:
+
+smmr(results = sol_yp, outcome = "EXPORT", match=FALSE, cases=1, nec.cond = "STOCK + MA", necessity = TRUE)
+
+# Get typical - deviant relevance cases for each disjunct of the necessary condition:
+
+smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=1, nec.cond = "STOCK + MA", necessity = TRUE)
+
 
 }
 \keyword{QCA}
