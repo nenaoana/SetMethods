@@ -154,7 +154,7 @@ matches.suf.typdcn <-
           }
         s <- apply(K, 1, aux.f)
         R <- data.frame(TYP=K[,1],
-                        DCON=K[,2],
+                        DCONS=K[,2],
                         Best=s,
                         Term=rep(term, length(s)),
                         Best_matching_pair=rep(FALSE, length(s)))	
@@ -173,25 +173,25 @@ matches.suf.typdcn <-
         }
         
         
-        R$MostDCON <- FALSE
+        R$MostDCONS <- FALSE
         mtt <- cases.suf.dcn(results = results, outcome = outcome, sol = sol)
         mtt <- mtt[[1]]$results
         mtt <- mtt[mtt$Term==colnames(X)[i],]
-        mttc <- mtt$Cases[(mtt$MostDCON==TRUE)]
+        mttc <- mtt$Cases[(mtt$MostDCONS==TRUE)]
         for (h in 1:nrow(R)){
-          if (R$DCON[h] %in% mttc){R$MostDCON[h] <- TRUE}
+          if (R$DCONS[h] %in% mttc){R$MostDCONS[h] <- TRUE}
         }
-        R <- R[order(R$Best, -R$MostTypTerm, -R$MostDCON),]
+        R <- R[order(R$Best, -R$MostTypTerm, -R$MostDCONS),]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
       } else {
         R <- data.frame(TYP=NULL,
-                        DCON=NULL,
+                        DCONS=NULL,
                         Best=NULL,
                         Term=NULL,
                         Best_matching_pair=NULL,
-                        MostDCON=NULL,
+                        MostDCONS=NULL,
                         MostTypTerm= NULL)
         R <- R[,-c(4,5)]
         L[[i]]<-R
@@ -1124,7 +1124,7 @@ matches.suf.typiirnfc <-
         }
         
         R <- R[order(1-R$UniqCov, 1-R$ConsIIR, 1-R$GlobUncov, R$Best, 1-R$MostTyp),]
-        R <- R[,c(1,2,5,6,3,4,7)]
+        R <- R[,c(1,2,5,7,6,3,4)]
         L[[i]]<-R[1:(min(c(nrow(R), max_pairs))), ]
         M[[i]] <- list(title=termp, results=R[1:(min(c(nrow(R), max_pairs))), ])
         class(M) <- 'matchessuf'
@@ -1134,8 +1134,9 @@ matches.suf.typiirnfc <-
                         Best=NULL,
                         MostTyp=NULL,
                         UniqCov=NULL,
-                        GlobUncov=NULL)
-        R <- R[,c(1,2,5,6,3,4)]
+                        GlobUncov=NULL,
+                        ConsIIR = NULL)
+        R <- R[,c(1,2,5,7,6,3,4)]
         L[[i]]<-R
         M[[i]] <- list(title=termp, results=R)
         class(M) <- 'matchessuf'

@@ -8,14 +8,14 @@ cluster.plot <-
            wiconssize = 5,
            wiconsangle = 90)
   {
-    if (class(cluster.res)!= 'clusterdiagnostics' & class(cluster.res)!= 'clusterminimize') 
+    if (!('clusterdiagnostics' %in% class(cluster.res)) & !('clusterminimize' %in% class(cluster.res)))  
       stop("cluster.res must be a result of a cluster diagnostics obtained with the cluster() function!")
     CT <- list()
     ticklab = unique(as.character(cluster.res$cluster_ids))
     xtick<-seq(1, length(ticklab), by=1)
     
     # CMIN - S
-    if (class(cluster.res) == 'clusterminimize'){
+    if ('clusterminimize' %in% class(cluster.res)){
     for (i in 1:length(cluster.res$output)){
      CT[[i]] <- cluster.res$output[[i]]$BECOS
      dt <- data.frame(xtick,CT[[i]])
@@ -76,7 +76,7 @@ cluster.plot <-
       ticklabw = unique(as.character(cluster.res$unit_ids))
       xtickw<-seq(1, length(ticklabw), by=1)
       
-      if (class(cluster.res) == 'clusterminimize'){
+      if ('clusterminimize' %in% class(cluster.res)){
       if (wiconslabs == TRUE) {
       for (i in 1:length(cluster.res$output)){
         CTw[[i]] <- cluster.res$output[[i]]$WICONS

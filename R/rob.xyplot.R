@@ -8,7 +8,7 @@ rob.xyplot <-
             labs = TRUE,
             area_lab=TRUE)
   { 
-    if (class(test_sol) == "list")
+    if ("list" %in% class(test_sol))
     {
       P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
       for (i in length(test_sol))
@@ -20,7 +20,7 @@ rob.xyplot <-
     else {
       P2 <- pimdata(results = test_sol, outcome = outcome)
     }
-      if (class(test_sol) == "list")
+      if ("list" %in% class(test_sol))
       {
         P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
         for (i in length(test_sol))

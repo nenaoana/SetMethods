@@ -6,7 +6,7 @@ stargazerTT <-
            out = NULL,
            digits = 3)
 {
-if (class(truthtable) != "QCA_tt") stop ("The result provided must be a truth table obtained with the truthTable function!")
+if (!("QCA_tt" %in% class(truthtable))) stop ("The result provided must be a truth table obtained with the truthTable function!")
     suppressWarnings(truthtable$tt$incl <- round(as.numeric(truthtable$tt$incl), digits = digits))
     suppressWarnings(truthtable$tt$PRI <- round(as.numeric(truthtable$tt$PRI), digits = digits))
     suppressWarnings(truthtable$tt$OUT <- as.numeric(truthtable$tt$OUT))

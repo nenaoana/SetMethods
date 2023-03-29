@@ -54,7 +54,7 @@ rob.calibrange <-
                                              n.cut = n.cut,
                                              include = include,
                                              ...)), silent = TRUE)
-        if (class(sol) == "try-error") {break}
+        if ("try-error" %in% class(sol)) {break}
         if (is.null(init.sol$i.sol)) {
           s = sol$solution[[1]]
         }
@@ -95,7 +95,7 @@ rob.calibrange <-
                                              n.cut = n.cut,
                                              include = include,
                                              ...)), silent = TRUE)
-        if (class(sol) == "try-error") {break}
+        if ("try-error" %in% class(sol)) {break}
         if (is.null(init.sol$i.sol)) {
           s = sol$solution[[1]]
         }
@@ -137,7 +137,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -178,7 +178,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -219,7 +219,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -259,7 +259,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -300,7 +300,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }
@@ -340,7 +340,7 @@ rob.calibrange <-
                                            n.cut = n.cut,
                                            include = include,
                                            ...)), silent = TRUE)
-      if (class(sol) == "try-error") {break}
+      if ("try-error" %in% class(sol)) {break}
       if (is.null(init.sol$i.sol)) {
         s = sol$solution[[1]]
       }

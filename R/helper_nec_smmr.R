@@ -103,10 +103,10 @@ cases.nec.dcn <-
     names(Z$Outcome)<- "Outcome"
     names(Z)[names(Z)=="Sd"]<- "Best"
     ttsplit <- aggregate(Z$Best,by=Z[sortnames],min, drop=FALSE)
-    Z$MostDCON <- FALSE
+    Z$MostDCONS <- FALSE
     for (n in 1:nrow(Z)){
       for (s in 1:nrow(ttsplit)){
-        if(all(ttsplit[s,sortnames] == Z[n,sortnames]) & ttsplit[s,"x"] == Z[n, "Best"]){Z[n,"MostDCON"] <- TRUE}
+        if(all(ttsplit[s,sortnames] == Z[n,sortnames]) & ttsplit[s,"x"] == Z[n, "Best"]){Z[n,"MostDCONS"] <- TRUE}
       }}
     Z$`TT<=Y` <- FALSE
     for (n in 1:nrow(Z)){
@@ -125,12 +125,12 @@ cases.nec.dcn <-
         {Z$GlobUncov[m] <- gufill[as.character(Z$Case[m]),"sum"]}
       }
       Z <- Z[do.call("order", c(Z[sortnames], 1-Z["GlobUncov"], 1-Z["TT<=Y"], Z["Best"])), ]
-      Z <- cbind(Z[,c(1,2)], Z[sortnames],Z["TT_row"], Z["Outcome"],Z["GlobUncov"],Z["TT<=Y"],Z["Best"], Z["MostDCON"])
+      Z <- cbind(Z[,c(1,2)], Z[sortnames],Z["TT_row"], Z["Outcome"],Z["GlobUncov"],Z["TT<=Y"],Z["Best"], Z["MostDCONS"])
     }
     else{
       
       Z <- Z[do.call("order", c(Z[sortnames], 1-Z["TT<=Y"], Z["Best"])), ]
-      Z <- cbind(Z[,c(1,2)], Z[sortnames],Z["TT_row"], Z["Outcome"],Z["TT<=Y"],Z["Best"], Z["MostDCON"])
+      Z <- cbind(Z[,c(1,2)], Z[sortnames],Z["TT_row"], Z["Outcome"],Z["TT<=Y"],Z["Best"], Z["MostDCONS"])
     }
     
     M[[i]] <- list(title=titl, results=Z) 
@@ -371,8 +371,8 @@ cases.nec.typ <-
             {Z$UniqCov[m] <- gufill[as.character(Z$Case[m]),"sum"]}
             
             
-            Z <- Z[order(Z$Rank,1-Z$CleanCorr,Z$Best,Z$NecCond,1-Z$UniqCov),]
-            Z<-Z[, c(1, 2, 3, 6,7, 4, 5, 8)]
+            Z <- Z[order(Z$Rank,1-Z$CleanCorr,1-Z$UniqCov,Z$Best,Z$NecCond,1-Z$MostTyp),]
+            Z<-Z[, c(1, 2, 3, 6,7,8, 4, 5)]
             
           }
           else{
@@ -394,7 +394,7 @@ cases.nec.typ <-
               gufill$sum <- ifelse(gufill$sum==ncol(gufill)-1, TRUE,FALSE)
               for (m in  1:nrow(Z))
               {Z$UniqCov[m] <- gufill[as.character(Z$Case[m]),"sum"]}
-          Z <- Z[order(1-Z$UniqCov,Z$Best,Z$NecCond),]
+          Z <- Z[order(1-Z$UniqCov,Z$Best,Z$NecCond,1-Z$MostTyp),]
           Z <- Z[, c(1, 2, 3, 6, 4, 5)]
           }
         }
@@ -682,7 +682,7 @@ matches.nec.typdcn <-
           }
         s <- apply(K, 1, aux.f)
         R <- data.frame(TYP=K[,1],
-                        DCON=K[,2],
+                        DCONS=K[,2],
                         Best=s,
                         Best_matching_pair=rep(FALSE, length(s)))	  
         
@@ -693,7 +693,7 @@ matches.nec.typdcn <-
         
         if (nrow(K)>0){
         FS$ids <- rownames(FS)
-        R <- merge(R, FS, by.x='DCON', by.y='ids')
+        R <- merge(R, FS, by.x='DCONS', by.y='ids')
         colnames(R)[4:ncol(R)] <- paste('TT_', colnames(R)[4:ncol(R)], sep='') 
         tt_row_fil <- apply(R[, grep('TT_', colnames(R))], 1, 
                             function(r) paste(r, collapse=''))
@@ -710,12 +710,12 @@ matches.nec.typdcn <-
         }
         
         
-        R$MostDCON <- FALSE
+        R$MostDCONS <- FALSE
         mtt <- cases.nec.dcn(nec.cond = nec.cond_or, results = results, outcome = outcome, sol = sol)
         mtt <- mtt[[i]]$results
-        mttc <- mtt$Case[(mtt$MostDCON==TRUE)]
+        mttc <- mtt$Case[(mtt$MostDCONS==TRUE)]
         for (h in 1:nrow(R)){
-          if (R$DCON[h] %in% mttc){R$MostDCON[h] <- TRUE}
+          if (R$DCONS[h] %in% mttc){R$MostDCONS[h] <- TRUE}
         }
         
         if (length(suin)>0 & names(NC[,i,drop=FALSE]) %in% suin){
@@ -738,13 +738,13 @@ matches.nec.typdcn <-
             gufill$sum<-rowSums(gufill[,colnms, drop = FALSE])
             gufill$sum <- ifelse(gufill$sum==ncol(gufill)-1, TRUE,FALSE)
             for (m in  1:nrow(R))
-            {R$GlobUncov[m] <- gufill[as.character(R$DCON[m]),"sum"]}
+            {R$GlobUncov[m] <- gufill[as.character(R$DCONS[m]),"sum"]}
           }
           
           aux.list <-
             function(x)
             {
-              x <- x[order(-x$UniqCov, -x$GlobUncov, x$Best, -x$MostTyp, -x$MostDCON), ]
+              x <- x[order(-x$UniqCov, -x$GlobUncov, x$Best, -x$MostTyp, -x$MostDCONS), ]
               return(x[1:min(c(nrow(x), max_pairs)), ])
             }
           
@@ -752,9 +752,9 @@ matches.nec.typdcn <-
           R <- do.call(rbind, R_list)
           R$Best <- round(R$Best, digits = 3)
           rownames(R) <- NULL
-          R <- cbind(R[,1:2],R[sortnames],R["UniqCov"],R["GlobUncov"],R["Best"], R["MostTyp"], R["MostDCON"])
+          R <- cbind(R[,1:2],R[sortnames],R["UniqCov"],R["GlobUncov"],R["Best"], R["MostTyp"], R["MostDCONS"])
           
-          #R <- R[order(-R$UniqCov, -R$GlobUncov, R$Best, -R$MostTyp, -R$MostDCON),]
+          #R <- R[order(-R$UniqCov, -R$GlobUncov, R$Best, -R$MostTyp, -R$MostDCONS),]
           #R<-R[, c(1, 2, 3, 6, 7, 4, 5)]
           
         }
@@ -763,7 +763,7 @@ matches.nec.typdcn <-
           aux.list <-
             function(x)
             {
-              x <- x[order(x$Best, -x$MostTyp, -x$MostDCON), ]
+              x <- x[order(x$Best, -x$MostTyp, -x$MostDCONS), ]
               return(x[1:min(c(nrow(x), max_pairs)), ])
             }
           
@@ -771,7 +771,7 @@ matches.nec.typdcn <-
           R <- do.call(rbind, R_list)
           R$Best <- round(R$Best, digits = 3)
           rownames(R) <- NULL
-          R <- cbind(R[,1:2],R[sortnames],R["Best"],R["MostTyp"],R["MostDCON"])
+          R <- cbind(R[,1:2],R[sortnames],R["Best"],R["MostTyp"],R["MostDCONS"])
           }
         M[[i]] <- list(title=titl, results=R[1:(min(c(nrow(R), max_pairs))), ])
       }

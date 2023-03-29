@@ -8,7 +8,7 @@ stargazerSol <-
            out = NULL,
            digits = 3)
   {
-    if (class(results) != "QCA_min") stop ("The result provided must be a solution obtained with the minimize function!")
+    if (!("QCA_min" %in% class(results))) stop ("The result provided must be a solution obtained with the minimize function!")
     
     PD <- pimdata(results=results, outcome=outcome, sol = sol)
     

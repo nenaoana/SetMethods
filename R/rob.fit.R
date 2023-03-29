@@ -2,14 +2,14 @@ rob.fit <-
   function(test_sol, initial_sol, outcome)
   { 
     all_sols = list()
-    if (class(test_sol) == "list"){all_sols <- test_sol}
+    if ("list" %in% class(test_sol)){all_sols <- test_sol}
     else{all_sols[[1]] <- test_sol}
     all_sols[[length(all_sols)+1]] <- initial_sol
     rcf <- rob.corefit(test_sol, initial_sol, outcome)
     isf <- QCAfit(initial_sol, outcome, necessity = FALSE)
     rob_cons <- isf["solution_formula",1]/rcf[1]
     rob_cov <- rcf[2]/isf["solution_formula",2]
-    if (class(test_sol) == "list")
+    if ("list" %in% class(test_sol))
     {
       P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
       for (i in length(test_sol))
@@ -21,7 +21,7 @@ rob.fit <-
     else {
       P2 <- pimdata(results = test_sol, outcome = outcome)
     }
-    if (class(test_sol) == "list")
+    if ("list" %in% class(test_sol))
     {
       P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
       for (j in length(test_sol))

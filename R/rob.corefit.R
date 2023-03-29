@@ -1,7 +1,7 @@
 rob.corefit <- 
   function(test_sol, initial_sol, outcome)
   { all_sols = list()
-  if (class(test_sol) == "list"){all_sols <- test_sol}
+  if ("list" %in% class(test_sol)){all_sols <- test_sol}
   else{all_sols[[1]] <- test_sol}
   all_sols[[length(all_sols)+1]] <- initial_sol
   PD <- pimdata(results = all_sols[[1]], outcome = outcome)

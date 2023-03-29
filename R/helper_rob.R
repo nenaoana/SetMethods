@@ -20,7 +20,7 @@ rob.evaluation <-
            initial_sol, 
            outcome)
   {		
-    if (class(test_sol) == "list")
+    if ("list" %in% class(test_sol))
     {
       P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
       for (i in length(test_sol))
@@ -33,7 +33,7 @@ rob.evaluation <-
       P2 <- pimdata(results = test_sol, outcome = outcome)
     }
     
-    if (class(test_sol) == "list")
+    if ("list" %in% class(test_sol))
     {
       P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
       for (j in length(test_sol))
@@ -111,7 +111,7 @@ rob.case.ratio <-
 
 robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = TRUE, maxTS = FALSE)
 { 
-  if (class(test_sol) == "list"){
+  if ("list" %in% class(test_sol)){
     results1 = test_sol[[1]]
   }
   else results1 = test_sol
@@ -141,7 +141,7 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
     }
   }
   
-  if (class(test_sol) == "list")
+  if ("list" %in% class(test_sol))
   {
     test_int <- s2
     for (i in length(test_sol))
@@ -153,7 +153,7 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
   
   else {test_int <- s2}
   
-  if (class(test_sol) == "list")
+  if ("list" %in% class(test_sol))
   {
       test_union <- rob.union(test_sol)
   }
@@ -202,7 +202,7 @@ robust.rank<-function(test_sol,
                       outcome)
 
 {
-  if (class(test_sol) == "list")
+  if ("list" %in% class(test_sol))
   {
     P2 <- pimdata(results = test_sol[[1]], outcome = outcome)
     for (i in length(test_sol))
@@ -215,7 +215,7 @@ robust.rank<-function(test_sol,
     P2 <- pimdata(results = test_sol, outcome = outcome)
   }
   
-  if (class(test_sol) == "list")
+  if ("list" %in% class(test_sol))
   {
     P3 <- pimdata(results = test_sol[[1]], outcome = outcome)
     for (j in length(test_sol))
