@@ -126,7 +126,7 @@ smmr <-
                                   sol=sol,
                                   max_pairs=max_pairs) 
       M[[5]] <- list(title="Typical-Typical - Term", results=R5[[1]]$results)
-      R6 <- matches.suf.typirrnfc(results=results, 
+      R6 <- matches.suf.typiirnfc(results=results, 
                                   outcome=outcome, 
                                   sol=sol,
                                   max_pairs=max_pairs) 
