@@ -1,3 +1,7 @@
+Version 4.0
+	o Fixed: bug in cluster() showing an NaN result in divisions by 0 in small clusters.
+	o Improved: the formulas and output of the smmr() function for sufficiency has been updated to reflect the latest version in case selection guidelines in Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press. 
+	o New: the smmr() function now includes analyses of necessity in line with the latest version in case selection guidelines in Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press. 
 Version 3.0
 	o Improved: the range of functions (rob.calibrange, rob.inclrange, rob.ncutrange, rob.cases, rob.corefit, rob.fit, rob.xyplot, rob.singletest) for performing the robustness test protocol in Oana and Schneider (2021) have been updated to reflect new changes in the protocol;
 	o Improved: the output of the smmr() function has been updated to reflect the changes in case selection guidelines in Schneider, Carsten Q. 2021. Set-Theoretic Multi-Method Research: A Guide to Combining QCA and Case Studies. Cambridge: Cambridge University Press. 
