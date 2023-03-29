@@ -8,7 +8,7 @@
 }
 \usage{
 smmr(results, outcome, sol = 1, match = NULL, 
-      cases = NULL, max_pairs = 5, term = 1, ...)
+      cases = NULL, max_pairs = 5, term = 1, nec.cond =NULL, necessity = FALSE...)
 }
 \arguments{
 	\item{results}{
@@ -27,23 +27,32 @@ smmr(results, outcome, sol = 1, match = NULL,
 		and i = intermediate solution.
 	}
 	\item{match}{
-		Logical. Should comparative MMR be used?
+		Logical. Should comparative SMMR be used?
 	}
 	\item{cases}{
 	  A numerical vector indicating the type of cases to be returned.
-		\cr For single case studies: \cr \verb{ 1 = typical cases,}
+		\cr For single case studies for SUFFICIENCY: \cr \verb{ 1 = typical cases,}
 		                         \cr \verb{ 2 = typical cases for each focal conjunct in a sufficient term,}   
 		                         \cr \verb{ 3 = deviant consistency,}
 		                         \cr \verb{ 4 = deviant coverage,}
 		                         \cr \verb{ 5 = individually irrelevant,}
 		                         \cr \verb{ 6 = all of the above;}
-		\cr For comparative case studies:\cr \verb{ 1 = Typical-Typical for each focal conjuct in a sufficient term,}
+		\cr For comparative case studies for SUFFICIENCY:\cr \verb{ 1 = Typical-Typical for each focal conjuct in a sufficient term,}
 		                              \cr \verb{ 2 = Typical-IIR for each focal conjuct in a sufficient term,}
 		                              \cr \verb{ 3 = Typical-Dev.Cons.,}
 		                              \cr \verb{ 4 = Dev.Cov.-IIR;}
 		                              \cr \verb{ 5 = Typical-Typical for each term;}
                                   \cr \verb{ 6 = Typical-IIR for each term;}
 		                              \cr \verb{ 7 = all of the above;}
+		\cr For single case studies for NECESSITY: \cr \verb{ 1 = typical cases,}
+		                         \cr \verb{ 2 = deviant consistency,}
+		                         \cr \verb{ 3 = deviant relevance,}
+		                         \cr \verb{ 4 = all of the above;}
+		\cr For comparative case studies for NECESSITY:\cr \verb{ 1 = Typical-Deviant Relevance ,}
+		                              \cr \verb{ 2 = Typical-Deviant Consistency,}
+		                              \cr \verb{ 3 = Typical-IIR,}
+		                              \cr \verb{ 4 = Typical-Typical,}
+		                              \cr \verb{ 5 = all of the above;}
 	}
 	\item{max_pairs}{
 		Maximum number of pairs to extract.
@@ -51,6 +60,12 @@ smmr(results, outcome, sol = 1, match = NULL,
 	\item{term}{
 		A numeric vector where the first number indicates the number of the
 		term according to the order in the "qca" object.
+	}
+	\item{nec.cond}{
+		A character vector speifying the necessity results obtained. This could be of the form "A", "A+B", or "A*B". Notice than nec.cond can also be specified for sufficiency results in single SMMR typical cases for each focal conjunct in a sufficient term, and for comparative SMMR in typical-typical and typical-iir comparisons for each focal conjunct. Note than in the later case only expressions of the forms "A" or "A+B" are accepted. If dealing with a necessary condition of the form "A*B", each of the individual conditions should be entered separately when performing analyses of sufficiency.
+	}
+	\item{necessity}{
+		Logical. Should SMMR results for necessity be shown?
 	}
 	\item{...}{
 		Deprecated arguments (neg.out, use.tilde)
