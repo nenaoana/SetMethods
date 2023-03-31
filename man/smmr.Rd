@@ -62,7 +62,7 @@ smmr(results, outcome, sol = 1, match = NULL,
 		term according to the order in the "qca" object.
 	}
 	\item{nec.cond}{
-		A character vector speifying the necessity results obtained. This could be of the form "A", "A+B", or "A*B", making sure no spaces are left between the name of the conditions and the Boolean operator. Notice than nec.cond can also be specified for sufficiency results in single SMMR typical cases for each focal conjunct in a sufficient term, and for comparative SMMR in typical-typical and typical-iir comparisons for each focal conjunct. Note than in the later case only expressions of the forms "A" or "A+B" are accepted. If dealing with a necessary condition of the form "A*B", each of the individual conditions should be entered separately when performing analyses of sufficiency.
+		A character vector specifying the necessity results obtained. This could be of the form "A", "A+B", or "A*B", making sure no spaces are left between the name of the conditions and the Boolean operator. Notice than nec.cond can also be specified for sufficiency results in single SMMR typical cases for each focal conjunct in a sufficient term, and for comparative SMMR in typical-typical and typical-iir comparisons for each focal conjunct. Note that in the later case only expressions of the forms "A" or "A+B" are accepted. If dealing with a necessary condition of the form "A*B", each of the individual conditions should be entered separately when performing analyses of sufficiency.
 	}
 	\item{necessity}{
 		Logical. Should SMMR results for necessity be shown?
@@ -98,6 +98,12 @@ sol_yp <- minimize(SCHF, outcome = "EXPORT",
 
 smmr(results = sol_yp, outcome = "EXPORT", match=FALSE, cases=2, term = 3)
 
+# Get typical cases for each focal conjunct in the third term of the parsimonious solution
+# and specifying STOCK as a necessary condition:
+
+smmr(results = sol_yp, outcome = "EXPORT", 
+      match=FALSE, cases=2, term = 3, nec.cond="STOCK")
+
 # Get matching typical-typical cases for the second term of the parsimonious solution:
 
 smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=1, term = 2)
@@ -112,11 +118,13 @@ smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=3)
 
 # Get typical cases for each disjunct of the necessary condition:
 
-smmr(results = sol_yp, outcome = "EXPORT", match=FALSE, cases=1, nec.cond = "STOCK+MA", necessity = TRUE)
+smmr(results = sol_yp, outcome = "EXPORT", match=FALSE, cases=1, 
+     nec.cond = "STOCK+MA", necessity = TRUE)
 
 # Get typical - deviant relevance cases for each disjunct of the necessary condition:
 
-smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=1, nec.cond = "STOCK+MA", necessity = TRUE)
+smmr(results = sol_yp, outcome = "EXPORT", match=TRUE, cases=1, 
+     nec.cond = "STOCK+MA", necessity = TRUE)
 
 
 }
