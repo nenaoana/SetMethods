@@ -97,11 +97,11 @@ theory.data <-
       colnames(P) <- as.vector(unlist(sapply(colnames(P), function(x)  tild(x))))}
     
     P$Sol.Formula <- apply(P, 1, max)
-    P$Theory <- tv
-    P$'T*S' <- pmin(  tv,   P$Sol.Formula)
-    P$'~T*S' <- pmin(1-tv,   P$Sol.Formula)
-    P$'T*~S' <- pmin(  tv, 1-P$Sol.Formula)
-    P$'~T*~S' <- pmin(1-tv, 1-P$Sol.Formula)
+    P$Theory <- as.numeric(tv)
+    P$'T*S' <- pmin(  as.numeric(tv),   P$Sol.Formula)
+    P$'~T*S' <- pmin(1-as.numeric(tv),   P$Sol.Formula)
+    P$'T*~S' <- pmin(  as.numeric(tv), 1-P$Sol.Formula)
+    P$'~T*~S' <- pmin(1-as.numeric(tv), 1-P$Sol.Formula)
     if (empirics$options$neg.out) {
       P$Outcome<-empirics$tt$recoded.data[,outcome]
     } else {
@@ -298,10 +298,14 @@ theory.fit <-
   {            
     n_c <- ncol(theory_data)-1
     if(consH == FALSE){
-    theory_fit <- data.frame(matrix(NA, ncol=3, nrow=0))}
-    else{theory_fit <- data.frame(matrix(NA, ncol=4, nrow=0))}
+    theory_fit <- data.frame(matrix(NA, ncol=3, nrow=0))
+    names(theory_fit) < c("Cons.Suf", "Cov.Suf", "PRI")
+    }
+    else{theory_fit <- data.frame(matrix(NA, ncol=4, nrow=0))
+    names(theory_fit) < c("Cons.Suf", "Cov.Suf", "PRI","Cons.Suf(H)")
+    }
     for (i in (1:n_c)){
-      theory_fit <- rbind(theory_fit, QCAfit(theory_data[,i], theory_data[, ncol(theory_data)], necessity = FALSE, consH = consH))}
+      theory_fit <- rbind(theory_fit, data.frame(as.list(QCAfit(theory_data[,i], theory_data[, ncol(theory_data)], necessity = FALSE, consH = consH))))}
     rownames(theory_fit) <- names(theory_data[1:n_c])
     if(consH == FALSE){
       names(theory_fit) <- c("Cons.Suf","Cov.Suf","PRI")}
@@ -351,10 +355,13 @@ theory.intersections <- function(theory, empirics, sol = 1, use.tilde = TRUE)
   
   thintersect <- list()
   
-  thintersect$TE <- intersectExp(theory,emp)
-  thintersect$tE <- intersectExp(negate(theory)[[1]][1],emp)
-  thintersect$Te <- intersectExp(theory,negate(emp)[[1]][1])
-  thintersect$te <- intersectExp(negateExp(theory),negate(emp)[[1]][1])
+  n_c_l <- length(names(empirics$tt$tt))-5
+  lab_conds <- names(empirics$tt$tt[,1:n_c_l])
+  
+  thintersect$TE <- as.character(intersection(theory,emp))
+  thintersect$tE <- as.character(intersection(negate(theory, snames=lab_conds, simplify=FALSE)[[1]][1],emp))
+  thintersect$Te <- as.character(intersection(theory,negate(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
+  thintersect$te <- as.character(intersection(negate(theory, snames=lab_conds, simplify=FALSE),negate(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
   
   class(thintersect) <- 'thintersect'
   return(thintersect)
