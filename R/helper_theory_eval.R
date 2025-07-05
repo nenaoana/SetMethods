@@ -359,9 +359,9 @@ theory.intersections <- function(theory, empirics, sol = 1, use.tilde = TRUE)
   lab_conds <- names(empirics$tt$tt[,1:n_c_l])
   
   thintersect$TE <- as.character(intersection(theory,emp))
-  thintersect$tE <- as.character(intersection(negate(theory, snames=lab_conds, simplify=FALSE)[[1]][1],emp))
-  thintersect$Te <- as.character(intersection(theory,negate(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
-  thintersect$te <- as.character(intersection(negate(theory, snames=lab_conds, simplify=FALSE),negate(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
+  thintersect$tE <- as.character(intersection(invert(theory, snames=lab_conds, simplify=FALSE)[[1]][1],emp))
+  thintersect$Te <- as.character(intersection(theory,invert(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
+  thintersect$te <- as.character(intersection(invert(theory, snames=lab_conds, simplify=FALSE),invert(emp, snames=lab_conds, simplify=FALSE)[[1]][1]))
   
   class(thintersect) <- 'thintersect'
   return(thintersect)

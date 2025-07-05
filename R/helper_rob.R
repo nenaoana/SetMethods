@@ -11,7 +11,7 @@ rob.union <- function(test_sol)
       }
     }
   ts <- paste(ts[2:length(ts)], collapse = "+")
-  ts <- simplify(ts)
+  #ts <- simplify(ts)
   return(ts)
 }
 
@@ -109,7 +109,7 @@ rob.case.ratio <-
     return(RCR)
   }
 
-robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = TRUE, maxTS = FALSE)
+robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = TRUE, maxTS = FALSE, cond_names="")
 { 
   if ("list" %in% class(test_sol)){
     results1 = test_sol[[1]]
@@ -181,17 +181,17 @@ robust.intersections <- function(test_sol, initial_sol, sol_i = 1, use.tilde = T
     emp1 <- paste(toupper(s1), collapse = "+")}
   
   thintersect <- list()
-  
+  cond_names = names(initial_sol$tt$initial.data)
   if(maxTS==FALSE){
   thintersect$S1S2 <- intersection(emp1,emp2)[[1]][1]
-  thintersect$s1S2 <- intersection(negate(emp1)[[1]][1],emp2)[[1]][1]
-  thintersect$S1s2 <- intersection(emp1,negate(emp2)[[1]][1])[[1]][1]
-  thintersect$s1s2 <- intersection(negate(emp1)[[1]][1],negate(emp2)[[1]][1])[[1]][1]}
+  thintersect$s1S2 <- intersection(invert(emp1,snames = cond_names,simplify = FALSE)[[1]][1],emp2)[[1]][1]
+  thintersect$S1s2 <- intersection(emp1,invert(emp2,snames = cond_names,simplify = FALSE)[[1]][1])[[1]][1]
+  thintersect$s1s2 <- intersection(invert(emp1,snames = cond_names,simplify = FALSE)[[1]][1],invert(emp2,snames = cond_names,simplify = FALSE)[[1]][1])[[1]][1]}
   else{
-  thintersect$S1S2 <- intersection(emp1,simplify(emp3)[[1]][1])[[1]][1]
-  thintersect$s1S2 <- intersection(negate(emp1)[[1]][1],simplify(emp3)[[1]][1])[[1]][1]
-  thintersect$S1s2 <- intersection(emp1,negate(simplify(emp3)[[1]][1])[[1]][1])[[1]][1]
-  thintersect$s1s2 <- intersection(negate(emp1)[[1]][1],negate(simplify(emp3)[[1]][1])[[1]][1])[[1]][1]}
+  thintersect$S1S2 <- intersection(emp1,emp3,snames = cond_names)[[1]][1]
+  thintersect$s1S2 <- intersection(invert(emp1,snames = cond_names,simplify = FALSE)[[1]][1],emp3,snames = cond_names)[[1]][1]
+  thintersect$S1s2 <- intersection(emp1,invert(emp3,snames = cond_names, simplify = FALSE)[[1]][1],snames = cond_names)[[1]][1]
+  thintersect$s1s2 <- intersection(invert(emp1,snames = cond_names,simplify = FALSE)[[1]][1],invert(emp3,snames = cond_names, simplify = FALSE)[[1]][1],snames = cond_names)[[1]][1]}
   
   class(thintersect) <- 'robtersect'
   return(thintersect)
